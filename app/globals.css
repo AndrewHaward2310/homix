@@ -1,0 +1,530 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================================================================
+   OCEAN PARK — DESIGN TOKENS
+   Style: "Apple Luxury Minimal" cho nền tảng bất động sản cao cấp
+   ========================================================================= */
+
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-sans-base), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+
+  /* Semantic color mapping */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand — accent ocean sâu, dùng rất tiết chế */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
+  /* Glass surfaces */
+  --color-glass: var(--glass);
+  --color-glass-border: var(--glass-border);
+
+  /* Charts (giữ để tương thích) */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius — thang bo góc ngữ nghĩa (chỉ dùng 2 mức chính + full):
+     · control  = rounded-lg  (12px) → nút chữ nhật, input, ô nhỏ, thumbnail
+     · surface  = rounded-2xl (20px) → card, panel, modal, ảnh, container lớn
+     · pill/tròn = rounded-full
+     Các mức sm/md/xl giữ cho shadcn primitive nội bộ, tránh dùng cho card mới. */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* Type scale (desktop) */
+  --text-display: 5.5rem; /* 88px */
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.04em;
+  --text-h1: 3rem; /* 48px */
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: 2rem; /* 32px */
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: 1.5rem; /* 24px */
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.02em;
+  --text-body: 1.0625rem; /* 17px */
+  --text-body--line-height: 1.6;
+  --text-caption: 0.875rem; /* 14px */
+  --text-caption--line-height: 1.5;
+
+  /* Motion */
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --foreground: #1d1d1f;
+
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1f;
+
+  /* Primary = brand ocean sâu */
+  --primary: #0b5c63;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f5f5f7;
+  --secondary-foreground: #1d1d1f;
+
+  --muted: #f5f5f7;
+  --muted-foreground: #86868b;
+
+  --accent: #f5f5f7;
+  --accent-foreground: #1d1d1f;
+
+  --brand: #0b5c63;
+  --brand-foreground: #ffffff;
+
+  --destructive: #c0392b;
+
+  --border: #e8e8ed;
+  --input: #e8e8ed;
+  --ring: #0b5c63;
+
+  /* Glass: nền trắng bán trong suốt + viền trắng 10% */
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.6);
+
+  --chart-1: #0b5c63;
+  --chart-2: #86868b;
+  --chart-3: #1d1d1f;
+  --chart-4: #b0b0b8;
+  --chart-5: #e8e8ed;
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #0a0a0a;
+  --foreground: #f5f5f7;
+
+  --card: #141416;
+  --card-foreground: #f5f5f7;
+
+  --popover: #141416;
+  --popover-foreground: #f5f5f7;
+
+  /* Teal sáng hơn cho nền tối — #0b5c63 gần như tàng hình trên #0a0a0a;
+     brand dùng làm chữ (giá) nên cần đủ tương phản (~5:1 trên card #141416). */
+  --primary: #12888f;
+  --primary-foreground: #ffffff;
+
+  --secondary: #1a1a1c;
+  --secondary-foreground: #f5f5f7;
+
+  --muted: #1a1a1c;
+  --muted-foreground: #9a9aa0;
+
+  --accent: #1a1a1c;
+  --accent-foreground: #f5f5f7;
+
+  --brand: #2fb2bb;
+  --brand-foreground: #06232a;
+
+  --destructive: #e74c3c;
+
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: #2fb2bb;
+
+  --glass: rgba(10, 10, 10, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+
+  --chart-1: #0b5c63;
+  --chart-2: #86868b;
+  --chart-3: #f5f5f7;
+  --chart-4: #5a5a5f;
+  --chart-5: #2a2a2c;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* =========================================================================
+   MOTION — fade-in + trượt lên nhẹ khi cuộn tới
+   ========================================================================= */
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 600ms var(--ease-luxury),
+      transform 600ms var(--ease-luxury);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+  /* Elevation — thang 3 mức, shadow rất mềm/khuếch tán rộng/opacity thấp:
+     · luxury-sm (e1) = card nghỉ         · luxury (e2) = card hover/nổi nhẹ
+     · luxury-lg (e3) = overlay/modal/popover/panel nổi cao */
+  .shadow-luxury-sm {
+    box-shadow: 0 8px 24px -14px rgba(29, 29, 31, 0.14);
+  }
+  .shadow-luxury {
+    box-shadow: 0 24px 60px -20px rgba(29, 29, 31, 0.12);
+  }
+  .shadow-luxury-lg {
+    box-shadow: 0 40px 100px -30px rgba(29, 29, 31, 0.18);
+  }
+
+  /* Ken Burns — ảnh hero phóng chậm, sống động hơn ảnh tĩnh */
+  @keyframes kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+  .animate-kenburns {
+    animation: kenburns 24s var(--ease-luxury) infinite alternate;
+  }
+
+  /* Rise — xuất hiện: mờ + trượt lên, dùng cho hero (stagger qua animation-delay) */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .rise {
+    opacity: 0;
+    animation: rise 0.85s var(--ease-luxury) both;
+  }
+
+  /* Scroll cue — mũi chỉ cuộn nhấp nháy trôi xuống */
+  @keyframes scrollcue {
+    0% {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  .animate-scrollcue {
+    animation: scrollcue 1.8s ease-in-out infinite;
+  }
+
+  /* Float nhẹ (badge/điểm nhấn) */
+  @keyframes floaty {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+  .animate-floaty {
+    animation: floaty 4s ease-in-out infinite;
+  }
+
+  /* Dark mode: style bản đồ Vinhomes chỉ có bản sáng → làm dịu bớt cho đỡ chói
+     (dark-map style thật là 1 đợt riêng). Không đảo màu để không hỏng icon POI. */
+  .dark .maplibregl-map {
+    filter: brightness(0.82) saturate(0.85) contrast(1.03);
+  }
+
+  /* Skeleton — nền dịu + vệt sáng quét ngang (shimmer), thay animate-pulse thô */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--secondary) 88%, var(--muted));
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--background) 55%, transparent),
+      transparent
+    );
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Page transition — CHỈ mờ dần (không transform: bọc cả trang, transform sẽ
+     phá position:fixed của navbar trong lúc animate). */
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .animate-page-enter {
+    animation: page-enter 0.35s var(--ease-luxury, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-kenburns,
+    .rise,
+    .animate-scrollcue,
+    .animate-floaty,
+    .animate-page-enter {
+      animation: none;
+      opacity: 1;
+    }
+    .skeleton::after {
+      animation: none;
+    }
+  }
+}
+
+/* =========================================================================
+   MASTERPLAN LOCATOR (MapLibre) — ẩn control mặc định & marker pill glass
+   ========================================================================= */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-logo,
+.maplibregl-ctrl-bottom-left,
+.maplibregl-ctrl-bottom-right,
+.maplibregl-ctrl-top-left,
+.maplibregl-ctrl-top-right {
+  display: none !important;
+}
+.maplibregl-canvas:focus {
+  outline: none;
+}
+
+/* Marker dạng pill kính — điểm nhấn chính trên bản đồ */
+.ocean-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  padding: 5px 12px 5px 9px;
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--background) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px -8px rgba(29, 29, 31, 0.35);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transform-origin: center bottom;
+  transition:
+    transform 220ms var(--ease-luxury),
+    background-color 220ms var(--ease-luxury),
+    box-shadow 220ms var(--ease-luxury);
+}
+.ocean-pill__dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 9999px;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+.ocean-pill__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ocean-pill:hover,
+.ocean-pill.is-hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 14px 34px -10px rgba(29, 29, 31, 0.45);
+}
+.ocean-pill.is-active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: transparent;
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 16px 38px -10px rgba(11, 92, 99, 0.55);
+}
+.ocean-pill.is-active .ocean-pill__dot {
+  background: var(--primary-foreground);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-foreground) 30%, transparent);
+}
+
+/* Pin căn hộ trên mini-map trang chi tiết */
+.prop-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: var(--brand);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--brand) 22%, transparent), 0 6px 16px -4px rgba(0,0,0,0.4);
+}
+
+/* Marker giá trên map /search — đồng bộ hover với card */
+.price-marker {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 6px 18px -6px rgba(29, 29, 31, 0.3);
+  transition:
+    transform 180ms var(--ease-luxury),
+    background-color 180ms var(--ease-luxury),
+    color 180ms var(--ease-luxury);
+}
+.price-marker:hover,
+.price-marker.is-active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: transparent;
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+/* Tooltip POI khi hover (giống map Vinhomes) */
+.poi-tip .maplibregl-popup-content {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 34px -12px rgba(29, 29, 31, 0.35);
+  background: color-mix(in srgb, var(--background) 96%, transparent);
+  backdrop-filter: blur(8px);
+}
+.poi-tip .maplibregl-popup-tip {
+  display: none;
+}
+.poi-tip__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 230px;
+}
+.poi-tip__dot {
+  margin-top: 5px;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 9999px;
+}
+.poi-tip__name {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--foreground);
+}
+.poi-tip__cat {
+  margin-top: 1px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+
+/* Marker POI tiện ích (lớp tự quản) — nhẹ hơn pill tòa tháp, phân theo màu nhóm */
+.ocean-poi {
+  --poi-color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  border: 1px solid color-mix(in srgb, var(--poi-color) 30%, var(--glass-border));
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px -6px rgba(29, 29, 31, 0.28);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0.92;
+  transition:
+    opacity 200ms var(--ease-luxury),
+    transform 200ms var(--ease-luxury);
+}
+.ocean-poi:hover {
+  opacity: 1;
+  transform: scale(1.06);
+  z-index: 1;
+}
+.ocean-poi__dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 9999px;
+  background: var(--poi-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--poi-color) 24%, transparent);
+}

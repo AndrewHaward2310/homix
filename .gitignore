@@ -1,0 +1,23 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+
+# Environment variables (secrets) — NEVER commit
+.env
+.env*.local
+
+# Working screenshots (chứa ảnh chụp map bản quyền, không cần cho app)
+ux-shots/
+
+# Dev/screenshot tooling (puppeteer, tham chiếu token ở /tmp)
+_shot.mjs
+_shot-drill.mjs
+
+# Common ignores
+node_modules
+.next/
+.DS_Store

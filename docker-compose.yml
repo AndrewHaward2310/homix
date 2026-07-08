@@ -1,0 +1,43 @@
+# Ocean Park — hạ tầng local/deploy.
+# Postgres map ra cổng 5433 (host) để tránh đụng Postgres hệ thống ở 5432.
+# Dev: chỉ cần `docker compose up -d postgres`, app chạy bằng `pnpm dev`.
+# Deploy: `docker compose up -d` để dựng cả app (profile "app").
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: oceanpark-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: oceanpark
+      POSTGRES_PASSWORD: oceanpark
+      POSTGRES_DB: oceanpark
+    ports:
+      - '5433:5432'
+    volumes:
+      - oceanpark_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U oceanpark -d oceanpark']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    profiles: ['app'] # chỉ chạy khi deploy: `docker compose --profile app up -d`
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oceanpark-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Trong mạng compose, app nối postgres qua cổng nội bộ 5432.
+      DATABASE_URL: postgresql://oceanpark:oceanpark@postgres:5432/oceanpark?schema=public
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-doi-truoc-khi-len-that}
+      NODE_ENV: production
+    ports:
+      - '3000:3000'
+
+volumes:
+  oceanpark_pgdata:
