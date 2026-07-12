@@ -32,6 +32,13 @@
 3. (#3) Hoàn thiện combo: index `/combo` + đặt combo thật.
 4. (#1) Bento featured + section số liệu + xen kẽ nền.
 
+## Bước "review" của loop — DÙNG CODEX CLI (đã cài)
+Codex CLI có sẵn (`codex`, đã login ChatGPT). Mỗi iteration, bước review chạy **cả hai** cho 2 góc nhìn:
+```
+codex exec -s read-only -o <outfile> "review 'git diff main...HEAD', tập trung code mới, tìm bug correctness/bảo mật/edge case, xuất finding file:line + mức độ + cách sửa, KHÔNG sửa file"
+```
+rồi đọc `<outfile>`, cộng với `/code-review`. Fix finding của cả hai. (Codex đã bắt được: race read-modify-write ở POST /images, orphan khi upload lỗi giữa chừng — đã fix ở commit `4b8c7bd`.)
+
 ## Ghi chú kỹ thuật
 - Font serif Fraunces render dấu tiếng Việt ở cỡ lớn hơi lệch (vd "Cuối tuần") — cân nhắc chỉ dùng serif cho tiêu đề ít dấu, hoặc fine-tune. Xem [[brand-and-font]].
 - Mọi ảnh ngoài (Supabase) render tốt nhờ `images.unoptimized`.
