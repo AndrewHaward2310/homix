@@ -21,7 +21,12 @@ async function hydrate(def: ComboDef): Promise<TripCombo | null> {
   const perks: TripComboPerk[] = def.perks
     .map((p) => {
       const perk = byId.get(p.perkId)
-      return perk ? { perk, qty: p.qty } : null
+      if (!perk) {
+        // Data biên tập sai (perkId không tồn tại) — cảnh báo thay vì âm thầm bỏ qua.
+        console.warn(`[combos] combo "${def.id}" tham chiếu perk không tồn tại: ${p.perkId}`)
+        return null
+      }
+      return { perk, qty: p.qty }
     })
     .filter((x): x is TripComboPerk => x !== null)
 

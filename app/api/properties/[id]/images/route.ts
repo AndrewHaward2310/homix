@@ -7,6 +7,7 @@ import type { User } from '@/types'
 import {
   uploadPropertyImage,
   deletePropertyImage,
+  validateImage,
   isStorageConfigured,
   StorageError,
 } from '@/lib/storage'
@@ -58,19 +59,30 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: 'Tối đa 20 ảnh mỗi lần.' }, { status: 400 })
   }
 
+  // Validate TẤT CẢ file trước khi upload — tránh upload dở dang rồi mới lỗi (orphan).
   try {
-    const urls: string[] = []
-    for (const file of files) urls.push(await uploadPropertyImage(id, file))
-    const updated = await prisma.property.update({
-      where: { id },
-      data: { images: [...gate.row.images, ...urls] },
-    })
-    return NextResponse.json({ property: toProperty(updated) }, { status: 201 })
+    for (const file of files) validateImage(file)
   } catch (err) {
-    const msg = err instanceof StorageError ? err.message : 'Upload thất bại.'
-    const status = err instanceof StorageError ? 400 : 500
-    return NextResponse.json({ error: msg }, { status })
+    const msg = err instanceof StorageError ? err.message : 'Ảnh không hợp lệ.'
+    return NextResponse.json({ error: msg }, { status: 400 })
   }
+
+  const uploaded: string[] = []
+  try {
+    for (const file of files) uploaded.push(await uploadPropertyImage(id, file))
+  } catch (err) {
+    // Upload giữa chừng lỗi → dọn các file đã lên để không tạo orphan.
+    await Promise.all(uploaded.map((u) => deletePropertyImage(u).catch(() => {})))
+    const msg = err instanceof StorageError ? err.message : 'Upload thất bại.'
+    return NextResponse.json({ error: msg }, { status: err instanceof StorageError ? 400 : 500 })
+  }
+
+  // Append NGUYÊN TỬ (Prisma push) — tránh race read-modify-write khi upload đồng thời.
+  const updated = await prisma.property.update({
+    where: { id },
+    data: { images: { push: uploaded } },
+  })
+  return NextResponse.json({ property: toProperty(updated) }, { status: 201 })
 }
 
 // Ảnh có thể là URL Supabase HOẶC path tĩnh tương đối (/images/..) → chỉ cần string.
