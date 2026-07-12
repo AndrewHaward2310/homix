@@ -13,6 +13,7 @@
   /* Fonts */
   --font-sans: var(--font-sans-base), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+  --font-serif: var(--font-display), 'Fraunces', ui-serif, Georgia, serif;
 
   /* Semantic color mapping */
   --color-background: var(--background);
@@ -324,7 +325,65 @@
     }
   }
   .animate-page-enter {
-    animation: page-enter 0.35s var(--ease-luxury, cubic-bezier(0.22, 1, 0.36, 1)) both;
+    animation: page-enter 0.5s var(--ease-luxury, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  /* ---- Brand loader ---- */
+  /* Logo "thở" nhẹ: scale + độ mờ nhịp nhàng */
+  @keyframes brand-breathe {
+    0%,
+    100% {
+      transform: scale(0.92);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  .animate-brand-breathe {
+    animation: brand-breathe 1.6s var(--ease-luxury, cubic-bezier(0.22, 1, 0.36, 1)) infinite;
+  }
+
+  /* Vòng sáng lan toả quanh logo */
+  @keyframes brand-halo {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+  .animate-brand-halo {
+    animation: brand-halo 1.8s ease-out infinite;
+  }
+
+  /* Thanh tiến trình vô định — vệt sáng chạy qua lại */
+  @keyframes loading-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(300%);
+    }
+  }
+  .animate-loading-sweep {
+    animation: loading-sweep 1.15s var(--ease-luxury, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+  }
+
+  /* Fade nhẹ khi loader xuất hiện */
+  @keyframes loader-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .animate-loader-in {
+    animation: loader-in 0.3s ease-out both;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -332,7 +391,11 @@
     .rise,
     .animate-scrollcue,
     .animate-floaty,
-    .animate-page-enter {
+    .animate-page-enter,
+    .animate-brand-breathe,
+    .animate-brand-halo,
+    .animate-loading-sweep,
+    .animate-loader-in {
       animation: none;
       opacity: 1;
     }

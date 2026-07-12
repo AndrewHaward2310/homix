@@ -39,7 +39,7 @@ function Field({
   return (
     <label
       className={cn(
-        'group flex min-w-0 items-center gap-3 rounded-full px-5 py-2.5 transition-colors hover:bg-secondary/60',
+        'group flex min-w-0 items-center gap-3 rounded-full px-5 py-3.5 transition-colors hover:bg-secondary/60',
         className,
       )}
     >
@@ -93,9 +93,9 @@ export function SearchBar() {
   }
 
   return (
-    <div className="w-full max-w-3xl">
-      {/* Tabs — pill trên nền ảnh tối */}
-      <div className="mb-3 flex gap-2" role="tablist" aria-label={t('search.submit')}>
+    <div className="mx-auto w-full max-w-4xl">
+      {/* Tabs — pill trên nền ảnh tối, canh giữa */}
+      <div className="mb-4 flex justify-center gap-2" role="tablist" aria-label={t('search.submit')}>
         {TABS.map((tab) => {
           const selected = active === tab.type
           return (
@@ -106,10 +106,10 @@ export function SearchBar() {
               aria-selected={selected}
               onClick={() => setActive(tab.type)}
               className={cn(
-                'rounded-full px-5 py-2 font-sans text-[0.875rem] font-medium backdrop-blur-md transition-all duration-300 active:scale-[0.97]',
+                'rounded-full px-6 py-2.5 font-sans text-[0.9rem] font-medium backdrop-blur-md transition-all duration-300 active:scale-[0.97]',
                 selected
                   ? 'bg-background text-foreground shadow-luxury'
-                  : 'border border-white/25 bg-white/10 text-white hover:bg-white/20',
+                  : 'border border-white/30 bg-white/15 text-white hover:bg-white/25',
               )}
             >
               {t(tab.labelKey)}
@@ -121,7 +121,7 @@ export function SearchBar() {
       {/* Thanh search trắng đặc */}
       <form
         onSubmit={handleSearch}
-        className="flex flex-col gap-1 rounded-2xl bg-background p-2 shadow-luxury-lg ring-1 ring-black/5 transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/30 hover:-translate-y-0.5 hover:shadow-[0_54px_130px_-30px_rgba(29,29,31,0.32)] md:flex-row md:items-center md:gap-0 md:rounded-full md:p-1.5 md:pl-2"
+        className="flex flex-col gap-1 rounded-3xl bg-background p-2 shadow-luxury-lg ring-1 ring-black/5 transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/30 hover:-translate-y-0.5 hover:shadow-[0_54px_130px_-30px_rgba(29,29,31,0.32)] md:flex-row md:items-center md:gap-0 md:rounded-full md:p-2 md:pl-3"
       >
         <Field icon={MapPin} label={t('search.location')} className="md:flex-[1.5]">
           <select name="towerId" className={fieldControl} defaultValue="">
@@ -174,7 +174,7 @@ export function SearchBar() {
         {/* Nút tìm kiếm */}
         <button
           type="submit"
-          className="group mt-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-7 font-sans text-[1rem] font-medium text-primary-foreground transition-all duration-300 hover:brightness-110 hover:shadow-[0_10px_30px_-8px_rgba(11,92,99,0.6)] active:scale-[0.98] md:mt-0 md:h-12 md:w-12 md:px-0 lg:w-auto lg:px-7"
+          className="group mt-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-[linear-gradient(180deg,color-mix(in_srgb,var(--primary)_84%,white),var(--primary))] px-7 font-sans text-[1rem] font-medium text-primary-foreground shadow-[0_10px_28px_-10px_rgba(11,92,99,0.65)] ring-1 ring-inset ring-white/15 transition-all duration-300 hover:brightness-110 hover:shadow-[0_14px_36px_-8px_rgba(11,92,99,0.7)] active:scale-[0.98] md:mt-0 md:h-14 md:w-14 md:px-0 lg:w-auto lg:px-8"
         >
           <Search
             className="size-5 transition-transform duration-300 group-hover:scale-110"

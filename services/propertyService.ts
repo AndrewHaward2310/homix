@@ -210,6 +210,42 @@ export async function getSimilar(property: Property, limit = 4): Promise<Propert
   return items
 }
 
+async function parseError(res: Response): Promise<never> {
+  const body = (await res.json().catch(() => null)) as { error?: string } | null
+  throw new Error(body?.error ?? `Thao tác thất bại (${res.status})`)
+}
+
+/** Upload thêm ảnh cho 1 căn (admin/host sở hữu) → trả Property đã cập nhật. */
+export async function uploadPropertyImages(id: string, files: File[]): Promise<Property> {
+  const fd = new FormData()
+  files.forEach((f) => fd.append('files', f))
+  const res = await fetch(`/api/properties/${id}/images`, { method: 'POST', body: fd })
+  if (!res.ok) await parseError(res)
+  return ((await res.json()) as { property: Property }).property
+}
+
+/** Sắp xếp lại thứ tự ảnh (ảnh đầu = ảnh bìa) → trả Property đã cập nhật. */
+export async function reorderPropertyImages(id: string, images: string[]): Promise<Property> {
+  const res = await fetch(`/api/properties/${id}/images`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ images }),
+  })
+  if (!res.ok) await parseError(res)
+  return ((await res.json()) as { property: Property }).property
+}
+
+/** Xoá 1 ảnh của căn → trả Property đã cập nhật. */
+export async function deletePropertyImage(id: string, url: string): Promise<Property> {
+  const res = await fetch(`/api/properties/${id}/images`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  })
+  if (!res.ok) await parseError(res)
+  return ((await res.json()) as { property: Property }).property
+}
+
 /** Danh sách tòa tháp (shape Tower cơ bản) — cho search-bar & tra cứu theo id. */
 export async function getTowers(): Promise<Tower[]> {
   const data = await getJson<{ towers: Tower[] }>('/api/towers')
@@ -231,4 +267,7 @@ export const propertyService = {
   getSimilar,
   getTowers,
   getMasterplanTowers,
+  uploadPropertyImages,
+  reorderPropertyImages,
+  deletePropertyImage,
 }

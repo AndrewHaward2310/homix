@@ -173,6 +173,34 @@ export type Perk = {
 }
 
 // ---------------------------------------------------------------------------
+// TripCombo: gói "chuyến đi" = 1 căn lưu trú ngắn ngày + nhóm trải nghiệm (Perk),
+// bán theo giá gói ưu đãi so với mua lẻ. Hydrate từ Property + Perk ở API.
+// ---------------------------------------------------------------------------
+export type TripComboPerk = { perk: Perk; qty: number }
+
+export type TripCombo = {
+  id: string
+  title: LocalizedText
+  subtitle: LocalizedText
+  /** Ảnh bìa chủ đề (đường dẫn tĩnh). */
+  themeImage: string
+  nights: number
+  guests: number
+  /** Nhãn chủ đề ngắn, ví dụ "Nghỉ dưỡng", "Foodie". */
+  tags: LocalizedText[]
+  property: Property
+  perks: TripComboPerk[]
+  /** Tổng giá mua lẻ (lưu trú × đêm + các perk × số lượng). */
+  listPriceVnd: number
+  /** Giá gói ưu đãi. */
+  packagePriceVnd: number
+  savingsVnd: number
+  savingsPct: number
+  ratingAvg: number
+  reviewCount: number
+}
+
+// ---------------------------------------------------------------------------
 // Tiện ích định dạng
 // ---------------------------------------------------------------------------
 

@@ -54,18 +54,18 @@ export function GlassNavbar({ solid = false }: { solid?: boolean }) {
           scrolled ? 'border-b border-glass-border bg-glass backdrop-blur-xl' : 'border-b border-transparent bg-transparent',
         )}
       >
-        <Container className="flex h-16 items-center justify-between md:h-[72px]">
+        <Container className="flex h-[72px] items-center justify-between md:h-[88px]">
           <Link href="/" aria-label="HOMIX">
             <Logo tone={scrolled ? 'auto' : 'light'} />
           </Link>
 
-          <nav aria-label={t('nav.overview')} className="hidden items-center gap-9 md:flex">
+          <nav aria-label={t('nav.overview')} className="hidden items-center gap-10 md:flex">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'group relative font-sans text-[0.9rem] transition-colors duration-300',
+                  'group relative font-sans text-[0.95rem] font-medium transition-colors duration-300',
                   scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white',
                 )}
               >

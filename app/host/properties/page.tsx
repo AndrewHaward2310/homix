@@ -8,6 +8,7 @@ import { useAuth } from '@/components/auth/auth-context'
 import { useT } from '@/lib/i18n/provider'
 import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
 import { PropertyCard } from '@/components/property/property-card'
+import { ManageImagesButton } from '@/components/property/manage-images-button'
 
 export default function HostPropertiesPage() {
   const { user } = useAuth()
@@ -42,7 +43,16 @@ export default function HostPropertiesPage() {
       <StateWrapper state={state} className="mt-6" emptyTitle="Chưa có tài sản nào">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
-            <PropertyCard key={p.id} property={p} towerName={towerNames[p.towerId]} />
+            <div key={p.id} className="flex flex-col gap-3">
+              <PropertyCard property={p} towerName={towerNames[p.towerId]} />
+              <ManageImagesButton
+                property={p}
+                className="self-start"
+                onUpdated={(images) =>
+                  setItems((xs) => xs.map((x) => (x.id === p.id ? { ...x, images } : x)))
+                }
+              />
+            </div>
           ))}
         </div>
       </StateWrapper>

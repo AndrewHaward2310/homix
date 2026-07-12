@@ -9,6 +9,7 @@ import { searchProperties } from '@/services/propertyService'
 import { adminService } from '@/services/adminService'
 import { useLocale } from '@/lib/i18n/provider'
 import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
+import { ManageImagesButton } from '@/components/property/manage-images-button'
 import { cn } from '@/lib/utils'
 
 export default function AdminListingsPage() {
@@ -63,6 +64,13 @@ export default function AdminListingsPage() {
                 {p.verified ? <BadgeCheck className="size-3.5" /> : <Clock className="size-3.5" />}
                 {p.verified ? t('admin.verified') : t('admin.pending')}
               </span>
+              <ManageImagesButton
+                property={p}
+                className="shrink-0"
+                onUpdated={(images) =>
+                  setItems((xs) => xs.map((x) => (x.id === p.id ? { ...x, images } : x)))
+                }
+              />
               <button
                 type="button"
                 onClick={() => setVerified(p.id, !p.verified)}

@@ -24,6 +24,17 @@ const geistMono = localFont({
   display: 'swap',
 })
 
+// Font serif hiển thị (Fraunces) — chỉ dùng cho tiêu đề lớn/hero, tạo điểm nhấn sang.
+const display = localFont({
+  src: [
+    { path: './fonts/fraunces-vietnamese.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/fraunces-latin-ext.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/fraunces-latin.woff2', weight: '400 700', style: 'normal' },
+  ],
+  variable: '--font-display',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: {
@@ -63,7 +74,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`bg-background ${sans.variable} ${geistMono.variable}`}
+      className={`bg-background ${sans.variable} ${geistMono.variable} ${display.variable}`}
       suppressHydrationWarning
     >
       <head>

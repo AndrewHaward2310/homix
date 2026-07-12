@@ -15,11 +15,11 @@ type LogoProps = {
 export function Logo({ tone = 'auto', markOnly = false, className }: LogoProps) {
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <LogoMark className="size-8" />
+      <LogoMark className="size-9" />
       {!markOnly && (
         <span
           className={cn(
-            'font-sans text-[1.2rem] font-extrabold leading-none tracking-[-0.03em]',
+            'font-sans text-[1.35rem] font-extrabold leading-none tracking-[-0.03em]',
             tone === 'light' ? 'text-white' : 'text-foreground',
           )}
         >
