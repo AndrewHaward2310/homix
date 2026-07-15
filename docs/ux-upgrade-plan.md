@@ -10,6 +10,10 @@
 
 **Combo — cập nhật (iteration 2):** ✅ trang danh sách `/combo` (index) + link "Xem tất cả" trên trang chủ; tách `components/combo/combo-card.tsx` dùng chung (DRY). Codex + /code-review: 0 finding. **Còn thiếu:** đặt combo THẬT (CTA hiện trỏ `/property/[id]`) — cần booking gộp stay+perks; badge combo trên card căn hộ liên quan.
 
+## 🔴 #6 — Map nhấp nháy + Branded loading/error cấp component (user báo trực tiếp)
+- **Map flicker**: `components/home/masterplan/masterplan-locator.tsx` dùng style ngoài `MAP_STYLE_URL` (vh.vinhomes.vn) — chập chờn → chớp/"styleimagemissing". Cần: (a) overlay **BrandLoader** khi map chưa `load`; (b) bắt sự kiện `error`/`styleimagemissing` → trạng thái lỗi có thương hiệu + nút thử lại; (c) chống re-init (kiểm tra deps useEffect, guard tạo map 1 lần).
+- **Branded loader cấp component**: `BrandLoader`/`app/loading.tsx` hiện chỉ chạy khi chuyển route (Suspense). Tạo biến thể nhỏ gọn (spinner logo HOMIX) cho loading/error của map, danh sách, ảnh… Cân nhắc dùng trong `StateWrapper` (loading/error) để đồng bộ toàn site.
+
 ## 🔴 #2 — Hình ảnh & cách trình bày (ưu tiên cao — ảnh hiện vẫn chưa "chuẩn OCP"/chưa đồng bộ)
 1. **Chuẩn hoá bộ ảnh**: hero, featured, lifestyle, combo đang trộn ảnh thật OCP + vài ảnh nội thất "mượn". Cần 1 bộ ảnh nhất quán tông màu (xanh hồ/nắng ấm). Xem [[image-sourcing-decision]]. Việc này giờ **dễ hơn nhiều** nhờ tính năng **Quản lý ảnh** ([[property-image-management]]) — có thể thay ảnh từng căn ngay trên web.
 2. **Xử lý ảnh nhất quán**: tỉ lệ cắt cố định (4:3 card, 16:11 combo), overlay gradient thống nhất, `priority` cho ảnh đầu, chất lượng ≥ tránh vỡ nét.
@@ -37,12 +41,12 @@ Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được bu
 3. (#3) Hoàn thiện combo: index `/combo` + đặt combo thật.
 4. (#1) Bento featured + section số liệu + xen kẽ nền.
 
-## Bước "review" của loop — DÙNG CODEX CLI (đã cài)
-Codex CLI có sẵn (`codex`, đã login ChatGPT). Mỗi iteration, bước review chạy **cả hai** cho 2 góc nhìn:
-```
-codex exec -s read-only -o <outfile> "review 'git diff main...HEAD', tập trung code mới, tìm bug correctness/bảo mật/edge case, xuất finding file:line + mức độ + cách sửa, KHÔNG sửa file"
-```
-rồi đọc `<outfile>`, cộng với `/code-review`. Fix finding của cả hai. (Codex đã bắt được: race read-modify-write ở POST /images, orphan khi upload lỗi giữa chừng — đã fix ở commit `4b8c7bd`.)
+## Bước "review" của loop — HAI TẦNG (theo yêu cầu user)
+Mỗi iteration review bằng **2 tác nhân độc lập**, fix union của cả hai:
+1. **Subagent review** — spawn 1 subagent (Agent tool, `general-purpose`) đọc `git diff` của iteration, tìm bug correctness/bảo mật/edge case/UX, trả finding file:line + mức độ + cách sửa (KHÔNG sửa).
+2. **Codex CLI review** — `codex exec -s read-only -o <outfile> "review git diff HEAD, ... KHÔNG sửa file"` rồi đọc `<outfile>`.
+
+(Trước đây dùng `/code-review` skill thay cho subagent; Codex đã bắt race read-modify-write ở POST /images — fix ở `4b8c7bd`. Từ nay: subagent + Codex.)
 
 ## Ghi chú kỹ thuật
 - Font serif Fraunces render dấu tiếng Việt ở cỡ lớn hơi lệch (vd "Cuối tuần") — cân nhắc chỉ dùng serif cho tiêu đề ít dấu, hoặc fine-tune. Xem [[brand-and-font]].
