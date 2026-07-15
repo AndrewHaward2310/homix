@@ -2,6 +2,29 @@ import { LogoMark } from './logo'
 import { cn } from '@/lib/utils'
 
 /**
+ * BrandSpinner — loader thương hiệu NHỎ, canh giữa theo dòng chảy (không absolute).
+ * Dùng cho fallback loading của StateWrapper và các khối inline.
+ */
+export function BrandSpinner({ label, className }: { label?: string; className?: string }) {
+  return (
+    <div
+      className={cn('flex flex-col items-center justify-center gap-3 py-14 animate-loader-in', className)}
+      role="status"
+      aria-live="polite"
+      aria-label={label ?? 'Đang tải'}
+    >
+      <div className="relative flex items-center justify-center">
+        <span className="absolute size-9 rounded-xl bg-brand/25 blur-md animate-brand-halo" aria-hidden="true" />
+        <LogoMark className="relative size-9 animate-brand-breathe" />
+      </div>
+      {label && (
+        <span className="font-sans text-[0.8125rem] font-medium text-muted-foreground">{label}</span>
+      )}
+    </div>
+  )
+}
+
+/**
  * BrandLoaderInline — loader thương hiệu GỌN, phủ trong phần tử cha (relative).
  * Dùng cho loading cấp component: map, danh sách, ảnh… (không phải toàn màn hình).
  */

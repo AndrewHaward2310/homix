@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { AlertCircle, Inbox } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { BrandSpinner } from '@/components/luxury/brand-loader'
 
 export type ViewState = 'loading' | 'error' | 'empty' | 'success'
 
@@ -36,11 +37,7 @@ export function StateWrapper({
   if (state === 'loading') {
     return (
       <div className={className}>
-        {skeleton ?? (
-          <div className="flex items-center justify-center py-16">
-            <span className="size-6 animate-spin rounded-full border-2 border-border border-t-brand" />
-          </div>
-        )}
+        {skeleton ?? <BrandSpinner />}
       </div>
     )
   }

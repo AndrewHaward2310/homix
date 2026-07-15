@@ -14,7 +14,7 @@
 - Map: handler `styleimagemissing` chèn ảnh trong suốt → HẾT flicker icon thiếu (log sạch); loading overlay → **BrandLoaderInline** (logo HOMIX); error state có nút **Thử lại** (re-init map qua `retryKey`).
 - `components/luxury/brand-loader.tsx`: thêm **BrandLoaderInline** (loader thương hiệu gọn, phủ trong container) — tái dùng được cho map/danh sách/ảnh.
 - Review 2 tầng (subagent + Codex) đều bắt HIGH: retry không dọn `markersRef` → mất marker; đã fix (cleanup clear markersRef/poiPopupRef/heroLayerRef) + z-index loader.
-- **Còn (bổ sung sau):** tích hợp BrandLoaderInline vào `StateWrapper` để đồng bộ loading/error toàn site.
+- ✅ (iteration 5) Đồng bộ toàn site: thêm `BrandSpinner` (loader thương hiệu inline) + dùng làm fallback loading của `StateWrapper` → mọi trang host/admin/agent/combo/search có loading mang thương hiệu HOMIX (skeleton riêng vẫn ưu tiên). Review 2 tầng: 0 bug; Codex nhắc bỏ track `tsconfig.tsbuildinfo` → đã gitignore.
 
 ## 🔴 #2 — Hình ảnh & cách trình bày (ưu tiên cao — ảnh hiện vẫn chưa "chuẩn OCP"/chưa đồng bộ)
 1. **Chuẩn hoá bộ ảnh**: hero, featured, lifestyle, combo đang trộn ảnh thật OCP + vài ảnh nội thất "mượn". Cần 1 bộ ảnh nhất quán tông màu (xanh hồ/nắng ấm). Xem [[image-sourcing-decision]]. Việc này giờ **dễ hơn nhiều** nhờ tính năng **Quản lý ảnh** ([[property-image-management]]) — có thể thay ảnh từng căn ngay trên web.
