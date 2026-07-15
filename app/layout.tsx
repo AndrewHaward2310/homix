@@ -24,13 +24,19 @@ const geistMono = localFont({
   display: 'swap',
 })
 
-// Font hiển thị (Space Grotesk) — sans-serif hiện đại, hỗ trợ tiếng Việt đầy đủ.
-// Dùng cho tiêu đề lớn/hero (class font-display).
+// Font hiển thị (Be Vietnam Pro) — sans-serif hiện đại, THIẾT KẾ CHO TIẾNG VIỆT
+// (dấu chồng ế/ẫ/ị chuẩn). Dùng cho tiêu đề lớn/hero (class font-display).
 const display = localFont({
   src: [
-    { path: './fonts/spacegrotesk-vietnamese.woff2', weight: '400 700', style: 'normal' },
-    { path: './fonts/spacegrotesk-latin-ext.woff2', weight: '400 700', style: 'normal' },
-    { path: './fonts/spacegrotesk-latin.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/bevietnampro-500-vietnamese.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/bevietnampro-500-latin-ext.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/bevietnampro-500-latin.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/bevietnampro-600-vietnamese.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/bevietnampro-600-latin-ext.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/bevietnampro-600-latin.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/bevietnampro-700-vietnamese.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/bevietnampro-700-latin-ext.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/bevietnampro-700-latin.woff2', weight: '700', style: 'normal' },
   ],
   variable: '--font-display-base',
   display: 'swap',
