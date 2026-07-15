@@ -365,5 +365,22 @@
   "trust.verified": "Verified listings",
   "combos.viewAll": "View all combos",
   "combos.allTitle": "All trip combos",
-  "combos.allSubtitle": "Curated stay-plus-experience bundles — book once, enjoy it all."
+  "combos.allSubtitle": "Curated stay-plus-experience bundles — book once, enjoy it all.",
+  "agent.pricing.title": "AI Pricing",
+  "agent.pricing.subtitle": "Estimate a fair price range from comparable live listings.",
+  "agent.pricing.tower": "Tower / subzone",
+  "agent.pricing.anyTower": "All subzones",
+  "agent.pricing.type": "Deal type",
+  "agent.pricing.area": "Area (m²)",
+  "agent.pricing.beds": "Bedrooms",
+  "agent.pricing.anyBeds": "Any",
+  "agent.pricing.suggested": "Suggested price",
+  "agent.pricing.range": "Fair range",
+  "agent.pricing.perM2": "Median / m²",
+  "agent.pricing.comparables": "{n} comparables",
+  "agent.pricing.basis": "Based on {n} live listings of the same type",
+  "agent.pricing.empty": "Not enough data — widen the filters.",
+  "agent.pricing.compsTitle": "Comparable listings",
+  "agent.pricing.estimate": "Estimate",
+  "agent.pricing.bedsShort": "BR"
 }

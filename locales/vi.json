@@ -365,5 +365,22 @@
   "trust.verified": "Tin đăng được xác minh",
   "combos.viewAll": "Xem tất cả combo",
   "combos.allTitle": "Tất cả combo chuyến đi",
-  "combos.allSubtitle": "Gói lưu trú + trải nghiệm được tuyển chọn — đặt một lần, tận hưởng trọn vẹn."
+  "combos.allSubtitle": "Gói lưu trú + trải nghiệm được tuyển chọn — đặt một lần, tận hưởng trọn vẹn.",
+  "agent.pricing.title": "Định giá thông minh",
+  "agent.pricing.subtitle": "Ước tính khoảng giá dựa trên các căn tương đương đang niêm yết trên sàn.",
+  "agent.pricing.tower": "Tòa tháp / phân khu",
+  "agent.pricing.anyTower": "Tất cả phân khu",
+  "agent.pricing.type": "Loại giao dịch",
+  "agent.pricing.area": "Diện tích (m²)",
+  "agent.pricing.beds": "Số phòng ngủ",
+  "agent.pricing.anyBeds": "Bất kỳ",
+  "agent.pricing.suggested": "Giá đề xuất",
+  "agent.pricing.range": "Khoảng hợp lý",
+  "agent.pricing.perM2": "Trung vị / m²",
+  "agent.pricing.comparables": "{n} căn so sánh",
+  "agent.pricing.basis": "Dựa trên {n} tin cùng loại đang niêm yết",
+  "agent.pricing.empty": "Chưa đủ dữ liệu để định giá — hãy nới bộ lọc.",
+  "agent.pricing.compsTitle": "Căn tương đương",
+  "agent.pricing.estimate": "Ước tính",
+  "agent.pricing.bedsShort": "PN"
 }

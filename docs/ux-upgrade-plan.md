@@ -15,6 +15,11 @@
 2. **Xử lý ảnh nhất quán**: tỉ lệ cắt cố định (4:3 card, 16:11 combo), overlay gradient thống nhất, `priority` cho ảnh đầu, chất lượng ≥ tránh vỡ nét.
 3. **Ảnh có chiều sâu**: thêm hover-zoom (đã có ở combo card), parallax nhẹ ở vài section, ảnh phòng ngủ/bếp THẬT cho card (hiện `apt-bedroom-1`/`apt-kitchen-1` đang là ảnh phòng khách — xem [[image-sourcing-decision]] mục caveat).
 
+## 🟠 #5 — Đầy đủ tính năng cho SALE (portal /agent phần lớn là stub ComingSoon)
+Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được build; còn lại là stub 9 dòng.
+- ✅ **AI Pricing** (`/agent/pricing`) — công cụ định giá thật theo căn tương đương available (median/p25/p75 giá/m² × diện tích) + danh sách comps. Codex bắt 4 finding (chỉ lấy available, area rỗng, i18n `PN`) → đã fix.
+- **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `match` (gợi ý căn cho lead), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
+
 ## 🟠 #1 — Bố cục & nhịp điệu trang
 - **Xen kẽ nền & layout** để trang bớt "một mạch": section combo đã dùng `bg-secondary/40` — áp cùng nguyên tắc cho các section khác (sáng/tối xen kẽ, full-bleed vs container).
 - **Đa dạng dạng thẻ**: hiện featured toàn card giống nhau. Thêm 1 "hero card" lớn hoặc bố cục bento cho khu nổi bật.
