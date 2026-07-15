@@ -39,7 +39,7 @@ export function ComboIndexClient() {
         <Container className="py-12 md:py-16">
           <Reveal className="max-w-2xl">
             <Eyebrow>{t('combos.eyebrow')}</Eyebrow>
-            <H1 className="mt-4 font-serif">{t('combos.allTitle')}</H1>
+            <H1 className="mt-4 font-display">{t('combos.allTitle')}</H1>
             <Body className="mt-5">{t('combos.allSubtitle')}</Body>
           </Reveal>
 

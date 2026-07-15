@@ -54,7 +54,7 @@ export function ComboCard({ combo, priority }: { combo: TripCombo; priority?: bo
         </span>
 
         <div className="absolute inset-x-0 bottom-0 p-4">
-          <h3 className="font-serif text-[1.5rem] font-semibold leading-tight text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.5)]">
+          <h3 className="font-display text-[1.5rem] font-semibold leading-tight text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.5)]">
             {pickLocale(combo.title, locale)}
           </h3>
           <div className="mt-1.5 flex items-center gap-3 font-sans text-[0.8125rem] font-medium text-white/90">

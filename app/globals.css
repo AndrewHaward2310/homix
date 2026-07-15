@@ -13,7 +13,7 @@
   /* Fonts */
   --font-sans: var(--font-sans-base), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
-  --font-serif: var(--font-display), 'Fraunces', ui-serif, Georgia, serif;
+  --font-display: var(--font-display-base), 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
 
   /* Semantic color mapping */
   --color-background: var(--background);

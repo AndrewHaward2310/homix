@@ -92,7 +92,7 @@ export function ComboDetailClient({ id }: { id: string }) {
                       </span>
                     ))}
                   </div>
-                  <h1 className="mt-3 max-w-3xl font-serif text-[2.25rem] font-semibold leading-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)] md:text-[3rem]">
+                  <h1 className="mt-3 max-w-3xl font-display text-[2.25rem] font-semibold leading-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)] md:text-[3rem]">
                     {pickLocale(combo.title, locale)}
                   </h1>
                   <div className="mt-3 flex flex-wrap items-center gap-4 font-sans text-[0.9rem] font-medium text-white/90">
@@ -180,7 +180,7 @@ export function ComboDetailClient({ id }: { id: string }) {
                       </span>
                     </div>
                     <div className="mt-2 flex items-end justify-between gap-2">
-                      <span className="font-serif text-[2rem] font-bold leading-none text-foreground">
+                      <span className="font-display text-[2rem] font-bold leading-none text-foreground">
                         {formatCurrency(combo.packagePriceVnd)}
                       </span>
                       <span className="font-sans text-[0.8125rem] text-muted-foreground">{t('combos.package')}</span>

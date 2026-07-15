@@ -87,7 +87,7 @@ export function TestimonialsSection() {
     <Section id="danh-gia" className="scroll-mt-20">
       <Reveal className="max-w-2xl">
         <Eyebrow>{t('testimonials.eyebrow')}</Eyebrow>
-        <H2 className="mt-4 font-serif">{t('testimonials.title')}</H2>
+        <H2 className="mt-4 font-display">{t('testimonials.title')}</H2>
         <Body className="mt-5">{t('testimonials.subtitle')}</Body>
         {!loading && (
           <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2">

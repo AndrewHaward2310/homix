@@ -169,7 +169,7 @@ export default function AgentPricingPage() {
                   <div className="flex items-center gap-2 font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.1em] text-brand">
                     <Sparkles className="size-4" /> {t('agent.pricing.estimate')}
                   </div>
-                  <div className="mt-2 font-serif text-[2.4rem] font-bold leading-none text-foreground">
+                  <div className="mt-2 font-display text-[2.4rem] font-bold leading-none text-foreground">
                     {formatCurrency(estimate.suggested)}
                   </div>
                   <div className="mt-2 font-sans text-[0.9rem] text-muted-foreground">

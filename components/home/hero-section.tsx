@@ -40,7 +40,7 @@ export function HeroSection() {
       <Container className="relative z-10 flex flex-col items-center pb-16 pt-28 text-center md:pt-32">
         <Reveal className="flex flex-col items-center">
           <Eyebrow className="text-white/85">{t('hero.eyebrow')}</Eyebrow>
-          <Display className="mt-5 max-w-4xl text-balance font-serif font-medium tracking-[-0.015em] text-white drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
+          <Display className="mt-5 max-w-4xl text-balance font-display font-medium tracking-[-0.015em] text-white drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
             {t('hero.pitch')}
           </Display>
         </Reveal>

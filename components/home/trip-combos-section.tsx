@@ -40,7 +40,7 @@ export function TripCombosSection() {
       <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div className="max-w-2xl">
           <Eyebrow>{t('combos.eyebrow')}</Eyebrow>
-          <H2 className="mt-4 font-serif">{t('combos.title')}</H2>
+          <H2 className="mt-4 font-display">{t('combos.title')}</H2>
           <Body className="mt-5">{t('combos.subtitle')}</Body>
         </div>
         <Link
