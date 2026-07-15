@@ -18,6 +18,7 @@ import {
 import { useLocale } from '@/lib/i18n/provider'
 import { formatMoney } from '@/types'
 import { cn } from '@/lib/utils'
+import { BrandLoaderInline } from '@/components/luxury/brand-loader'
 import {
   AMENITY_CATEGORY_META,
   AMENITY_CATEGORY_ORDER,
@@ -312,6 +313,7 @@ export function MasterplanLocator() {
 
   const [loaded, setLoaded] = useState(false)
   const [mapError, setMapError] = useState(false)
+  const [retryKey, setRetryKey] = useState(0)
   const [showAmenities, setShowAmenities] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [openId, setOpenId] = useState<string | null>(null)
@@ -427,6 +429,14 @@ export function MasterplanLocator() {
       // style/tiles không tải được -> hiện fallback
       if (e?.error && !mapRef.current?.isStyleLoaded()) setMapError(true)
     })
+    // Icon sprite thiếu (style ngoài Vinhomes hay thiếu) -> chèn ảnh trong suốt để
+    // MapLibre không cảnh báo lặp & không nhấp nháy vì thiếu ảnh.
+    map.on('styleimagemissing', (e) => {
+      const id = e.id
+      if (id && !map.hasImage(id)) {
+        map.addImage(id, { width: 1, height: 1, data: new Uint8Array(4) })
+      }
+    })
     map.on('move', () => {
       // cập nhật vị trí popup theo camera hiện tại
       projectOpenRef.current()
@@ -439,11 +449,19 @@ export function MasterplanLocator() {
 
     return () => {
       ro.disconnect()
+      // Dọn marker/popup/3D-layer gắn với map cũ để lần re-init ("Thử lại") tạo lại
+      // đúng (nếu không, guard markersRef.has() sẽ bỏ qua mọi tòa → mất hết marker).
+      markersRef.current.forEach(({ marker }) => marker.remove())
+      markersRef.current.clear()
+      poiPopupRef.current?.remove()
+      poiPopupRef.current = null
+      heroLayerRef.current = null
       map.remove()
       mapRef.current = null
     }
+    // retryKey: cho phép khởi tạo lại map khi bấm "Thử lại".
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [retryKey])
 
   // Toà 3D điểm nhấn (three.js custom layer) — thêm 1 lần khi có tòa + map sẵn sàng.
   useEffect(() => {
@@ -846,7 +864,7 @@ export function MasterplanLocator() {
           sập về 0px và bản đồ trắng. */}
       <div ref={containerRef} className="h-full w-full" aria-label="Ocean Park map" />
 
-      {/* Fallback khi map lỗi */}
+      {/* Fallback khi map lỗi — mang thương hiệu + nút thử lại */}
       {mapError && (
         <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-secondary to-muted px-6 text-center">
           <MapPinOff className="size-7 text-muted-foreground" aria-hidden="true" />
@@ -856,12 +874,26 @@ export function MasterplanLocator() {
           <p className="max-w-sm font-sans text-sm leading-relaxed text-muted-foreground">
             {t('locator.errorDesc')}
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              setMapError(false)
+              setLoaded(false)
+              setRetryKey((k) => k + 1)
+            }}
+            className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 font-sans text-sm font-semibold text-primary-foreground transition hover:brightness-110"
+          >
+            {t('locator.retry')}
+          </button>
         </div>
       )}
 
-      {/* Shimmer khi map đang tải */}
+      {/* Loader thương hiệu khi map đang tải (thay shimmer thô) */}
       {!loaded && !mapError && (
-        <div className="absolute inset-0 z-30 animate-pulse bg-gradient-to-br from-secondary via-muted to-secondary" />
+        <>
+          <div className="absolute inset-0 z-20 bg-gradient-to-br from-secondary via-muted to-secondary" aria-hidden="true" />
+          <BrandLoaderInline label={t('locator.loading')} className="z-[35]" />
+        </>
       )}
 
       {!mapError && (

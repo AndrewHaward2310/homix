@@ -2,6 +2,35 @@ import { LogoMark } from './logo'
 import { cn } from '@/lib/utils'
 
 /**
+ * BrandLoaderInline — loader thương hiệu GỌN, phủ trong phần tử cha (relative).
+ * Dùng cho loading cấp component: map, danh sách, ảnh… (không phải toàn màn hình).
+ */
+export function BrandLoaderInline({ label, className }: { label?: string; className?: string }) {
+  return (
+    <div
+      className={cn(
+        'absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-background/70 backdrop-blur-sm animate-loader-in',
+        className,
+      )}
+      role="status"
+      aria-live="polite"
+      aria-label={label ?? 'Đang tải'}
+    >
+      <div className="relative flex items-center justify-center">
+        <span className="absolute size-10 rounded-xl bg-brand/25 blur-md animate-brand-halo" aria-hidden="true" />
+        <LogoMark className="relative size-10 animate-brand-breathe" />
+      </div>
+      {label && (
+        <span className="font-sans text-[0.8125rem] font-medium text-muted-foreground">{label}</span>
+      )}
+      <span className="relative h-[3px] w-24 overflow-hidden rounded-full bg-border">
+        <span className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-brand animate-loading-sweep" aria-hidden="true" />
+      </span>
+    </div>
+  )
+}
+
+/**
  * BrandLoader — màn hình chờ toàn khung, mang thương hiệu HOMIX.
  * Logo "thở" nhẹ + vòng halo lan toả + thanh tiến trình vô định.
  * Dùng cho app/loading.tsx (Suspense boundary của App Router).

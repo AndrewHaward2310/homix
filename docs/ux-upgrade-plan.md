@@ -10,9 +10,11 @@
 
 **Combo — cập nhật (iteration 2):** ✅ trang danh sách `/combo` (index) + link "Xem tất cả" trên trang chủ; tách `components/combo/combo-card.tsx` dùng chung (DRY). Codex + /code-review: 0 finding. **Còn thiếu:** đặt combo THẬT (CTA hiện trỏ `/property/[id]`) — cần booking gộp stay+perks; badge combo trên card căn hộ liên quan.
 
-## 🔴 #6 — Map nhấp nháy + Branded loading/error cấp component (user báo trực tiếp)
-- **Map flicker**: `components/home/masterplan/masterplan-locator.tsx` dùng style ngoài `MAP_STYLE_URL` (vh.vinhomes.vn) — chập chờn → chớp/"styleimagemissing". Cần: (a) overlay **BrandLoader** khi map chưa `load`; (b) bắt sự kiện `error`/`styleimagemissing` → trạng thái lỗi có thương hiệu + nút thử lại; (c) chống re-init (kiểm tra deps useEffect, guard tạo map 1 lần).
-- **Branded loader cấp component**: `BrandLoader`/`app/loading.tsx` hiện chỉ chạy khi chuyển route (Suspense). Tạo biến thể nhỏ gọn (spinner logo HOMIX) cho loading/error của map, danh sách, ảnh… Cân nhắc dùng trong `StateWrapper` (loading/error) để đồng bộ toàn site.
+## ✅ #6 — Map nhấp nháy + Branded loading/error — ĐÃ LÀM (iteration 4)
+- Map: handler `styleimagemissing` chèn ảnh trong suốt → HẾT flicker icon thiếu (log sạch); loading overlay → **BrandLoaderInline** (logo HOMIX); error state có nút **Thử lại** (re-init map qua `retryKey`).
+- `components/luxury/brand-loader.tsx`: thêm **BrandLoaderInline** (loader thương hiệu gọn, phủ trong container) — tái dùng được cho map/danh sách/ảnh.
+- Review 2 tầng (subagent + Codex) đều bắt HIGH: retry không dọn `markersRef` → mất marker; đã fix (cleanup clear markersRef/poiPopupRef/heroLayerRef) + z-index loader.
+- **Còn (bổ sung sau):** tích hợp BrandLoaderInline vào `StateWrapper` để đồng bộ loading/error toàn site.
 
 ## 🔴 #2 — Hình ảnh & cách trình bày (ưu tiên cao — ảnh hiện vẫn chưa "chuẩn OCP"/chưa đồng bộ)
 1. **Chuẩn hoá bộ ảnh**: hero, featured, lifestyle, combo đang trộn ảnh thật OCP + vài ảnh nội thất "mượn". Cần 1 bộ ảnh nhất quán tông màu (xanh hồ/nắng ấm). Xem [[image-sourcing-decision]]. Việc này giờ **dễ hơn nhiều** nhờ tính năng **Quản lý ảnh** ([[property-image-management]]) — có thể thay ảnh từng căn ngay trên web.

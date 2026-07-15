@@ -382,5 +382,6 @@
   "agent.pricing.empty": "Chưa đủ dữ liệu để định giá — hãy nới bộ lọc.",
   "agent.pricing.compsTitle": "Căn tương đương",
   "agent.pricing.estimate": "Ước tính",
-  "agent.pricing.bedsShort": "PN"
+  "agent.pricing.bedsShort": "PN",
+  "locator.retry": "Thử lại"
 }

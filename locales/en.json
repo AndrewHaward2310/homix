@@ -382,5 +382,6 @@
   "agent.pricing.empty": "Not enough data — widen the filters.",
   "agent.pricing.compsTitle": "Comparable listings",
   "agent.pricing.estimate": "Estimate",
-  "agent.pricing.bedsShort": "BR"
+  "agent.pricing.bedsShort": "BR",
+  "locator.retry": "Try again"
 }
