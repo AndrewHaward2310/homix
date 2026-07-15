@@ -8,7 +8,7 @@
 - UI: section trang chủ `components/home/trip-combos-section.tsx` (thẻ magazine: ảnh chủ đề, tag, **badge tiết kiệm %**, **rating sao**, giá lẻ gạch ngang + giá gói) và trang chi tiết `app/combo/[id]` (hero + "Trong combo có gì" + panel giá sticky + "Đặt combo này").
 - Đã verify: giá/tiết kiệm/rating đúng; section + detail render đẹp (vi/en).
 
-**Còn thiếu của combo (đề xuất tiếp):** trang danh sách `/combo` (index) + link "Xem tất cả"; đặt combo THẬT (hiện CTA trỏ về `/property/[id]`) — cần booking gộp stay+perks; badge combo trên card căn hộ liên quan.
+**Combo — cập nhật (iteration 2):** ✅ trang danh sách `/combo` (index) + link "Xem tất cả" trên trang chủ; tách `components/combo/combo-card.tsx` dùng chung (DRY). Codex + /code-review: 0 finding. **Còn thiếu:** đặt combo THẬT (CTA hiện trỏ `/property/[id]`) — cần booking gộp stay+perks; badge combo trên card căn hộ liên quan.
 
 ## 🔴 #2 — Hình ảnh & cách trình bày (ưu tiên cao — ảnh hiện vẫn chưa "chuẩn OCP"/chưa đồng bộ)
 1. **Chuẩn hoá bộ ảnh**: hero, featured, lifestyle, combo đang trộn ảnh thật OCP + vài ảnh nội thất "mượn". Cần 1 bộ ảnh nhất quán tông màu (xanh hồ/nắng ấm). Xem [[image-sourcing-decision]]. Việc này giờ **dễ hơn nhiều** nhờ tính năng **Quản lý ảnh** ([[property-image-management]]) — có thể thay ảnh từng căn ngay trên web.

@@ -362,5 +362,8 @@
   "trust.support": "24/7 support",
   "trust.towers": "Subzones",
   "trust.transparent": "Transparent pricing, no hidden fees",
-  "trust.verified": "Verified listings"
+  "trust.verified": "Verified listings",
+  "combos.viewAll": "View all combos",
+  "combos.allTitle": "All trip combos",
+  "combos.allSubtitle": "Curated stay-plus-experience bundles — book once, enjoy it all."
 }
