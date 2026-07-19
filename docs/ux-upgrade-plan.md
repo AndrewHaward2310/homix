@@ -24,7 +24,8 @@
 ## 🟠 #5 — Đầy đủ tính năng cho SALE (portal /agent phần lớn là stub ComingSoon)
 Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được build; còn lại là stub 9 dòng.
 - ✅ **AI Pricing** (`/agent/pricing`) — công cụ định giá thật theo căn tương đương available (median/p25/p75 giá/m² × diện tích) + danh sách comps. Codex bắt 4 finding (chỉ lấy available, area rỗng, i18n `PN`) → đã fix.
-- **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `match` (gợi ý căn cho lead), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
+- ✅ **Smart Match** (`/agent/match`, iteration 6) — mỗi lead + căn gợi ý thật (join `matchedPropertyIds`→property, chỉ căn available), badge trạng thái, liên hệ mailto/tel. Review 2 tầng cùng bắt: getProperties default pageSize (→ searchProperties 48), lọc available, mailto/tel, retry, key thừa — đã fix hết.
+- **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
 
 ## 🟠 #1 — Bố cục & nhịp điệu trang
 - **Xen kẽ nền & layout** để trang bớt "một mạch": section combo đã dùng `bg-secondary/40` — áp cùng nguyên tắc cho các section khác (sáng/tối xen kẽ, full-bleed vs container).

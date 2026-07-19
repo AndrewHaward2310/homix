@@ -383,5 +383,12 @@
   "agent.pricing.compsTitle": "Căn tương đương",
   "agent.pricing.estimate": "Ước tính",
   "agent.pricing.bedsShort": "PN",
-  "locator.retry": "Thử lại"
+  "locator.retry": "Thử lại",
+  "agent.match.title": "Smart Match",
+  "agent.match.subtitle": "Gợi ý căn phù hợp cho từng khách theo nhu cầu đã ghi nhận.",
+  "agent.match.need": "Nhu cầu",
+  "agent.match.matched": "Căn gợi ý",
+  "agent.match.noMatch": "Chưa có căn khớp — thêm nhu cầu hoặc mở rộng tiêu chí.",
+  "agent.match.contact": "Liên hệ",
+  "agent.match.empty": "Chưa có khách nào."
 }

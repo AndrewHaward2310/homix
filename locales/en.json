@@ -383,5 +383,12 @@
   "agent.pricing.compsTitle": "Comparable listings",
   "agent.pricing.estimate": "Estimate",
   "agent.pricing.bedsShort": "BR",
-  "locator.retry": "Try again"
+  "locator.retry": "Try again",
+  "agent.match.title": "Smart Match",
+  "agent.match.subtitle": "Suggested units for each customer based on their recorded needs.",
+  "agent.match.need": "Need",
+  "agent.match.matched": "Suggested units",
+  "agent.match.noMatch": "No match yet — add needs or widen criteria.",
+  "agent.match.contact": "Contact",
+  "agent.match.empty": "No customers yet."
 }
