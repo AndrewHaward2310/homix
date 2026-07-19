@@ -30,7 +30,7 @@ Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được bu
 ## 🔴 #7 — Homepage CHƯA ĐỦ MỚI LẠ / GIỮ CHÂN (user báo lại nhiều lần)
 Mục tiêu: 5–10 giây đầu phải "wow" + có yếu tố tương tác giữ người xem cuộn tiếp. Ý tưởng (làm dần, mỗi iteration 1–2 mảng):
 - **Hero sống động hơn**: giữ layout gọn nhưng thêm chiều sâu — ví dụ scroll-parallax nhẹ trên ảnh, hoặc số liệu/điểm nhấn động (đếm số) ngay dưới search; cân nhắc "search gợi ý" (autocomplete phân khu) để tương tác ngay.
-- **Bố cục bento** cho khu "Căn hộ nổi bật": 1 card lớn nổi bật + lưới nhỏ, thay vì 8 card đều tăm tắp → phá đơn điệu.
+- ✅ (iteration 7) **Bố cục bento** cho "Căn hộ nổi bật": `FeaturedHeroCard` lớn (magazine) + lưới 2×2 + hàng 3 card → phá kiểu 8 card đều. Review 2 tầng: guard khi ít item, DRY helper giá (`lib/property-format.ts` dùng chung PropertyCard), motion-safe hover. (Bỏ qua button-in-Link vì giống PropertyCard sẵn có.)
 - **Nhịp xen kẽ**: nền sáng/tối xen kẽ giữa các section (combo đã có `bg-secondary/40`) + divider mềm; reveal/stagger nhất quán.
 - **Yếu tố tương tác giữ chân**: dải "đang xem / vừa đặt" (social proof động), hoặc quiz nhỏ "tìm căn hợp gu" → dẫn vào /search với filter.
 - **Micro-interactions**: hover card nâng + đổ bóng (đã có ở combo), nút CTA có phản hồi, cursor/entrance tinh tế.

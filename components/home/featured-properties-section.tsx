@@ -12,6 +12,7 @@ import { getProperties, getTowers } from '@/services/propertyService'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useT } from '@/lib/i18n/provider'
 import { PropertyCard } from '@/components/property/property-card'
+import { FeaturedHeroCard } from '@/components/property/featured-hero-card'
 import { PropertyGridSkeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
@@ -60,20 +61,54 @@ export function FeaturedPropertiesSection() {
 
       {loading ? (
         <PropertyGridSkeleton count={8} className="mt-12" />
-      ) : (
-        <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((property, i) => (
-            <Reveal key={property.id} delay={(i % 4) * 80}>
-              <PropertyCard
-                property={property}
-                towerName={towerNames[property.towerId]}
-                favorite={isFavorite(property.id)}
+      ) : items.length === 0 ? null : (
+        <>
+          {/* Bố cục bento: 1 căn nổi bật lớn (magazine) + lưới căn nhỏ bên cạnh.
+              Chỉ chia 2 cột khi có ≥2 căn (tránh cột phải trống nếu quá ít). */}
+          <div className={cn('mt-12 grid gap-6', items.length > 1 && 'lg:grid-cols-2')}>
+            <Reveal className="lg:flex">
+              <FeaturedHeroCard
+                property={items[0]}
+                towerName={towerNames[items[0].towerId]}
+                favorite={isFavorite(items[0].id)}
                 onToggleFavorite={toggle}
-                priority={i < 4}
+                priority
+                className="w-full"
               />
             </Reveal>
-          ))}
-        </div>
+            {items.length > 1 && (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {items.slice(1, 5).map((property, i) => (
+                  <Reveal key={property.id} delay={(i % 2) * 80}>
+                    <PropertyCard
+                      property={property}
+                      towerName={towerNames[property.towerId]}
+                      favorite={isFavorite(property.id)}
+                      onToggleFavorite={toggle}
+                      priority={i < 2}
+                    />
+                  </Reveal>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Hàng căn còn lại */}
+          {items.length > 5 && (
+            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+              {items.slice(5, 8).map((property, i) => (
+                <Reveal key={property.id} delay={(i % 3) * 80}>
+                  <PropertyCard
+                    property={property}
+                    towerName={towerNames[property.towerId]}
+                    favorite={isFavorite(property.id)}
+                    onToggleFavorite={toggle}
+                  />
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </Section>
   )

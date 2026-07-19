@@ -6,7 +6,7 @@ import { Bed, Bath, Maximize, Heart, BadgeCheck, Star } from 'lucide-react'
 import type { Property } from '@/types'
 import { pickLocale } from '@/types'
 import { useLocale } from '@/lib/i18n/provider'
-import { getIntlLocale } from '@/lib/i18n/config'
+import { formatCompactPrice, priceSuffixKey } from '@/lib/property-format'
 import { cn } from '@/lib/utils'
 
 type PropertyCardProps = {
@@ -33,19 +33,9 @@ export function PropertyCard({
 }: PropertyCardProps) {
   const { locale, t } = useLocale()
   const title = pickLocale(property.title, locale)
-  const intl = getIntlLocale(locale)
-  const compact = new Intl.NumberFormat(intl, {
-    style: 'currency',
-    currency: 'VND',
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(property.priceVnd)
-  const suffix =
-    property.type === 'rent_long'
-      ? t('common.perMonth')
-      : property.type === 'stay_short'
-        ? t('common.perNight')
-        : ''
+  const compact = formatCompactPrice(property.priceVnd, locale)
+  const suffixKey = priceSuffixKey(property.type)
+  const suffix = suffixKey ? t(suffixKey) : ''
 
   return (
     <Link
