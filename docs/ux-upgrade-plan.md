@@ -50,7 +50,13 @@ Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia s
 - ✅ **B (phần 1)** — ADMIN CHỈNH BẬC GIẢM GIÁ đã làm: `/admin/settings` (thay stub) — thêm/xoá/bật-tắt/sửa %, trần giảm, xem trước; `/api/admin/combo-discounts` (GET+PUT, chỉ admin, zod, transaction Serializable). Verify end-to-end: admin đổi 8%→15% ⇒ builder đổi giá ngay. Review 2 tầng đã fix: chặn gửi mảng rỗng (xoá sạch bậc), chặn mốc trùng cả client lẫn server, trần `maxDiscountVnd` (BigInt an toàn), key ổn định khi xoá dòng, không nuốt ký tự khi gõ, không cho xoá bậc cuối.
 - **B (còn lại)** — link chia sẻ đã có sẵn nhờ state trên URL; còn: 2 lối vào (wizard hỏi nhanh, mở từ combo mẫu) + gợi ý thông minh.
 - ⚠️ **PHÁT HIỆN QUAN TRỌNG (reviewer nêu):** `app/api/bookings/route.ts` tính `totalVnd = priceVnd × nights` — **chưa áp perks lẫn bậc giảm giá**. Nghĩa là bậc admin chỉnh mới ảnh hưởng con số HIỂN THỊ ở builder, chưa ảnh hưởng tiền đặt thật. Phải làm ở **C** (booking tiêu thụ combo) thì tính năng mới có tác dụng thương mại.
-- **C** — Bản SALE ở `/agent/collections`: tái dùng builder, chọn lead, "gửi báo giá" (copy link), tóm tắt gửi khách.
+- **C1 (ƯU TIÊN CAO NHẤT)** — BOOKING TIÊU THỤ COMBO để tiền đặt thật đúng:
+  - `prisma`: thêm `Booking.perks Json?` (snapshot [{perkId, qty, priceVnd}]) + migration (DB local, an toàn).
+  - `POST /api/bookings`: nhận `perks?: [{perkId, qty}]`; **tính TIỀN Ở SERVER** — nạp giá perk từ DB (không tin client), nạp bậc giảm giá từ `ComboDiscountTier`, dùng `priceCombo()` → `totalVnd = packagePriceVnd`; lưu snapshot perks. Giữ nguyên chặn double-booking.
+  - `components/property/property-detail-client.tsx`: đọc `nights/guests/perks` trên URL (builder truyền sang), hiện bảng kê combo (lưu trú + từng trải nghiệm + giảm giá) và gửi `perks` khi đặt.
+  - Verify: đặt thử từ builder → `totalVnd` khớp giá gói builder hiển thị.
+- **C2** — Bản SALE ở `/agent/collections` (tab "Báo giá"): tái dùng builder, chọn lead, "gửi báo giá" (copy link), tóm tắt gửi khách.
+- **C3** — 2 lối vào còn lại của builder: wizard hỏi nhanh (đi với ai/mấy đêm/thích gì/ngân sách) + mở từ combo mẫu; và gợi ý thông minh (đếm đồng xuất hiện perk trong `COMBO_DEFS`).
 
 **Ràng buộc:** i18n vi/en; KHÔNG cắt chữ "..."; mật độ thông tin gọn (chi tiết để ở trang căn); `motion-safe:`; verify tsc + screenshot vi/en; review 2 tầng mỗi vòng.
 
