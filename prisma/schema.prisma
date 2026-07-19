@@ -181,6 +181,10 @@ model Booking {
   checkOut   String? // stay_short: ngày trả phòng
   viewingAt  String? // sale/rent_long: thời điểm hẹn xem (ISO)
   status     BookingStatus @default(pending)
+  /// Trải nghiệm đặt kèm (combo tự thiết kế): [{ perkId, qty, priceVnd, name }].
+  /// Lưu SNAPSHOT giá lúc đặt để sau này perk đổi giá không làm sai đơn cũ.
+  perks      Json?
+  /// Tổng cuối cùng SAU giảm giá bậc thang (server tính, không tin client).
   totalVnd   BigInt        @default(0)
   createdAt  DateTime      @default(now())
 

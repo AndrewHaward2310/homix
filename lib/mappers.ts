@@ -14,6 +14,7 @@ import type {
 } from '@prisma/client'
 import type {
   Booking,
+  BookingPerk,
   Favorite,
   Lead,
   LocaleCode,
@@ -107,9 +108,28 @@ export function toBooking(b: PrismaBooking): Booking {
     checkOut: b.checkOut ?? undefined,
     viewingAt: b.viewingAt ?? undefined,
     status: b.status,
+    perks: toBookingPerks(b.perks),
     totalVnd: toNum(b.totalVnd),
     createdAt: b.createdAt.toISOString(),
   }
+}
+
+/** Đọc snapshot perks (JSONB) về mảng BookingPerk, bỏ qua dữ liệu cũ/không hợp lệ. */
+function toBookingPerks(raw: PrismaBooking['perks']): BookingPerk[] | undefined {
+  if (!Array.isArray(raw)) return undefined
+  const out: BookingPerk[] = []
+  for (const item of raw) {
+    if (!item || typeof item !== 'object') continue
+    const r = item as Record<string, unknown>
+    if (typeof r.perkId !== 'string' || typeof r.qty !== 'number') continue
+    out.push({
+      perkId: r.perkId,
+      qty: r.qty,
+      priceVnd: typeof r.priceVnd === 'number' ? r.priceVnd : toNum(r.priceVnd as never),
+      name: (r.name ?? {}) as LocalizedText,
+    })
+  }
+  return out.length ? out : undefined
 }
 
 export function toLead(l: PrismaLead): Lead {

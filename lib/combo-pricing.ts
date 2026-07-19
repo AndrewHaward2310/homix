@@ -3,6 +3,28 @@
  * Tách riêng để hai luồng không bao giờ lệch cách tính.
  */
 
+/** Trần số lượng cho MỘT trải nghiệm trong một đơn. */
+export const MAX_PERK_QTY = 20
+/** Trần số LOẠI trải nghiệm khác nhau trong một đơn. */
+export const MAX_PERK_KINDS = 20
+
+/**
+ * Gộp danh sách trải nghiệm theo id: cộng dồn số lượng, chặn trần, giữ thứ tự chọn.
+ * Dùng CHUNG cho client (đọc URL) và server (đọc payload) — nếu chỉ một bên gộp,
+ * một perk lặp nhiều lần sẽ bị đếm thành nhiều loại và tự leo bậc giảm giá.
+ */
+export function dedupePerks<T extends { perkId: string; qty: number }>(
+  items: T[],
+): { perkId: string; qty: number }[] {
+  const byId = new Map<string, number>()
+  for (const it of items) {
+    if (!it.perkId || !Number.isInteger(it.qty) || it.qty <= 0) continue
+    if (!byId.has(it.perkId) && byId.size >= MAX_PERK_KINDS) continue
+    byId.set(it.perkId, Math.min((byId.get(it.perkId) ?? 0) + it.qty, MAX_PERK_QTY))
+  }
+  return [...byId].map(([perkId, qty]) => ({ perkId, qty }))
+}
+
 /** Bậc giảm giá — nguồn từ bảng ComboDiscountTier (admin chỉnh ở /admin/settings). */
 export type DiscountTier = {
   minPerks: number
@@ -36,8 +58,8 @@ export type ComboPrice = {
   appliedTier: DiscountTier | null
 }
 
-/** Làm tròn xuống bội số 1.000đ cho giá đẹp. */
-const roundVnd = (n: number) => Math.round(n / 1000) * 1000
+/** Làm tròn XUỐNG bội số 1.000đ (dùng cho số tiền được giảm — giá đẹp, không vượt gốc). */
+const floorVnd = (n: number) => Math.floor(n / 1000) * 1000
 
 /** Bậc cao nhất mà số trải nghiệm đạt được (chỉ xét bậc đang bật). */
 export function tierFor(perksCount: number, tiers: DiscountTier[]): DiscountTier | null {
@@ -66,8 +88,10 @@ export function priceCombo(input: ComboPriceInput): ComboPrice {
   const cap = appliedTier?.maxDiscountVnd
   if (cap != null) discountVnd = Math.min(discountVnd, cap)
 
-  const packagePriceVnd = roundVnd(listPriceVnd - discountVnd)
-  const savingsVnd = listPriceVnd - packagePriceVnd
+  // Làm tròn ĐÚNG số tiền giảm (xuống bội 1.000đ) rồi trừ khỏi giá gốc: đảm bảo
+  // packagePrice ≤ listPrice, savings ≥ 0, và không có "tiết kiệm ảo" khi giảm = 0.
+  const savingsVnd = Math.max(0, Math.min(floorVnd(discountVnd), listPriceVnd))
+  const packagePriceVnd = listPriceVnd - savingsVnd
 
   return {
     listPriceVnd,

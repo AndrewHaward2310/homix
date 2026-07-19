@@ -1,10 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ChevronLeft, ChevronRight, CalendarDays, CheckCircle2, Loader2 } from 'lucide-react'
-import type { AvailabilityRange, Property } from '@/types'
+import type { AvailabilityRange, Perk, Property } from '@/types'
+import { pickLocale } from '@/types'
 import { useLocale } from '@/lib/i18n/provider'
 import { bookingService } from '@/services/bookingService'
+import { getPerks } from '@/services/perkService'
+import { getDiscountTiers } from '@/services/comboService'
+import { priceCombo, dedupePerks, type DiscountTier } from '@/lib/combo-pricing'
 import { cn } from '@/lib/utils'
 
 const MS_DAY = 86_400_000
@@ -115,7 +120,8 @@ export function BookingCard({
   blocked: AvailabilityRange[]
   className?: string
 }) {
-  const { t, formatCurrency } = useLocale()
+  const { t, locale, formatCurrency } = useLocale()
+  const sp = useSearchParams()
   const blocked = useBlocked(blockedRanges)
   const isStay = property.type === 'stay_short'
 
@@ -124,14 +130,41 @@ export function BookingCard({
   const [viewingAt, setViewingAt] = useState('')
   const [state, setState] = useState<'idle' | 'confirm' | 'sending' | 'done' | 'error'>('idle')
   const [errMsg, setErrMsg] = useState('')
+  // Danh mục trải nghiệm + bậc giảm giá — để hiện bảng kê combo và xem trước tổng.
+  const [perkList, setPerkList] = useState<Perk[]>([])
+  const [tiers, setTiers] = useState<DiscountTier[]>([])
+  // Trạng thái nạp combo: chặn đặt khi URL có ?perks mà dữ liệu chưa sẵn sàng —
+  // nếu không, khách bấm đặt sớm sẽ âm thầm đặt phòng-không-combo.
+  const hasComboParam = isStay && Boolean(sp.get('perks'))
+  const [comboState, setComboState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle')
+  const [comboReload, setComboReload] = useState(0)
+
+  useEffect(() => {
+    if (!hasComboParam) {
+      setComboState('idle')
+      return
+    }
+    let active = true
+    setComboState('loading')
+    // Nạp cùng lúc: nếu perk có mà bậc giảm giá chưa có, xem trước sẽ hiện thiếu giảm giá.
+    Promise.all([getPerks(), getDiscountTiers()])
+      .then(([rows, tierRows]) => {
+        if (!active) return
+        setPerkList(rows)
+        setTiers(tierRows)
+        setComboState('ready')
+      })
+      .catch(() => active && setComboState('error'))
+    return () => {
+      active = false
+    }
+  }, [hasComboParam, comboReload])
 
   const nights =
     checkIn && checkOut
       ? Math.round((parse(checkOut).getTime() - parse(checkIn).getTime()) / MS_DAY)
       : 0
   const subtotal = nights * property.priceVnd
-  const serviceFee = Math.round(subtotal * 0.05)
-  const total = subtotal + serviceFee
 
   // Chọn ngày: lần 1 đặt nhận phòng; lần 2 đặt trả phòng (nếu hợp lệ & không vượt vùng chặn).
   const pick = (day: string) => {
@@ -151,7 +184,48 @@ export function BookingCard({
     setCheckOut(day)
   }
 
-  const canSubmit = isStay ? Boolean(checkIn && checkOut) : Boolean(viewingAt)
+  // --- Combo đi kèm: trình tự thiết kế combo truyền qua URL ?perks=pk_x:1,pk_y:2 ---
+  // Gộp theo perkId (URL sửa tay có thể lặp id) — nếu không, một perk lặp 3 lần
+  // sẽ bị đếm thành 3 loại và tự "leo" lên bậc giảm giá cao hơn.
+  const comboPerks = useMemo(() => {
+    const raw = sp.get('perks')
+    if (!raw) return [] as { perkId: string; qty: number }[]
+    return dedupePerks(
+      raw.split(',').map((part) => {
+        const [id, q] = part.split(':')
+        return { perkId: id ?? '', qty: Number(q) }
+      }),
+    )
+  }, [sp])
+
+  const chosenPerks = useMemo(
+    () =>
+      comboPerks
+        .map((c) => {
+          const perk = perkList.find((p) => p.id === c.perkId)
+          return perk ? { perk, qty: c.qty } : null
+        })
+        .filter((x): x is { perk: Perk; qty: number } => x !== null),
+    [comboPerks, perkList],
+  )
+
+  // Xem trước tổng tiền — DÙNG CHUNG công thức với server (priceCombo)
+  const preview = useMemo(
+    () =>
+      isStay && nights > 0
+        ? priceCombo({
+            pricePerNightVnd: property.priceVnd,
+            nights,
+            perks: chosenPerks.map((c) => ({ priceVnd: c.perk.priceVnd, qty: c.qty })),
+            tiers,
+          })
+        : null,
+    [isStay, nights, property.priceVnd, chosenPerks, tiers],
+  )
+
+  const comboPending = hasComboParam && comboState !== 'ready'
+  const canSubmit =
+    (isStay ? Boolean(checkIn && checkOut) : Boolean(viewingAt)) && !comboPending
 
   const submit = async () => {
     setState('sending')
@@ -161,6 +235,9 @@ export function BookingCard({
       checkIn: isStay ? checkIn! : undefined,
       checkOut: isStay ? checkOut! : undefined,
       viewingAt: isStay ? undefined : new Date(viewingAt).toISOString(),
+      // Nguồn sự thật là URL (comboPerks), không phải catalog đã fetch — server tự
+      // tra giá từ DB. Tránh mất combo nếu catalog chưa tải xong.
+      perks: isStay && comboPerks.length ? comboPerks : undefined,
     })
     if (res.ok) setState('done')
     else {
@@ -206,10 +283,22 @@ export function BookingCard({
               <Row label={`${formatCurrency(property.priceVnd)} × ${nights} ${t('property.nights')}`}>
                 {formatCurrency(subtotal)}
               </Row>
-              <Row label={t('property.serviceFee')}>{formatCurrency(serviceFee)}</Row>
+              {chosenPerks.map(({ perk, qty }) => (
+                <Row
+                  key={perk.id}
+                  label={`${pickLocale(perk.name, locale)}${qty > 1 ? ` ×${qty}` : ''}`}
+                >
+                  {formatCurrency(perk.priceVnd * qty)}
+                </Row>
+              ))}
+              {preview && preview.savingsVnd > 0 && (
+                <Row label={t('builder.savePct', { pct: preview.savingsPct })}>
+                  <span className="text-brand">−{formatCurrency(preview.savingsVnd)}</span>
+                </Row>
+              )}
               <div className="flex items-center justify-between border-t border-border pt-2 font-semibold text-foreground">
                 <span>{t('property.total')}</span>
-                <span>{formatCurrency(total)}</span>
+                <span>{formatCurrency(preview ? preview.packagePriceVnd : subtotal)}</span>
               </div>
             </div>
           )}
@@ -237,6 +326,29 @@ export function BookingCard({
         <CalendarDays className="size-4" />
         {isStay ? t('property.reserveNow') : t('property.viewingBook')}
       </button>
+
+      {/* Combo kèm theo chưa nạp xong → nói rõ vì sao chưa đặt được, không im lặng */}
+      {comboPending && (
+        <p
+          className="mt-2 text-center font-sans text-[0.8125rem] text-muted-foreground"
+          role="status"
+        >
+          {comboState === 'error' ? (
+            <>
+              {t('property.comboLoadError')}{' '}
+              <button
+                type="button"
+                onClick={() => setComboReload((n) => n + 1)}
+                className="font-semibold text-brand underline underline-offset-2"
+              >
+                {t('locator.retry')}
+              </button>
+            </>
+          ) : (
+            t('property.comboLoading')
+          )}
+        </p>
+      )}
 
       {/* Modal xác nhận / thanh toán in-app (glass, không rời trang) */}
       {state !== 'idle' && (
@@ -277,7 +389,7 @@ export function BookingCard({
                     <>
                       <Row label={t('property.checkIn')}>{checkIn}</Row>
                       <Row label={t('property.checkOut')}>{checkOut}</Row>
-                      <Row label={`${nights} ${t('property.nights')}`}>{formatCurrency(total)}</Row>
+                      <Row label={`${nights} ${t('property.nights')}`}>{formatCurrency(preview ? preview.packagePriceVnd : subtotal)}</Row>
                     </>
                   ) : (
                     <Row label={t('property.viewingAt')}>

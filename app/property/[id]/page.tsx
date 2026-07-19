@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { pickLocale } from '@/types'
 import { getPropertyServer } from '@/lib/server/property'
 import { PropertyDetailClient } from '@/components/property/property-detail-client'
+import { BrandLoader } from '@/components/luxury/brand-loader'
 
 // SEO: server component fetch metadata; UI render ở client component.
 export async function generateMetadata({
@@ -25,5 +27,10 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  return <PropertyDetailClient id={id} />
+  // BookingCard đọc useSearchParams (?perks) → cần Suspense boundary.
+  return (
+    <Suspense fallback={<BrandLoader />}>
+      <PropertyDetailClient id={id} />
+    </Suspense>
+  )
 }

@@ -178,7 +178,6 @@
   "property.total": "Tổng cộng",
   "property.perNightLabel": "mỗi đêm",
   "property.deposit": "Đặt cọc (10%)",
-  "property.serviceFee": "Phí dịch vụ",
   "property.viewingAt": "Thời điểm hẹn xem",
   "property.description": "Mô tả",
   "property.overview": "Tổng quan",
@@ -428,5 +427,8 @@
   "admin.removeTier": "Xoá bậc",
   "admin.saveTiers": "Lưu thay đổi",
   "admin.savedTiers": "Đã lưu bậc giảm giá",
-  "admin.tierPreview": "Ví dụ: chọn {n} trải nghiệm → giảm {pct}%"
+  "admin.tierPreview": "Ví dụ: chọn {n} trải nghiệm → giảm {pct}%",
+  "builder.savePct": "Tiết kiệm {pct}%",
+  "property.comboLoading": "Đang tải combo bạn đã chọn…",
+  "property.comboLoadError": "Không tải được combo bạn đã chọn."
 }

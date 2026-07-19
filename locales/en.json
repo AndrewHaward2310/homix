@@ -178,7 +178,6 @@
   "property.total": "Total",
   "property.perNightLabel": "per night",
   "property.deposit": "Deposit (10%)",
-  "property.serviceFee": "Service fee",
   "property.viewingAt": "Viewing time",
   "property.description": "Description",
   "property.overview": "Overview",
@@ -428,5 +427,8 @@
   "admin.removeTier": "Remove tier",
   "admin.saveTiers": "Save changes",
   "admin.savedTiers": "Discount tiers saved",
-  "admin.tierPreview": "Example: {n} experiences → {pct}% off"
+  "admin.tierPreview": "Example: {n} experiences → {pct}% off",
+  "builder.savePct": "Save {pct}%",
+  "property.comboLoading": "Loading your selected combo…",
+  "property.comboLoadError": "Could not load your selected combo."
 }

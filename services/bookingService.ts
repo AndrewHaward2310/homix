@@ -10,6 +10,8 @@ export type CreateBookingInput = {
   checkOut?: string
   /** sale/rent_long: thời điểm hẹn xem (ISO). */
   viewingAt?: string
+  /** Trải nghiệm đặt kèm (combo). Chỉ gửi id + số lượng — server tự tra giá. */
+  perks?: { perkId: string; qty: number }[]
 }
 
 /** Đơn đặt trong phạm vi vai trò người đăng nhập (server tự lọc). */

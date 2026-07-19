@@ -140,8 +140,18 @@ export type Booking = {
   /** sale / rent_long: thời điểm hẹn xem nhà (ISO). */
   viewingAt?: string
   status: BookingStatus
+  /** Trải nghiệm đặt kèm (combo tự thiết kế) — snapshot giá + tên lúc đặt. */
+  perks?: BookingPerk[]
   totalVnd: number
   createdAt: string
+}
+
+/** Một dòng trải nghiệm trong đơn: id + số lượng + giá & tên đã chốt lúc đặt. */
+export type BookingPerk = {
+  perkId: string
+  qty: number
+  priceVnd: number
+  name: LocalizedText
 }
 
 // ---------------------------------------------------------------------------

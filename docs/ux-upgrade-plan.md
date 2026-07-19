@@ -50,11 +50,12 @@ Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia s
 - ✅ **B (phần 1)** — ADMIN CHỈNH BẬC GIẢM GIÁ đã làm: `/admin/settings` (thay stub) — thêm/xoá/bật-tắt/sửa %, trần giảm, xem trước; `/api/admin/combo-discounts` (GET+PUT, chỉ admin, zod, transaction Serializable). Verify end-to-end: admin đổi 8%→15% ⇒ builder đổi giá ngay. Review 2 tầng đã fix: chặn gửi mảng rỗng (xoá sạch bậc), chặn mốc trùng cả client lẫn server, trần `maxDiscountVnd` (BigInt an toàn), key ổn định khi xoá dòng, không nuốt ký tự khi gõ, không cho xoá bậc cuối.
 - **B (còn lại)** — link chia sẻ đã có sẵn nhờ state trên URL; còn: 2 lối vào (wizard hỏi nhanh, mở từ combo mẫu) + gợi ý thông minh.
 - ⚠️ **PHÁT HIỆN QUAN TRỌNG (reviewer nêu):** `app/api/bookings/route.ts` tính `totalVnd = priceVnd × nights` — **chưa áp perks lẫn bậc giảm giá**. Nghĩa là bậc admin chỉnh mới ảnh hưởng con số HIỂN THỊ ở builder, chưa ảnh hưởng tiền đặt thật. Phải làm ở **C** (booking tiêu thụ combo) thì tính năng mới có tác dụng thương mại.
-- **C1 (ƯU TIÊN CAO NHẤT)** — BOOKING TIÊU THỤ COMBO để tiền đặt thật đúng:
-  - `prisma`: thêm `Booking.perks Json?` (snapshot [{perkId, qty, priceVnd}]) + migration (DB local, an toàn).
-  - `POST /api/bookings`: nhận `perks?: [{perkId, qty}]`; **tính TIỀN Ở SERVER** — nạp giá perk từ DB (không tin client), nạp bậc giảm giá từ `ComboDiscountTier`, dùng `priceCombo()` → `totalVnd = packagePriceVnd`; lưu snapshot perks. Giữ nguyên chặn double-booking.
-  - `components/property/property-detail-client.tsx`: đọc `nights/guests/perks` trên URL (builder truyền sang), hiện bảng kê combo (lưu trú + từng trải nghiệm + giảm giá) và gửi `perks` khi đặt.
-  - Verify: đặt thử từ builder → `totalVnd` khớp giá gói builder hiển thị.
+- ✅ **C1 (ĐÃ LÀM)** — BOOKING TIÊU THỤ COMBO: tiền đặt thật = lưu trú + trải nghiệm − bậc giảm giá, tính hoàn toàn ở server.
+  - `Booking.perks Json?` (snapshot `[{perkId, qty, priceVnd, name}]`) + migration; type `BookingPerk` vào `types/index.ts` và **`toBooking` map lại** (không còn write-only — GET đơn trả cả perks).
+  - `POST /api/bookings`: nhận `perks?: [{perkId, qty}]` (id-only, giá nạp từ DB), `priceCombo()` với `ComboDiscountTier` active → `totalVnd = packagePriceVnd`.
+  - `components/property/booking-card.tsx`: đọc `?perks` trên URL, bảng kê (lưu trú + từng trải nghiệm + dòng giảm giá) khớp server; gate đặt khi combo chưa tải xong (không âm thầm mất combo); bỏ phí dịch vụ 5% ảo.
+  - **Review 2 tầng (subagent + Codex) đã fix union:** (HIGH) gộp perkId trùng ở CẢ client & server qua `dedupePerks()` dùng chung → chặn leo bậc giảm giá giả; (HIGH) `toBooking` map perks; (HIGH) gửi `comboPerks` từ URL + gate loading; validate ngày `YYYY-MM-DD` + chặn `nights>30`; **400** khi perk id lạ / perks trên đơn sale; `floorVnd` cho phần giảm → không tiết kiệm ảo/âm; Suspense boundary cho trang property; xoá key chết `property.serviceFee`.
+  - Verify API: combo hợp lệ → `totalVnd=4.692.000` (khớp builder, GET trả perks); dup `pk_bbq×3` → chỉ 1 loại (6.175.000, không leo bậc); perk lạ/nights>30/perks-trên-sale → 400. UI: bảng kê khớp 4.692.000đ, label "Tiết kiệm 8%". `tsc --noEmit` sạch.
 - **C2** — Bản SALE ở `/agent/collections` (tab "Báo giá"): tái dùng builder, chọn lead, "gửi báo giá" (copy link), tóm tắt gửi khách.
 - **C3** — 2 lối vào còn lại của builder: wizard hỏi nhanh (đi với ai/mấy đêm/thích gì/ngân sách) + mở từ combo mẫu; và gợi ý thông minh (đếm đồng xuất hiện perk trong `COMBO_DEFS`).
 
