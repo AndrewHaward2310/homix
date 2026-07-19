@@ -465,5 +465,17 @@
   "wizard.interest.water": "Lagoon & outdoors",
   "wizard.interest.food": "Food & comfort",
   "wizard.build": "Build my combo",
-  "wizard.loadError": "Could not load experiences."
+  "wizard.loadError": "Could not load experiences.",
+  "agent.schedule.title": "Appointment scheduling",
+  "agent.schedule.subtitle": "Upcoming viewings and check-ins/outs across the platform.",
+  "agent.schedule.todayCount": "{n} today",
+  "agent.schedule.weekCount": "{n} in 7 days",
+  "agent.schedule.today": "Today",
+  "agent.schedule.tomorrow": "Tomorrow",
+  "agent.schedule.empty": "No upcoming appointments.",
+  "agent.schedule.kind.viewing": "Viewing",
+  "agent.schedule.kind.checkin": "Check-in",
+  "agent.schedule.kind.checkout": "Check-out",
+  "agent.schedule.allDay": "All day",
+  "agent.schedule.unknownProperty": "Property no longer available"
 }

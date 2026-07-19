@@ -465,5 +465,17 @@
   "wizard.interest.water": "Biển hồ & ngoài trời",
   "wizard.interest.food": "Ẩm thực & tiện nghi",
   "wizard.build": "Dựng combo cho tôi",
-  "wizard.loadError": "Không tải được trải nghiệm."
+  "wizard.loadError": "Không tải được trải nghiệm.",
+  "agent.schedule.title": "Điều phối lịch hẹn",
+  "agent.schedule.subtitle": "Lịch xem nhà và nhận/trả phòng sắp tới trên toàn hệ thống.",
+  "agent.schedule.todayCount": "{n} lịch hôm nay",
+  "agent.schedule.weekCount": "{n} lịch trong 7 ngày",
+  "agent.schedule.today": "Hôm nay",
+  "agent.schedule.tomorrow": "Ngày mai",
+  "agent.schedule.empty": "Chưa có lịch hẹn sắp tới.",
+  "agent.schedule.kind.viewing": "Hẹn xem",
+  "agent.schedule.kind.checkin": "Nhận phòng",
+  "agent.schedule.kind.checkout": "Trả phòng",
+  "agent.schedule.allDay": "Cả ngày",
+  "agent.schedule.unknownProperty": "Căn không còn khả dụng"
 }

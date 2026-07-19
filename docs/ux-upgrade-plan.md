@@ -25,7 +25,8 @@
 Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được build; còn lại là stub 9 dòng.
 - ✅ **AI Pricing** (`/agent/pricing`) — công cụ định giá thật theo căn tương đương available (median/p25/p75 giá/m² × diện tích) + danh sách comps. Codex bắt 4 finding (chỉ lấy available, area rỗng, i18n `PN`) → đã fix.
 - ✅ **Smart Match** (`/agent/match`, iteration 6) — mỗi lead + căn gợi ý thật (join `matchedPropertyIds`→property, chỉ căn available), badge trạng thái, liên hệ mailto/tel. Review 2 tầng cùng bắt: getProperties default pageSize (→ searchProperties 48), lọc available, mailto/tel, retry, key thừa — đã fix hết.
-- **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
+- ✅ **Điều phối lịch** (`/agent/schedule`) — lịch hẹn THẬT từ booking: hẹn xem (`viewingAt` sale/rent) + nhận/trả phòng (`checkIn/checkOut` stay); bỏ đơn huỷ/từ chối; nhóm theo ngày (Hôm nay/Ngày mai/…), badge loại + trạng thái, link tới căn; tóm tắt "hôm nay / 7 ngày". Review 2 tầng (Codex + subagent): fix cutoff theo loại (mốc có giờ đã qua thì ẩn), phân trang lấy đủ property (API cap 48), sticky header dưới header portal (`top-[72px]`), và nhãn chung + bỏ link chết khi căn không còn.
+- **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
 
 ## 🔴 #8 — TỰ THIẾT KẾ COMBO (Combo Builder) — user đặt hàng, ưu tiên cao
 Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia sẻ được. Bản cho SALE dùng làm công cụ **Báo giá**.
