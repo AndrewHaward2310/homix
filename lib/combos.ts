@@ -5,8 +5,7 @@ import { toProperty, toPerk } from '@/lib/mappers'
 import { COMBO_DEFS, type ComboDef } from '@/data/combos'
 import type { TripCombo, TripComboPerk } from '@/types'
 
-/** Làm tròn xuống bội số 1.000đ cho giá đẹp. */
-const roundVnd = (n: number) => Math.round(n / 1000) * 1000
+import { priceCombo } from '@/lib/combo-pricing'
 
 async function hydrate(def: ComboDef): Promise<TripCombo | null> {
   const [propRow, perkRows] = await Promise.all([
@@ -30,11 +29,14 @@ async function hydrate(def: ComboDef): Promise<TripCombo | null> {
     })
     .filter((x): x is TripComboPerk => x !== null)
 
-  const stayVnd = property.priceVnd * def.nights
-  const perksVnd = perks.reduce((s, x) => s + x.perk.priceVnd * x.qty, 0)
-  const listPriceVnd = stayVnd + perksVnd
-  const packagePriceVnd = roundVnd(listPriceVnd * (1 - def.discount))
-  const savingsVnd = listPriceVnd - packagePriceVnd
+  // Combo biên tập tự đặt mức giảm riêng (def.discount) — vẫn đi qua cùng một
+  // hàm tính giá với combo tự thiết kế để hai luồng không lệch nhau.
+  const priced = priceCombo({
+    pricePerNightVnd: property.priceVnd,
+    nights: def.nights,
+    perks: perks.map((x) => ({ priceVnd: x.perk.priceVnd, qty: x.qty })),
+    discount: def.discount,
+  })
 
   return {
     id: def.id,
@@ -46,10 +48,10 @@ async function hydrate(def: ComboDef): Promise<TripCombo | null> {
     tags: def.tags,
     property,
     perks,
-    listPriceVnd,
-    packagePriceVnd,
-    savingsVnd,
-    savingsPct: Math.round((savingsVnd / listPriceVnd) * 100),
+    listPriceVnd: priced.listPriceVnd,
+    packagePriceVnd: priced.packagePriceVnd,
+    savingsVnd: priced.savingsVnd,
+    savingsPct: priced.savingsPct,
     ratingAvg: property.ratingAvg ?? 4.9,
     reviewCount: property.reviewCount || 0,
   }

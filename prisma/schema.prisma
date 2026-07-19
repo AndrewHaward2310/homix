@@ -212,3 +212,18 @@ model Perk {
 
   createdAt DateTime @default(now())
 }
+
+/// Bậc giảm giá cho combo khách TỰ THIẾT KẾ: càng thêm nhiều trải nghiệm càng giảm sâu.
+/// Admin chỉnh trực tiếp ở /admin/settings (không hardcode trong mã).
+model ComboDiscountTier {
+  id        String   @id @default(cuid())
+  /// Số trải nghiệm tối thiểu để đạt bậc này (1, 2, 3...)
+  minPerks  Int      @unique
+  /// Phần trăm giảm trên tổng giá mua lẻ (0–100)
+  percent   Float
+  /// Trần số tiền được giảm (VND). null = không giới hạn.
+  maxDiscountVnd BigInt?
+  active    Boolean  @default(true)
+
+  updatedAt DateTime @updatedAt
+}

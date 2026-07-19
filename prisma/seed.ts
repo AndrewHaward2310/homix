@@ -179,6 +179,20 @@ async function main() {
     await prisma.lead.upsert({ where: { id: l.id }, update: data, create: { id: l.id, ...data } })
   }
 
+  // Bậc giảm giá mặc định cho combo tự thiết kế (admin chỉnh được ở /admin/settings).
+  // Càng thêm nhiều trải nghiệm, giảm càng sâu.
+  for (const tier of [
+    { minPerks: 1, percent: 5 },
+    { minPerks: 2, percent: 8 },
+    { minPerks: 3, percent: 12 },
+  ]) {
+    await prisma.comboDiscountTier.upsert({
+      where: { minPerks: tier.minPerks },
+      update: {},
+      create: tier,
+    })
+  }
+
   const counts = {
     users: await prisma.user.count(),
     towers: await prisma.tower.count(),
@@ -186,6 +200,7 @@ async function main() {
     perks: await prisma.perk.count(),
     bookings: await prisma.booking.count(),
     leads: await prisma.lead.count(),
+    comboDiscountTiers: await prisma.comboDiscountTier.count(),
   }
   console.log('[seed] xong:', counts)
 }
