@@ -27,6 +27,29 @@ Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được bu
 - ✅ **Smart Match** (`/agent/match`, iteration 6) — mỗi lead + căn gợi ý thật (join `matchedPropertyIds`→property, chỉ căn available), badge trạng thái, liên hệ mailto/tel. Review 2 tầng cùng bắt: getProperties default pageSize (→ searchProperties 48), lọc available, mailto/tel, retry, key thừa — đã fix hết.
 - **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
 
+## 🔴 #8 — TỰ THIẾT KẾ COMBO (Combo Builder) — user đặt hàng, ưu tiên cao
+Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia sẻ được. Bản cho SALE dùng làm công cụ **Báo giá**.
+
+**Quyết định đã chốt với user:**
+- Vào bằng **cả 3 cách**, cùng đổ về một builder: (a) wizard hỏi nhanh (đi với ai / mấy đêm / thích gì / ngân sách) → dựng sẵn; (b) mở từ **combo mẫu** có sẵn; (c) **tự chọn từ đầu**.
+- v1 gồm **đủ 4 cơ chế**: thanh **tiết kiệm sống** + **giảm giá bậc thang**; **link chia sẻ** (mã hoá URL); **chia tiền theo đầu người**; **gợi ý thông minh**.
+- Làm **luôn bản SALE** tại `/agent/collections` (tab "Báo giá", hiện là stub 9 dòng).
+
+**Kiến trúc (tránh migration DB — mạng tới Supabase chập chờn):**
+- Tách `priceCombo()` dùng chung từ `lib/combos.ts` → curated & custom cùng một logic giá (tránh lệch).
+- Trạng thái combo **mã hoá trong URL**: `/combo/tu-thiet-ke?p=<propertyId>&n=<nights>&g=<guests>&perks=pk_bbq:1,pk_kayak:2` → chia sẻ được ngay, không đụng schema.
+- Giảm giá bậc thang (hằng số ở `data/combos.ts` để dễ chỉnh): 1 trải nghiệm −5%, 2 −8%, ≥3 −12%.
+- Số lượng perk tự nhân theo ngữ cảnh: vé bãi tắm × số khách, bữa sáng × số đêm.
+- Gợi ý thông minh v1: đếm **đồng xuất hiện** perk trong `COMBO_DEFS` (perk hay đi cùng nhau / cùng loại căn).
+- v2 (sau): lưu combo vào tài khoản → khi đó mới cần bảng `CustomCombo`.
+
+**Chia iteration:**
+- **A** — Builder lõi: 3 lối vào, chọn căn/đêm/khách, tick trải nghiệm, giá sống + thanh tiết kiệm + chia đầu người. Route `/combo/tu-thiet-ke`; nút "Tự thiết kế combo" ở section Combo trang chủ và trang `/combo`.
+- **B** — Link chia sẻ (encode/decode URL + nút copy) + gợi ý thông minh.
+- **C** — Bản SALE ở `/agent/collections`: tái dùng builder, chọn lead, "gửi báo giá" (copy link), tóm tắt gửi khách.
+
+**Ràng buộc:** i18n vi/en; KHÔNG cắt chữ "..."; mật độ thông tin gọn (chi tiết để ở trang căn); `motion-safe:`; verify tsc + screenshot vi/en; review 2 tầng mỗi vòng.
+
 ## 🔴 #7 — Homepage CHƯA ĐỦ MỚI LẠ / GIỮ CHÂN (user báo lại nhiều lần)
 Mục tiêu: 5–10 giây đầu phải "wow" + có yếu tố tương tác giữ người xem cuộn tiếp. Ý tưởng (làm dần, mỗi iteration 1–2 mảng):
 - **Hero sống động hơn**: giữ layout gọn nhưng thêm chiều sâu — ví dụ scroll-parallax nhẹ trên ảnh, hoặc số liệu/điểm nhấn động (đếm số) ngay dưới search; cân nhắc "search gợi ý" (autocomplete phân khu) để tương tác ngay.
