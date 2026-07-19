@@ -13,7 +13,7 @@
   /* Fonts */
   --font-sans: var(--font-sans-base), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
-  --font-display: var(--font-display-base), 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-vi), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
 
   /* Semantic color mapping */
   --color-background: var(--background);
@@ -81,6 +81,12 @@
 
   /* Motion */
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Font hiển thị theo ngôn ngữ: bản Tiếng Anh (html lang="en") dùng Sora thay Montserrat.
+   LanguageProvider set document.documentElement.lang = locale. */
+:root:lang(en) {
+  --font-display: var(--font-display-en), 'Sora', ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {

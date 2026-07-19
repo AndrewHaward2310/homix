@@ -24,21 +24,25 @@ const geistMono = localFont({
   display: 'swap',
 })
 
-// Font hiển thị (Be Vietnam Pro) — sans-serif hiện đại, THIẾT KẾ CHO TIẾNG VIỆT
-// (dấu chồng ế/ẫ/ị chuẩn). Dùng cho tiêu đề lớn/hero (class font-display).
-const display = localFont({
+// Font hiển thị theo NGÔN NGỮ (class font-display, đổi qua :root:lang trong globals.css):
+//  - Tiếng Việt: Montserrat (geometric, sang, dấu Việt chuẩn)
+//  - Tiếng Anh: Sora (geometric hiện đại, cá tính — chỉ Latin)
+const displayVi = localFont({
   src: [
-    { path: './fonts/bevietnampro-500-vietnamese.woff2', weight: '500', style: 'normal' },
-    { path: './fonts/bevietnampro-500-latin-ext.woff2', weight: '500', style: 'normal' },
-    { path: './fonts/bevietnampro-500-latin.woff2', weight: '500', style: 'normal' },
-    { path: './fonts/bevietnampro-600-vietnamese.woff2', weight: '600', style: 'normal' },
-    { path: './fonts/bevietnampro-600-latin-ext.woff2', weight: '600', style: 'normal' },
-    { path: './fonts/bevietnampro-600-latin.woff2', weight: '600', style: 'normal' },
-    { path: './fonts/bevietnampro-700-vietnamese.woff2', weight: '700', style: 'normal' },
-    { path: './fonts/bevietnampro-700-latin-ext.woff2', weight: '700', style: 'normal' },
-    { path: './fonts/bevietnampro-700-latin.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/montserrat-vietnamese.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/montserrat-latin-ext.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/montserrat-latin.woff2', weight: '400 700', style: 'normal' },
   ],
-  variable: '--font-display-base',
+  variable: '--font-display-vi',
+  display: 'swap',
+})
+
+const displayEn = localFont({
+  src: [
+    { path: './fonts/sora-latin-ext.woff2', weight: '400 700', style: 'normal' },
+    { path: './fonts/sora-latin.woff2', weight: '400 700', style: 'normal' },
+  ],
+  variable: '--font-display-en',
   display: 'swap',
 })
 
@@ -81,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`bg-background ${sans.variable} ${geistMono.variable} ${display.variable}`}
+      className={`bg-background ${sans.variable} ${geistMono.variable} ${displayVi.variable} ${displayEn.variable}`}
       suppressHydrationWarning
     >
       <head>
