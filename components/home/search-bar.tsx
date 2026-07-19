@@ -63,7 +63,8 @@ const Divider = () => (
  * Frontend-only: mô phỏng luồng tìm kiếm.
  * TODO: nối API tìm kiếm backend (GET /api/properties?type=&tower=&...).
  */
-export function SearchBar() {
+/** onLight: dùng trên nền SÁNG (hero editorial) — đổi màu tab cho hợp. */
+export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boolean; align?: 'center' | 'left' }) {
   const t = useT()
   const router = useRouter()
   const [active, setActive] = useState<PropertyType>('rent_long')
@@ -93,9 +94,13 @@ export function SearchBar() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      {/* Tabs — pill trên nền ảnh tối, canh giữa */}
-      <div className="mb-4 flex justify-center gap-2" role="tablist" aria-label={t('search.submit')}>
+    <div className={cn('w-full max-w-4xl', align === 'center' && 'mx-auto')}>
+      {/* Tabs — pill (đổi màu theo nền sáng/tối) */}
+      <div
+        className={cn('mb-4 flex gap-2', align === 'center' ? 'justify-center' : 'justify-start')}
+        role="tablist"
+        aria-label={t('search.submit')}
+      >
         {TABS.map((tab) => {
           const selected = active === tab.type
           return (
@@ -106,10 +111,12 @@ export function SearchBar() {
               aria-selected={selected}
               onClick={() => setActive(tab.type)}
               className={cn(
-                'rounded-full px-6 py-2.5 font-sans text-[0.9rem] font-medium backdrop-blur-md transition-all duration-300 active:scale-[0.97]',
+                'rounded-full px-6 py-2.5 font-sans text-[0.9rem] font-medium transition-all duration-300 active:scale-[0.97]',
                 selected
-                  ? 'bg-background text-foreground shadow-luxury'
-                  : 'border border-white/30 bg-white/15 text-white hover:bg-white/25',
+                  ? 'bg-primary text-primary-foreground shadow-luxury'
+                  : onLight
+                    ? 'border border-border bg-background text-muted-foreground hover:bg-secondary'
+                    : 'border border-white/30 bg-white/15 text-white backdrop-blur-md hover:bg-white/25',
               )}
             >
               {t(tab.labelKey)}

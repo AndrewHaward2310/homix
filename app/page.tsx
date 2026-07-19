@@ -9,15 +9,19 @@ import { LifestyleSection } from '@/components/home/lifestyle-section'
 import { PerksSection } from '@/components/home/perks-section'
 import { RecentlyViewed } from '@/components/property/recently-viewed'
 import { SiteFooter } from '@/components/home/site-footer'
+import { getHeroFeaturedServer, getHeroStatsServer } from '@/lib/server/home'
 
 // Trang chủ — mặt tiền marketplace, PUBLIC (không yêu cầu đăng nhập).
-export default function Page() {
+export default async function Page() {
+  // Lấy ở SERVER để ảnh hero vào HTML đầu (LCP) và khối số liệu không nhảy (CLS).
+  const [featured, stats] = await Promise.all([getHeroFeaturedServer(), getHeroStatsServer()])
+
   return (
     <div className="min-h-screen bg-background">
-      <GlassNavbar />
+      <GlassNavbar solid />
       <main>
-        <HeroSection />
-        {/* Tín hiệu tin cậy ngay dưới hero (số liệu thật + cam kết). */}
+        <HeroSection featured={featured} stats={stats} />
+        {/* Dải cam kết dịch vụ (số liệu đã nằm ở hero). */}
         <TrustStrip />
         {/* Thấy căn trước (thắng nhanh) → rồi mới tới bối cảnh vị trí/bản đồ. */}
         <FeaturedPropertiesSection />
