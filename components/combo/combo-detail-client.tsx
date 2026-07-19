@@ -25,8 +25,13 @@ import { Body, Eyebrow } from '@/components/luxury/typography'
 import { luxuryButtonVariants } from '@/components/luxury/luxury-button'
 import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
 import { getCombo } from '@/services/comboService'
+import { buildComboLink, buildBuilderLink } from '@/components/combo/combo-builder-core'
 import { useLocale } from '@/lib/i18n/provider'
 import { cn } from '@/lib/utils'
+
+/** Map perks của combo → Record<perkId, qty> để dựng link đặt/tùy chỉnh. */
+const comboPerkMap = (combo: TripCombo): Record<string, number> =>
+  Object.fromEntries(combo.perks.map(({ perk, qty }) => [perk.id, qty]))
 
 const PERK_ICON: Record<PerkCategory, typeof Flame> = {
   bbq: Flame,
@@ -190,12 +195,28 @@ export function ComboDetailClient({ id }: { id: string }) {
                       {t('combos.save', { pct: combo.savingsPct })} · {formatCurrency(combo.savingsVnd)}
                     </div>
 
+                    {/* Đặt combo: mang trải nghiệm sang trang đặt (trước đây trỏ trơn
+                        /property/[id] nên booking mất combo). Số đêm do khách chọn trên lịch. */}
                     <Link
-                      href={`/property/${combo.property.id}`}
+                      href={buildComboLink(combo.property.id, comboPerkMap(combo))}
                       className={cn(luxuryButtonVariants({ variant: 'primary', size: 'lg' }), 'mt-6 w-full justify-center')}
                     >
                       {t('combos.bookCombo')}
                       <ArrowRight className="size-4" />
+                    </Link>
+
+                    {/* Lối vào builder từ combo MẪU (C3): mở sẵn combo này để khách tùy chỉnh. */}
+                    <Link
+                      href={buildBuilderLink(
+                        combo.property.id,
+                        combo.nights,
+                        combo.guests,
+                        comboPerkMap(combo),
+                      )}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-border bg-background px-5 py-3 font-sans text-[0.9rem] font-semibold text-foreground transition hover:bg-secondary"
+                    >
+                      <Sparkles className="size-4" />
+                      {t('combos.customize')}
                     </Link>
 
                     <ul className="mt-5 space-y-2">

@@ -448,5 +448,22 @@
   "quote.msgPackage": "Giá gói",
   "quote.msgSavings": "Tiết kiệm {pct}% ({amount})",
   "quote.msgBookAt": "Đặt phòng tại",
-  "quote.leadsError": "Không tải được danh sách khách."
+  "quote.leadsError": "Không tải được danh sách khách.",
+  "combos.customize": "Tùy chỉnh combo này",
+  "builder.suggestTitle": "Hay đi cùng lựa chọn của bạn",
+  "wizard.open": "Gợi ý nhanh",
+  "wizard.eyebrow": "Hỏi nhanh",
+  "wizard.title": "Để chúng tôi gợi ý combo cho bạn",
+  "wizard.party": "Bạn đi với ai?",
+  "wizard.party.couple": "Cặp đôi",
+  "wizard.party.family": "Gia đình",
+  "wizard.party.friends": "Nhóm bạn",
+  "wizard.nights": "Mấy đêm?",
+  "wizard.nightsN": "{n} đêm",
+  "wizard.interests": "Bạn thích gì?",
+  "wizard.interest.relax": "Thư giãn & BBQ",
+  "wizard.interest.water": "Biển hồ & ngoài trời",
+  "wizard.interest.food": "Ẩm thực & tiện nghi",
+  "wizard.build": "Dựng combo cho tôi",
+  "wizard.loadError": "Không tải được trải nghiệm."
 }

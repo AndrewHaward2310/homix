@@ -11,6 +11,7 @@ import { searchProperties } from '@/services/propertyService'
 import { getPerks } from '@/services/perkService'
 import { getDiscountTiers } from '@/services/comboService'
 import { priceCombo, type ComboPrice, type DiscountTier } from '@/lib/combo-pricing'
+import { suggestPerks } from '@/lib/combo-suggest'
 import { useLocale } from '@/lib/i18n/provider'
 import { cn } from '@/lib/utils'
 
@@ -60,10 +61,25 @@ export const serializePerks = (sel: Record<string, number>) =>
     .filter((x): x is string => x !== null)
     .join(',')
 
-/** Link đặt combo cho KHÁCH: /property/[id]?nights=&guests=&perks= (nguồn sự thật). */
-export function buildComboLink(propertyId: string, nights: number, guests: number, sel: Record<string, number>) {
+/**
+ * Link đặt combo cho KHÁCH: /property/[id]?perks=... (nguồn sự thật là trải nghiệm).
+ * KHÔNG kèm nights/guests: trang đặt tính số đêm theo lịch khách chọn (chống double-
+ * booking), nên hai tham số đó sẽ bị bỏ qua — chỉ mang perks để giữ combo.
+ */
+export function buildComboLink(propertyId: string, sel: Record<string, number>) {
+  const params = new URLSearchParams()
   const perks = serializePerks(sel)
-  return `/property/${propertyId}?nights=${nights}&guests=${guests}${perks ? `&perks=${perks}` : ''}`
+  if (perks) params.set('perks', perks)
+  const q = params.toString()
+  return `/property/${encodeURIComponent(propertyId)}${q ? `?${q}` : ''}`
+}
+
+/** Link MỞ builder với combo dựng sẵn (mở-từ-mẫu): /combo/tu-thiet-ke?p=&n=&g=&perks= */
+export function buildBuilderLink(propertyId: string, nights: number, guests: number, sel: Record<string, number>) {
+  const params = new URLSearchParams({ p: propertyId, n: String(nights), g: String(guests) })
+  const perks = serializePerks(sel)
+  if (perks) params.set('perks', perks)
+  return `/combo/tu-thiet-ke?${params}`
 }
 
 /** Sao chép text vào clipboard, fallback execCommand khi Clipboard API bị chặn. */
@@ -264,6 +280,12 @@ export function ComboBuilderCore({
     [property, nights, chosen, tiers],
   )
 
+  // Gợi ý "hay đi cùng nhau" — học từ combo mẫu, chỉ hiện perk chưa chọn & đang có.
+  const suggestions = useMemo(() => {
+    const ids = suggestPerks(Object.keys(selected), perks.map((p) => p.id))
+    return ids.map((id) => perkById.get(id)).filter((p): p is Perk => Boolean(p))
+  }, [selected, perks, perkById])
+
   const nextTier = useMemo(() => {
     const count = chosen.length
     const upcoming = [...tiers]
@@ -295,7 +317,7 @@ export function ComboBuilderCore({
         selected,
         chosen,
         priced,
-        quoteLink: buildComboLink(property.id, nights, guests, selected),
+        quoteLink: buildComboLink(property.id, selected),
       }
     : null
 
@@ -434,6 +456,30 @@ export function ComboBuilderCore({
                 )
               })}
             </ul>
+
+            {/* Gợi ý thông minh: perk hay đi cùng lựa chọn hiện tại (học từ combo mẫu). */}
+            {suggestions.length > 0 && (
+              <div className="mt-4 rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-3.5">
+                <div className="flex items-center gap-1.5 font-sans text-[0.8125rem] font-bold text-brand">
+                  <Sparkles className="size-3.5" />
+                  {t('builder.suggestTitle')}
+                </div>
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  {suggestions.map((perk) => (
+                    <button
+                      key={perk.id}
+                      type="button"
+                      onClick={() => togglePerk(perk)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-sans text-[0.8125rem] font-medium text-foreground transition hover:border-brand/50 hover:bg-brand/10"
+                    >
+                      <Plus className="size-3.5 text-brand" />
+                      {pickLocale(perk.name, locale)}
+                      <span className="text-muted-foreground">{formatCurrency(perk.priceVnd)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         </div>
 

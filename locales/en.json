@@ -448,5 +448,22 @@
   "quote.msgPackage": "Package price",
   "quote.msgSavings": "Save {pct}% ({amount})",
   "quote.msgBookAt": "Book at",
-  "quote.leadsError": "Could not load clients."
+  "quote.leadsError": "Could not load clients.",
+  "combos.customize": "Customize this combo",
+  "builder.suggestTitle": "Frequently added together",
+  "wizard.open": "Quick suggest",
+  "wizard.eyebrow": "Quick ask",
+  "wizard.title": "Let us suggest a combo for you",
+  "wizard.party": "Who are you travelling with?",
+  "wizard.party.couple": "Couple",
+  "wizard.party.family": "Family",
+  "wizard.party.friends": "Friends",
+  "wizard.nights": "How many nights?",
+  "wizard.nightsN": "{n} nights",
+  "wizard.interests": "What do you enjoy?",
+  "wizard.interest.relax": "Relax & BBQ",
+  "wizard.interest.water": "Lagoon & outdoors",
+  "wizard.interest.food": "Food & comfort",
+  "wizard.build": "Build my combo",
+  "wizard.loadError": "Could not load experiences."
 }

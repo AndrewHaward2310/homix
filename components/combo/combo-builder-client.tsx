@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Share2, ArrowRight } from 'lucide-react'
+import { Share2, ArrowRight, Wand2 } from 'lucide-react'
+import { ComboWizard } from './combo-wizard'
 import { GlassNavbar } from '@/components/luxury/glass-navbar'
 import { SiteFooter } from '@/components/home/site-footer'
 import { Container } from '@/components/luxury/container'
@@ -18,6 +19,7 @@ export function ComboBuilderClient() {
   const router = useRouter()
   const sp = useSearchParams()
   const toast = useToast()
+  const [wizardOpen, setWizardOpen] = useState(false)
 
   const onParams = useCallback(
     (next: Record<string, string | null>) => {
@@ -40,7 +42,23 @@ export function ComboBuilderClient() {
           <H1 className="mt-3 font-display">{t('builder.title')}</H1>
           <Body className="mt-4 max-w-xl">{t('builder.subtitle')}</Body>
 
-          <div className="mt-10">
+          {/* Lối vào "hỏi nhanh" (1 trong 3 cách vào builder) */}
+          <button
+            type="button"
+            onClick={() => setWizardOpen(true)}
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/5 px-4 py-2.5 font-sans text-[0.875rem] font-semibold text-brand transition hover:bg-brand/10"
+          >
+            <Wand2 className="size-4" />
+            {t('wizard.open')}
+          </button>
+
+          <ComboWizard
+            open={wizardOpen}
+            onClose={() => setWizardOpen(false)}
+            onApply={(patch) => onParams(patch)}
+          />
+
+          <div className="mt-8">
             <ComboBuilderCore
               sp={sp}
               onParams={onParams}
