@@ -40,6 +40,9 @@ function SearchInner() {
     const type = sp.get('type')
     return {
       type: (type && type !== 'all' ? type : undefined) as PropertyType | undefined,
+      // towerId: thanh tìm kiếm ở hero gửi lên — trước đây bị bỏ quên nên ô "khu vực"
+      // không có tác dụng.
+      towerId: sp.get('towerId') ?? undefined,
       q: sp.get('q') ?? undefined,
       minPrice: sp.get('minPrice') ? Number(sp.get('minPrice')) : undefined,
       maxPrice: sp.get('maxPrice') ? Number(sp.get('maxPrice')) : undefined,

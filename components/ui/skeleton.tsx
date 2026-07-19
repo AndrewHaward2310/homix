@@ -9,22 +9,24 @@ export function Skeleton({ className }: { className?: string }) {
 }
 
 /**
- * Khớp CHÍNH XÁC layout của <PropertyCard/>: ảnh 4:3 rounded-2xl, tiêu đề + giá,
- * dòng tòa/rating, dòng thông số — để lúc tải không bị "nhảy layout".
+ * Khớp CHÍNH XÁC layout của <PropertyCard/>: ảnh 4:3 rounded-2xl, tiêu đề 2 dòng,
+ * dòng tòa/rating, dòng giá riêng, 2 thông số — để lúc tải không bị "nhảy layout".
  */
 export function PropertyCardSkeleton() {
   return (
     <div aria-hidden="true">
       <Skeleton className="aspect-[4/3] w-full rounded-2xl" />
       <div className="px-1 pt-4">
-        <div className="flex items-baseline justify-between gap-3">
-          <Skeleton className="h-4 w-1/2" />
-          <Skeleton className="h-4 w-16" />
-        </div>
+        {/* tiêu đề 2 dòng */}
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="mt-1.5 h-4 w-2/3" />
+        {/* tòa + rating */}
         <Skeleton className="mt-2.5 h-3 w-1/3" />
-        <div className="mt-3 flex items-center gap-4">
+        {/* giá */}
+        <Skeleton className="mt-3 h-5 w-24" />
+        {/* 2 thông số */}
+        <div className="mt-2.5 flex items-center gap-4">
           <Skeleton className="h-3 w-12" />
-          <Skeleton className="h-3 w-10" />
           <Skeleton className="h-3 w-10" />
         </div>
       </div>

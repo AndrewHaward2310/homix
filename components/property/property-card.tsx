@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Bed, Bath, Maximize, Heart, BadgeCheck, Star } from 'lucide-react'
+import { Bed, Maximize, Heart, BadgeCheck, Star } from 'lucide-react'
 import type { Property } from '@/types'
 import { pickLocale } from '@/types'
 import { useLocale } from '@/lib/i18n/provider'
@@ -90,19 +90,16 @@ export function PropertyCard({
         )}
       </div>
 
+      {/* Nội dung gọn: tiêu đề đủ chữ (2 dòng, không cắt "..."), rồi mới tới giá.
+          Thông số chi tiết để dành trang chi tiết căn. */}
       <div className="px-1 pt-4">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="min-w-0 truncate font-sans text-[1.0625rem] font-semibold tracking-[-0.02em] text-foreground">
-            {title}
-          </h3>
-          <span className="shrink-0 font-sans text-[1rem] font-bold text-brand">
-            {compact}
-            <span className="font-normal text-muted-foreground">{suffix}</span>
-          </span>
-        </div>
+        {/* min-h = 2 dòng: giữ chiều cao thẻ đều nhau trong lưới */}
+        <h3 className="line-clamp-2 min-h-[2.75em] font-sans text-[1.0625rem] font-semibold leading-snug tracking-[-0.02em] text-foreground">
+          {title}
+        </h3>
 
-        <div className="mt-1 flex items-center gap-2 font-sans text-[0.9375rem] text-muted-foreground">
-          <span className="truncate">{towerName ?? property.code}</span>
+        <div className="mt-1.5 flex items-center gap-2 font-sans text-[0.9375rem] text-muted-foreground">
+          <span className="min-w-0 truncate">{towerName ?? property.code}</span>
           {property.ratingAvg != null && (
             <>
               <span aria-hidden="true" className="size-1 rounded-full bg-border" />
@@ -114,20 +111,21 @@ export function PropertyCard({
           )}
         </div>
 
-        <div className="mt-2.5 flex items-center gap-4 font-sans text-[0.8125rem] text-muted-foreground">
+        <div className="mt-2.5 font-sans text-[1.125rem] font-bold text-brand">
+          {compact}
+          <span className="text-[0.9375rem] font-normal text-muted-foreground">{suffix}</span>
+        </div>
+
+        {/* Chỉ 2 thông số cốt lõi — phòng tắm & phần còn lại xem ở trang chi tiết. */}
+        <div className="mt-2 flex items-center gap-4 font-sans text-[0.8125rem] text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <Maximize className="size-4" aria-hidden="true" />
             {property.areaM2} m²
           </span>
-          <span aria-hidden="true" className="size-1 rounded-full bg-border" />
           <span className="inline-flex items-center gap-1.5">
             <Bed className="size-4" aria-hidden="true" />
             {property.bedrooms}
-          </span>
-          <span aria-hidden="true" className="size-1 rounded-full bg-border" />
-          <span className="inline-flex items-center gap-1.5">
-            <Bath className="size-4" aria-hidden="true" />
-            {property.bathrooms}
+            <span className="sr-only">{t('search.anyBeds')}</span>
           </span>
         </div>
       </div>

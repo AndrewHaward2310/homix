@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Maximize, Bed, ArrowUpRight } from 'lucide-react'
+import { Maximize, ArrowUpRight } from 'lucide-react'
 import type { Property } from '@/types'
 import { pickLocale } from '@/types'
 import type { HeroStats } from '@/lib/server/home'
@@ -57,7 +57,7 @@ export function HeroSection({ featured, stats }: Props) {
           </Reveal>
 
           <Reveal delay={120} className="mt-8">
-            <SearchBar onLight align="left" />
+            <SearchBar onLight align="left" compact />
           </Reveal>
 
           {/* Số liệu tin cậy (server-rendered → không nhảy layout) */}
@@ -99,19 +99,17 @@ export function HeroSection({ featured, stats }: Props) {
                 <div className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
                   {t(`ptype.${featured.type}`)}
                 </div>
-                <div className="mt-0.5 max-w-[13rem] truncate font-sans text-[0.9rem] font-semibold text-foreground">
+                {/* Tiêu đề xuống 2 dòng cho đủ chữ (không cắt "...") */}
+                <div className="mt-0.5 line-clamp-2 max-w-[15rem] font-sans text-[0.9rem] font-semibold leading-snug text-foreground">
                   {pickLocale(featured.title, locale)}
                 </div>
-                <div className="mt-1 flex items-center gap-3 font-sans text-[0.8125rem] font-medium text-foreground">
+                <div className="mt-1.5 flex items-center gap-3 font-sans text-[0.8125rem] font-medium text-foreground">
                   <span className="font-bold text-brand">
                     {formatCompactPrice(featured.priceVnd, locale)}
                     {suffixKey && <span className="font-normal">{t(suffixKey)}</span>}
                   </span>
-                  <span className="inline-flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1 text-muted-foreground">
                     <Maximize className="size-3.5" /> {featured.areaM2}m²
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <Bed className="size-3.5" /> {featured.bedrooms}
                   </span>
                 </div>
               </div>

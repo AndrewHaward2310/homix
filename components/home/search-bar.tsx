@@ -63,8 +63,20 @@ const Divider = () => (
  * Frontend-only: mô phỏng luồng tìm kiếm.
  * TODO: nối API tìm kiếm backend (GET /api/properties?type=&tower=&...).
  */
-/** onLight: dùng trên nền SÁNG (hero editorial) — đổi màu tab cho hợp. */
-export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boolean; align?: 'center' | 'left' }) {
+/**
+ * onLight: dùng trên nền SÁNG (hero editorial) — đổi màu tab cho hợp.
+ * compact: dùng trong cột hẹp (hero split) — chỉ 2 ô (khu vực + khoảng giá) để chữ
+ * không bị đè/xuống dòng; ngày & số khách chọn tiếp ở trang /search.
+ */
+export function SearchBar({
+  onLight = false,
+  align = 'center',
+  compact = false,
+}: {
+  onLight?: boolean
+  align?: 'center' | 'left'
+  compact?: boolean
+}) {
   const t = useT()
   const router = useRouter()
   const [active, setActive] = useState<PropertyType>('rent_long')
@@ -130,7 +142,11 @@ export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boo
         onSubmit={handleSearch}
         className="flex flex-col gap-1 rounded-3xl bg-background p-2 shadow-luxury-lg ring-1 ring-black/5 transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/30 hover:-translate-y-0.5 hover:shadow-[0_54px_130px_-30px_rgba(29,29,31,0.32)] md:flex-row md:items-center md:gap-0 md:rounded-full md:p-2 md:pl-3"
       >
-        <Field icon={MapPin} label={t('search.location')} className="md:flex-[1.5]">
+        <Field
+          icon={MapPin}
+          label={t('search.location')}
+          className={cn('md:flex-[1.5]', compact && 'md:px-3.5')}
+        >
           <select name="towerId" className={fieldControl} defaultValue="">
             <option value="" disabled>
               {t('search.locationPlaceholder')}
@@ -145,16 +161,26 @@ export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boo
 
         {isStay ? (
           <>
+            {/* Compact (cột hẹp): chỉ thêm "số khách" — KHÔNG dùng ô giá vì khoảng giá
+                đang theo thang mua bán (tỷ), gửi kèm type=stay_short sẽ lọc sai. */}
+            {!compact && (
+              <>
+                <Divider />
+                <Field icon={CalendarDays} label={t('search.checkIn')} className="md:flex-1">
+                  <input type="date" className={fieldControl} />
+                </Field>
+                <Divider />
+                <Field icon={CalendarDays} label={t('search.checkOut')} className="md:flex-1">
+                  <input type="date" className={fieldControl} />
+                </Field>
+              </>
+            )}
             <Divider />
-            <Field icon={CalendarDays} label={t('search.checkIn')} className="md:flex-1">
-              <input type="date" className={fieldControl} />
-            </Field>
-            <Divider />
-            <Field icon={CalendarDays} label={t('search.checkOut')} className="md:flex-1">
-              <input type="date" className={fieldControl} />
-            </Field>
-            <Divider />
-            <Field icon={Users} label={t('search.guests')} className="md:flex-[0.8]">
+            <Field
+              icon={Users}
+              label={t('search.guests')}
+              className={cn('md:flex-[0.8]', compact && 'md:flex-1 md:px-3.5')}
+            >
               <select className={fieldControl} defaultValue="2">
                 {[1, 2, 3, 4, 5, 6].map((n) => (
                   <option key={n} value={n}>
@@ -167,7 +193,11 @@ export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boo
         ) : (
           <>
             <Divider />
-            <Field icon={Wallet} label={t('search.priceRange')} className="md:flex-1">
+            <Field
+              icon={Wallet}
+              label={t('search.priceRange')}
+              className={cn('md:flex-1', compact && 'md:px-3.5')}
+            >
               <select name="price" className={fieldControl} defaultValue="">
                 <option value="">{t('search.pricePlaceholder')}</option>
                 <option value="a">{'< 3 tỷ'}</option>
@@ -181,7 +211,12 @@ export function SearchBar({ onLight = false, align = 'center' }: { onLight?: boo
         {/* Nút tìm kiếm */}
         <button
           type="submit"
-          className="group mt-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-[linear-gradient(180deg,color-mix(in_srgb,var(--primary)_84%,white),var(--primary))] px-7 font-sans text-[1rem] font-medium text-primary-foreground shadow-[0_10px_28px_-10px_rgba(11,92,99,0.65)] ring-1 ring-inset ring-white/15 transition-all duration-300 hover:brightness-110 hover:shadow-[0_14px_36px_-8px_rgba(11,92,99,0.7)] active:scale-[0.98] md:mt-0 md:h-14 md:w-14 md:px-0 lg:w-auto lg:px-8"
+          aria-label={t('search.submit')}
+          className={cn(
+            'group mt-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-[linear-gradient(180deg,color-mix(in_srgb,var(--primary)_84%,white),var(--primary))] px-7 font-sans text-[1rem] font-medium text-primary-foreground shadow-[0_10px_28px_-10px_rgba(11,92,99,0.65)] ring-1 ring-inset ring-white/15 transition-all duration-300 hover:brightness-110 hover:shadow-[0_14px_36px_-8px_rgba(11,92,99,0.7)] active:scale-[0.98] md:mt-0 md:h-14 md:w-14 md:px-0',
+            // Cột hẹp (hero): nút gọn hơn để không lấn ô nhập
+            compact ? 'md:h-12 md:w-12 lg:w-auto lg:px-6' : 'lg:w-auto lg:px-8',
+          )}
         >
           <Search
             className="size-5 transition-transform duration-300 group-hover:scale-110"
