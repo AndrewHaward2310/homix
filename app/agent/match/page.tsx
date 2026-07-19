@@ -123,7 +123,7 @@ export default function AgentMatchPage() {
                             className="group flex items-center gap-3 rounded-xl border border-border p-3 transition hover:shadow-luxury"
                           >
                             <div className="min-w-0 flex-1">
-                              <p className="truncate font-sans text-[0.9rem] font-semibold text-foreground">
+                              <p className="line-clamp-2 font-sans text-[0.9rem] font-semibold leading-snug text-foreground">
                                 {pickLocale(p.title, locale)}
                               </p>
                               <p className="mt-0.5 flex items-center gap-1 font-sans text-[0.75rem] text-muted-foreground">

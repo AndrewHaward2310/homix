@@ -67,7 +67,7 @@ export function BookingItem({
           </span>
         </div>
         <Link href={`/property/${booking.propertyId}`}>
-          <h3 className="mt-1.5 truncate font-sans text-[0.975rem] font-semibold text-foreground hover:underline">
+          <h3 className="mt-1.5 line-clamp-2 font-sans text-[0.975rem] font-semibold leading-snug text-foreground hover:underline">
             {title}
           </h3>
         </Link>

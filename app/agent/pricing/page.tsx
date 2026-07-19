@@ -194,7 +194,7 @@ export default function AgentPricingPage() {
                   {comps.slice(0, 8).map((p) => (
                     <li key={p.id} className="flex items-center gap-3 p-3.5">
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-sans text-[0.9rem] font-medium text-foreground">
+                        <p className="line-clamp-2 font-sans text-[0.9rem] font-medium leading-snug text-foreground">
                           {pickLocale(p.title, locale)}
                         </p>
                         <p className="font-sans text-[0.75rem] text-muted-foreground">

@@ -50,7 +50,7 @@ export default function AdminListingsPage() {
                 {p.images[0] && <Image src={p.images[0]} alt="" fill sizes="64px" className="object-cover" />}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-sans text-[0.95rem] font-semibold text-foreground">{pickLocale(p.title, locale)}</p>
+                <p className="line-clamp-2 font-sans text-[0.95rem] font-semibold leading-snug text-foreground">{pickLocale(p.title, locale)}</p>
                 <p className="font-sans text-[0.8125rem] text-muted-foreground">
                   {p.code} · {formatCurrency(p.priceVnd)}
                 </p>
