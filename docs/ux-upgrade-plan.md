@@ -44,7 +44,9 @@ Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia s
 - v2 (sau): lưu combo vào tài khoản → khi đó mới cần bảng `CustomCombo`.
 
 **Chia iteration:**
-- **A** — Builder lõi: 3 lối vào, chọn căn/đêm/khách, tick trải nghiệm, giá sống + thanh tiết kiệm + chia đầu người. Route `/combo/tu-thiet-ke`; nút "Tự thiết kế combo" ở section Combo trang chủ và trang `/combo`.
+- ✅ **A** — Builder lõi ĐÃ LÀM (UI theo mockup **A: bảng 2 cột** user chọn): `/combo/tu-thiet-ke` — chọn căn/đêm/khách, tick trải nghiệm, giá sống + thanh tiết kiệm + chia đầu người + gợi ý bậc kế; state trên URL (chia sẻ được); nút vào từ section Combo & `/combo`. Nền tảng: `ComboDiscountTier` (DB) + `lib/combo-pricing.ts` dùng chung + `/api/combo-discounts`.
+  - Review 2 tầng đã fix: **High** CTA "Đặt combo" làm mất combo → nay mang `nights/guests/perks` sang trang đặt; clamp URL (n≤30, g≤12, qty≤20, số nguyên), loại perk id lạ, tự sửa `p` sai; tiers lỗi không đánh sập builder; clipboard fallback; a11y (1 nút toggle, aria-label có nghĩa, disabled ở giới hạn); chỉ hiện giá gạch khi thực sự tiết kiệm.
+  - **Còn nợ ở A**: 3 lối vào (wizard / mở từ mẫu) chưa làm — chuyển sang B; trang đặt chưa TIÊU THỤ `nights/guests/perks` (mới chỉ truyền sang) → làm ở B/C.
 - **B** — Link chia sẻ (encode/decode URL + nút copy) + gợi ý thông minh.
 - **C** — Bản SALE ở `/agent/collections`: tái dùng builder, chọn lead, "gửi báo giá" (copy link), tóm tắt gửi khách.
 

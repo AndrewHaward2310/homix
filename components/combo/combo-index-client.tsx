@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { Wand2 } from 'lucide-react'
 import type { TripCombo } from '@/types'
 import { GlassNavbar } from '@/components/luxury/glass-navbar'
 import { SiteFooter } from '@/components/home/site-footer'
@@ -37,10 +39,19 @@ export function ComboIndexClient() {
       <GlassNavbar solid />
       <main className="pt-[72px] md:pt-[88px]">
         <Container className="py-12 md:py-16">
-          <Reveal className="max-w-2xl">
-            <Eyebrow>{t('combos.eyebrow')}</Eyebrow>
-            <H1 className="mt-4 font-display">{t('combos.allTitle')}</H1>
-            <Body className="mt-5">{t('combos.allSubtitle')}</Body>
+          <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <Eyebrow>{t('combos.eyebrow')}</Eyebrow>
+              <H1 className="mt-4 font-display">{t('combos.allTitle')}</H1>
+              <Body className="mt-5">{t('combos.allSubtitle')}</Body>
+            </div>
+            <Link
+              href="/combo/tu-thiet-ke"
+              className="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-primary px-6 py-3 font-sans text-[0.95rem] font-semibold text-primary-foreground transition hover:brightness-110 md:self-auto"
+            >
+              <Wand2 className="size-4" />
+              {t('builder.cta')}
+            </Link>
           </Reveal>
 
           <StateWrapper state={state} className="mt-12" emptyTitle={t('combos.empty')}>

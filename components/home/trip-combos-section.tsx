@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Wand2 } from 'lucide-react'
 import type { TripCombo } from '@/types'
 import { Section } from '@/components/luxury/section'
 import { H2, Body, Eyebrow } from '@/components/luxury/typography'
@@ -43,13 +43,19 @@ export function TripCombosSection() {
           <H2 className="mt-4 font-display">{t('combos.title')}</H2>
           <Body className="mt-5">{t('combos.subtitle')}</Body>
         </div>
-        <Link
-          href="/combo"
-          className={cn(luxuryButtonVariants({ variant: 'outline', size: 'md' }), 'shrink-0 self-start md:self-auto')}
-        >
-          {t('combos.viewAll')}
-          <ArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
-        </Link>
+        <div className="flex shrink-0 flex-wrap gap-2 self-start md:self-auto">
+          <Link
+            href="/combo/tu-thiet-ke"
+            className={cn(luxuryButtonVariants({ variant: 'primary', size: 'md' }))}
+          >
+            <Wand2 className="size-4" />
+            {t('builder.cta')}
+          </Link>
+          <Link href="/combo" className={cn(luxuryButtonVariants({ variant: 'outline', size: 'md' }))}>
+            {t('combos.viewAll')}
+            <ArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </Reveal>
 
       <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
