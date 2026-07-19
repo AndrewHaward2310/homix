@@ -416,5 +416,17 @@
   "builder.cta": "Build your own combo",
   "builder.noPerk": "No experiences added yet",
   "builder.decrease": "Decrease",
-  "builder.increase": "Increase"
+  "builder.increase": "Increase",
+  "admin.discountTitle": "Combo builder discount tiers",
+  "admin.discountHint": "The more experiences a guest adds, the deeper the discount. Changes apply to the combo builder immediately.",
+  "admin.tierMinPerks": "From (experiences)",
+  "admin.tierPercent": "Discount (%)",
+  "admin.tierCap": "Cap (VND)",
+  "admin.tierActive": "Active",
+  "admin.tierNoCap": "No cap",
+  "admin.addTier": "Add tier",
+  "admin.removeTier": "Remove tier",
+  "admin.saveTiers": "Save changes",
+  "admin.savedTiers": "Discount tiers saved",
+  "admin.tierPreview": "Example: {n} experiences → {pct}% off"
 }

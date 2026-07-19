@@ -416,5 +416,17 @@
   "builder.cta": "Tự thiết kế combo",
   "builder.noPerk": "Chưa thêm trải nghiệm nào",
   "builder.decrease": "Giảm",
-  "builder.increase": "Tăng"
+  "builder.increase": "Tăng",
+  "admin.discountTitle": "Bậc giảm giá combo tự thiết kế",
+  "admin.discountHint": "Khách càng thêm nhiều trải nghiệm, giảm càng sâu. Thay đổi áp dụng ngay cho trình tự thiết kế combo.",
+  "admin.tierMinPerks": "Từ (số trải nghiệm)",
+  "admin.tierPercent": "Giảm (%)",
+  "admin.tierCap": "Trần giảm (đ)",
+  "admin.tierActive": "Bật",
+  "admin.tierNoCap": "Không giới hạn",
+  "admin.addTier": "Thêm bậc",
+  "admin.removeTier": "Xoá bậc",
+  "admin.saveTiers": "Lưu thay đổi",
+  "admin.savedTiers": "Đã lưu bậc giảm giá",
+  "admin.tierPreview": "Ví dụ: chọn {n} trải nghiệm → giảm {pct}%"
 }

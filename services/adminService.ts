@@ -40,4 +40,37 @@ export async function setListingVerified(id: string, verified: boolean): Promise
   return res.ok
 }
 
-export const adminService = { getOverview, getUsers, setUserFunction, setListingVerified }
+export const adminService = {
+  getOverview,
+  getUsers,
+  setUserFunction,
+  setListingVerified,
+  getComboDiscounts,
+  saveComboDiscounts,
+}
+
+/** Bậc giảm giá combo (admin) — gồm cả bậc đang tắt. */
+export type AdminDiscountTier = {
+  minPerks: number
+  percent: number
+  maxDiscountVnd: number | null
+  active: boolean
+}
+
+export async function getComboDiscounts(): Promise<AdminDiscountTier[]> {
+  const res = await fetch('/api/admin/combo-discounts')
+  if (!res.ok) throw new Error('combo discounts failed')
+  return (await res.json()).tiers
+}
+
+/** Lưu toàn bộ danh sách bậc; trả danh sách sau khi lưu. */
+export async function saveComboDiscounts(tiers: AdminDiscountTier[]): Promise<AdminDiscountTier[]> {
+  const res = await fetch('/api/admin/combo-discounts', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tiers }),
+  })
+  const body = (await res.json().catch(() => null)) as { tiers?: AdminDiscountTier[]; error?: string } | null
+  if (!res.ok) throw new Error(body?.error ?? 'Lưu bậc giảm giá thất bại')
+  return body?.tiers ?? []
+}
