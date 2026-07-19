@@ -12,7 +12,7 @@ import { MasterplanLocator } from './masterplan/masterplan-locator'
 export function BuildingLocatorSection() {
   const t = useT()
   return (
-    <section id="vi-tri" className="scroll-mt-20 py-16 md:py-24">
+    <section id="vi-tri" className="scroll-mt-20 bg-secondary/40 py-16 md:py-24">
       <Container>
         <Reveal className="max-w-2xl">
           <Eyebrow>{t('locator.eyebrow')}</Eyebrow>

@@ -84,7 +84,7 @@ export function TestimonialsSection() {
     : '5.0'
 
   return (
-    <Section id="danh-gia" className="scroll-mt-20">
+    <Section id="danh-gia" className="scroll-mt-20 bg-secondary/40">
       <Reveal className="max-w-2xl">
         <Eyebrow>{t('testimonials.eyebrow')}</Eyebrow>
         <H2 className="mt-4 font-display">{t('testimonials.title')}</H2>

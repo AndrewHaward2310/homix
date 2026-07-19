@@ -30,7 +30,7 @@ export function RecentlyViewed({ exclude }: { exclude?: string }) {
   if (items.length === 0) return null
 
   return (
-    <Section>
+    <Section className="bg-secondary/40">
       <Eyebrow>{t('recent.eyebrow')}</Eyebrow>
       <H2 className="mt-4">{t('recent.title')}</H2>
       <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">

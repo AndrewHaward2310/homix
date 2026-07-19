@@ -9,8 +9,8 @@ import type { HeroStats } from '@/lib/server/home'
 import { Container } from '@/components/luxury/container'
 import { Eyebrow, Display, Body } from '@/components/luxury/typography'
 import { Reveal } from '@/components/luxury/reveal'
+import { CountUp } from '@/components/luxury/count-up'
 import { useLocale } from '@/lib/i18n/provider'
-import { getIntlLocale } from '@/lib/i18n/config'
 import { formatCompactPrice, priceSuffixKey } from '@/lib/property-format'
 import { SearchBar } from './search-bar'
 
@@ -27,13 +27,12 @@ type Props = {
  */
 export function HeroSection({ featured, stats }: Props) {
   const { locale, t } = useLocale()
-  const nf = (n: number) => new Intl.NumberFormat(getIntlLocale(locale)).format(n)
   const suffixKey = featured ? priceSuffixKey(featured.type) : null
 
   const metrics = [
-    { v: `${nf(stats.properties)}+`, l: t('trust.properties') },
-    { v: nf(stats.towers), l: t('trust.towers') },
-    { v: nf(stats.hosts), l: t('trust.hosts') },
+    { n: stats.properties, suffix: '+', l: t('trust.properties') },
+    { n: stats.towers, suffix: '', l: t('trust.towers') },
+    { n: stats.hosts, suffix: '', l: t('trust.hosts') },
   ]
 
   return (
@@ -60,14 +59,16 @@ export function HeroSection({ featured, stats }: Props) {
             <SearchBar onLight align="left" compact />
           </Reveal>
 
-          {/* Số liệu tin cậy (server-rendered → không nhảy layout) */}
+          {/* Số liệu tin cậy: SSR ra giá trị thật (no-JS/CLS an toàn), đếm động khi cuộn tới */}
           <Reveal delay={200}>
             <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
               {metrics.map((s) => (
                 <div key={s.l}>
-                  <div className="font-display text-[1.5rem] font-bold leading-none tracking-[-0.02em] text-foreground tabular-nums">
-                    {s.v}
-                  </div>
+                  <CountUp
+                    value={s.n}
+                    suffix={s.suffix}
+                    className="font-display text-[1.5rem] font-bold leading-none tracking-[-0.02em] text-foreground tabular-nums"
+                  />
                   <div className="mt-1 font-sans text-[0.8125rem] text-muted-foreground">{s.l}</div>
                 </div>
               ))}

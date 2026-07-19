@@ -8,6 +8,7 @@ import { TestimonialsSection } from '@/components/home/testimonials-section'
 import { LifestyleSection } from '@/components/home/lifestyle-section'
 import { PerksSection } from '@/components/home/perks-section'
 import { RecentlyViewed } from '@/components/property/recently-viewed'
+import { WaveDivider } from '@/components/luxury/wave-divider'
 import { SiteFooter } from '@/components/home/site-footer'
 import { getHeroFeaturedServer, getHeroStatsServer } from '@/lib/server/home'
 
@@ -23,12 +24,18 @@ export default async function Page() {
         <HeroSection featured={featured} stats={stats} />
         {/* Dải cam kết dịch vụ (số liệu đã nằm ở hero). */}
         <TrustStrip />
-        {/* Thấy căn trước (thắng nhanh) → rồi mới tới bối cảnh vị trí/bản đồ. */}
+        {/* Thấy căn trước (thắng nhanh) → rồi mới tới bối cảnh vị trí/bản đồ.
+            Nhịp nền sáng/tối xen kẽ + divider sóng để trang bớt "một mạch". */}
         <FeaturedPropertiesSection />
+        {/* Khối tinted liền: Combo · Vừa xem · Vị trí (bền vững kể cả khi Vừa-xem rỗng) */}
+        <WaveDivider variant="to-tinted" />
         <TripCombosSection />
         <RecentlyViewed />
         <BuildingLocatorSection />
+        <WaveDivider variant="to-ground" />
         <LifestyleSection />
+        <WaveDivider variant="to-tinted" />
+        {/* Khối tinted liền: Đánh giá · Đặc quyền */}
         <TestimonialsSection />
         <PerksSection />
       </main>

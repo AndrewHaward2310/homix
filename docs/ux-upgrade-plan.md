@@ -67,7 +67,10 @@ Khách tự xếp combo (lưu trú + trải nghiệm), giá gói động, chia s
 **Ràng buộc:** i18n vi/en; KHÔNG cắt chữ "..."; mật độ thông tin gọn (chi tiết để ở trang căn); `motion-safe:`; verify tsc + screenshot vi/en; review 2 tầng mỗi vòng.
 
 ## 🔴 #7 — Homepage CHƯA ĐỦ MỚI LẠ / GIỮ CHÂN (user báo lại nhiều lần)
-Mục tiêu: 5–10 giây đầu phải "wow" + có yếu tố tương tác giữ người xem cuộn tiếp. Ý tưởng (làm dần, mỗi iteration 1–2 mảng):
+Mục tiêu: 5–10 giây đầu phải "wow" + có yếu tố tương tác giữ người xem cuộn tiếp.
+**User đã duyệt mockup 3 hướng (Artifact) → chọn A + C.** (Iteration 8 = A, Iteration 9 = C.)
+- ✅ **(iteration 8) Concept A — nhịp sống động**: `CountUp` số liệu hero (đếm khi cuộn tới, SSR=value chống CLS/no-JS, aria-label ổn định, reduced-motion an toàn); `WaveDivider` sóng mềm (màu tinted = color-mix khớp `bg-secondary/40`, có fallback fill); nhịp nền tinted xen kẽ (khối Combo/Vừa-xem/Vị-trí + khối Đánh-giá/Đặc-quyền, Lifestyle nền sáng ở giữa). Review 2 tầng: SSR=0→CLS, a11y trung gian, color-mix fallback — đã fix. Bền khi Vừa-xem rỗng.
+Ý tưởng (làm dần, mỗi iteration 1–2 mảng):
 - **Hero sống động hơn**: giữ layout gọn nhưng thêm chiều sâu — ví dụ scroll-parallax nhẹ trên ảnh, hoặc số liệu/điểm nhấn động (đếm số) ngay dưới search; cân nhắc "search gợi ý" (autocomplete phân khu) để tương tác ngay.
 - ✅ (iteration 7) **Bố cục bento** cho "Căn hộ nổi bật": `FeaturedHeroCard` lớn (magazine) + lưới 2×2 + hàng 3 card → phá kiểu 8 card đều. Review 2 tầng: guard khi ít item, DRY helper giá (`lib/property-format.ts` dùng chung PropertyCard), motion-safe hover. (Bỏ qua button-in-Link vì giống PropertyCard sẵn có.)
 - **Nhịp xen kẽ**: nền sáng/tối xen kẽ giữa các section (combo đã có `bg-secondary/40`) + divider mềm; reveal/stagger nhất quán.
