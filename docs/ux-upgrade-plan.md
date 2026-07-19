@@ -27,7 +27,16 @@ Phát hiện iteration 3: `/agent/*` có 12 tab nhưng chỉ `leads` được bu
 - ✅ **Smart Match** (`/agent/match`, iteration 6) — mỗi lead + căn gợi ý thật (join `matchedPropertyIds`→property, chỉ căn available), badge trạng thái, liên hệ mailto/tel. Review 2 tầng cùng bắt: getProperties default pageSize (→ searchProperties 48), lọc available, mailto/tel, retry, key thừa — đã fix hết.
 - **Còn stub cần build** (ưu tiên sale): `commission` (hoa hồng), `contracts` (HĐ & eKYC), `schedule` (điều phối lịch), `messages`, `quality`(SLA/CSAT). Mỗi cái 1 iteration.
 
-## 🟠 #1 — Bố cục & nhịp điệu trang
+## 🔴 #7 — Homepage CHƯA ĐỦ MỚI LẠ / GIỮ CHÂN (user báo lại nhiều lần)
+Mục tiêu: 5–10 giây đầu phải "wow" + có yếu tố tương tác giữ người xem cuộn tiếp. Ý tưởng (làm dần, mỗi iteration 1–2 mảng):
+- **Hero sống động hơn**: giữ layout gọn nhưng thêm chiều sâu — ví dụ scroll-parallax nhẹ trên ảnh, hoặc số liệu/điểm nhấn động (đếm số) ngay dưới search; cân nhắc "search gợi ý" (autocomplete phân khu) để tương tác ngay.
+- **Bố cục bento** cho khu "Căn hộ nổi bật": 1 card lớn nổi bật + lưới nhỏ, thay vì 8 card đều tăm tắp → phá đơn điệu.
+- **Nhịp xen kẽ**: nền sáng/tối xen kẽ giữa các section (combo đã có `bg-secondary/40`) + divider mềm; reveal/stagger nhất quán.
+- **Yếu tố tương tác giữ chân**: dải "đang xem / vừa đặt" (social proof động), hoặc quiz nhỏ "tìm căn hợp gu" → dẫn vào /search với filter.
+- **Micro-interactions**: hover card nâng + đổ bóng (đã có ở combo), nút CTA có phản hồi, cursor/entrance tinh tế.
+Lưu ý: đo LCP, tôn trọng prefers-reduced-motion.
+
+## 🟠 #1 — Bố cục & nhịp điệu trang (gộp vào #7)
 - **Xen kẽ nền & layout** để trang bớt "một mạch": section combo đã dùng `bg-secondary/40` — áp cùng nguyên tắc cho các section khác (sáng/tối xen kẽ, full-bleed vs container).
 - **Đa dạng dạng thẻ**: hiện featured toàn card giống nhau. Thêm 1 "hero card" lớn hoặc bố cục bento cho khu nổi bật.
 - **Nhịp cuộn**: đảm bảo mỗi section có eyebrow → title → subtitle nhất quán (đã có), thêm section "số liệu/uy tín" ngắn giữa hero và featured (dùng `hero.stat*` đang bỏ trống).
