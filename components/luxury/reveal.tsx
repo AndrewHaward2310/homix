@@ -13,6 +13,12 @@ type RevealProps<T extends ElementType> = {
   as?: T
   /** Độ trễ (ms) để tạo hiệu ứng lần lượt (stagger) */
   delay?: number
+  /**
+   * Tỉ lệ hiển thị tối thiểu để kích hoạt. Mặc định 0.15.
+   * Đặt 0 khi phần tử nằm trong vùng CUỘN NGANG (chỉ ló ra một phần ở mép),
+   * nếu không nó sẽ không bao giờ đạt ngưỡng và mãi vô hình.
+   */
+  threshold?: number
   className?: string
 } & Omit<ComponentPropsWithoutRef<T>, 'as' | 'className'>
 
@@ -22,6 +28,7 @@ type RevealProps<T extends ElementType> = {
 export function Reveal<T extends ElementType = 'div'>({
   as,
   delay = 0,
+  threshold = 0.15,
   className,
   style,
   children,
@@ -44,12 +51,12 @@ export function Reveal<T extends ElementType = 'div'>({
           }
         })
       },
-      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' },
+      { threshold, rootMargin: '0px 0px -60px 0px' },
     )
 
     observer.observe(node)
     return () => observer.disconnect()
-  }, [])
+  }, [threshold])
 
   return (
     <Comp

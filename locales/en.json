@@ -477,5 +477,6 @@
   "agent.schedule.kind.checkin": "Check-in",
   "agent.schedule.kind.checkout": "Check-out",
   "agent.schedule.allDay": "All day",
-  "agent.schedule.unknownProperty": "Property no longer available"
+  "agent.schedule.unknownProperty": "Property no longer available",
+  "combos.swipeHint": "Swipe for more combos"
 }

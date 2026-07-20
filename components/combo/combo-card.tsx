@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Moon, Users, Star, ArrowRight, Flame, Ticket, Bike, Sparkles, Check } from 'lucide-react'
 import type { TripCombo, PerkCategory } from '@/types'
 import { pickLocale } from '@/types'
-import { Body } from '@/components/luxury/typography'
 import { useLocale } from '@/lib/i18n/provider'
 
 export const COMBO_PERK_ICON: Record<PerkCategory, typeof Flame> = {
@@ -24,7 +23,7 @@ export function ComboCard({ combo, priority }: { combo: TripCombo; priority?: bo
   return (
     <Link
       href={`/combo/${combo.id}`}
-      className="group flex flex-col overflow-hidden rounded-3xl bg-card ring-1 ring-black/5 shadow-luxury transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury-lg"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl bg-card ring-1 ring-black/5 shadow-luxury transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury-lg"
     >
       {/* Ảnh chủ đề */}
       <div className="relative aspect-[16/11] overflow-hidden">
@@ -33,7 +32,7 @@ export function ComboCard({ combo, priority }: { combo: TripCombo; priority?: bo
           alt={pickLocale(combo.title, locale)}
           fill
           priority={priority}
-          sizes="(max-width: 1024px) 100vw, 33vw"
+          sizes="(max-width: 639px) 85vw, (max-width: 767px) 60vw, (max-width: 1023px) 50vw, 33vw"
           className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5" aria-hidden="true" />
@@ -68,13 +67,9 @@ export function ComboCard({ combo, priority }: { combo: TripCombo; priority?: bo
         </div>
       </div>
 
-      {/* Nội dung */}
+      {/* Nội dung — cố ý GỌN: mô tả dài để ở trang chi tiết, tránh cắt chữ "..." */}
       <div className="flex flex-1 flex-col p-5">
-        <Body className="line-clamp-2 text-[0.9rem] leading-relaxed">
-          {pickLocale(combo.subtitle, locale)}
-        </Body>
-
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5">
           <span className="inline-flex items-center gap-1 rounded-lg bg-brand/10 px-2 py-1 font-sans text-[0.75rem] font-medium text-brand">
             <Check className="size-3.5" /> {t('combos.stayNight', { n: combo.nights })}
           </span>
@@ -91,7 +86,7 @@ export function ComboCard({ combo, priority }: { combo: TripCombo; priority?: bo
           })}
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3 border-t border-border pt-4">
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-4">
           <div className="min-w-0">
             <div className="flex items-center gap-1 font-sans text-[0.8125rem] font-semibold text-foreground">
               <Star className="size-3.5 fill-amber-400 text-amber-400" />

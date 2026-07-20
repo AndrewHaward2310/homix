@@ -34,7 +34,7 @@ export function LifestyleSection() {
       </Container>
 
       {/* Ba chương là một CHUỖI trong ngày → dùng <ol> để truyền tải thứ tự */}
-      <ol className="flex list-none flex-col">
+      <ol className="flex list-none flex-col pb-16 md:pb-24">
         {CHAPTERS.map(({ key, image: img }, i) => {
           const imageRight = i % 2 === 1
           return (
@@ -55,7 +55,7 @@ export function LifestyleSection() {
                   src={img}
                   alt=""
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 767px) 100vw, 50vw"
                   className="object-cover"
                 />
               </div>
@@ -65,7 +65,7 @@ export function LifestyleSection() {
                 <Reveal
                   delay={80}
                   className={cn(
-                    'w-full px-6 py-12 sm:px-10 md:py-16',
+                    'w-full px-5 py-12 sm:px-8 md:py-16 lg:px-12 xl:px-16',
                     // Dồn khối chữ về phía ĐƯỜNG RÁP với ảnh (nhịp tạp chí), chừa
                     // khoảng thở với ảnh; cạnh ngoài dùng padding mặc định.
                     // max-w-xl (hẹp hơn cột) để margin-auto thật sự dồn được khối chữ

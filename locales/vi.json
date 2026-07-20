@@ -477,5 +477,6 @@
   "agent.schedule.kind.checkin": "Nhận phòng",
   "agent.schedule.kind.checkout": "Trả phòng",
   "agent.schedule.allDay": "Cả ngày",
-  "agent.schedule.unknownProperty": "Căn không còn khả dụng"
+  "agent.schedule.unknownProperty": "Căn không còn khả dụng",
+  "combos.swipeHint": "Vuốt ngang để xem thêm combo"
 }

@@ -58,17 +58,51 @@ export function TripCombosSection() {
         </div>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Mobile: dải CUỘN NGANG có snap (tràn mép để lộ thẻ kế → mời vuốt).
+          md+: quay lại lưới như cũ. */}
+      <div
+        role="region"
+        aria-label={t('combos.title')}
+        tabIndex={0}
+        className={cn(
+          // Âm lề phải KHỚP gutter của Container (px-5 → sm:px-8), nếu không sẽ
+          // lố vài px và làm cả trang tràn ngang.
+          'mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto',
+          '-mx-5 px-5 sm:-mx-8 sm:px-8',
+          // scroll-padding: để thẻ snap xong vẫn giữ gutter, không dính sát mép.
+          'scroll-pl-5 sm:scroll-pl-8 md:scroll-pl-0',
+          // py (không phải pb): overflow-x cũng cắt theo trục Y → chừa chỗ cho
+          // bóng đổ và hover nâng của thẻ.
+          'py-3',
+          '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+          'md:mx-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 md:py-0 lg:grid-cols-3',
+        )}
+      >
         {loading
           ? Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="skeleton aspect-[4/5] rounded-3xl" />
+              <div
+                key={i}
+                className="skeleton aspect-[4/5] w-[80%] shrink-0 snap-start rounded-3xl sm:w-[58%] md:w-auto md:shrink"
+              />
             ))
           : combos.map((combo, i) => (
-              <Reveal key={combo.id} delay={(i % 3) * 90}>
+              <Reveal
+                key={combo.id}
+                delay={(i % 3) * 90}
+                // threshold 0: trong dải cuộn ngang thẻ kế chỉ ló ~12% ở mép,
+                // không bao giờ đạt ngưỡng 0.15 → sẽ mãi vô hình.
+                threshold={0}
+                className="w-[80%] shrink-0 snap-start sm:w-[58%] md:w-auto md:shrink"
+              >
                 <ComboCard combo={combo} priority={i === 0} />
               </Reveal>
             ))}
       </div>
+
+      {/* Gợi ý vuốt — chỉ hiện ở mobile, nơi dải cuộn ngang thực sự tồn tại */}
+      <p className="mt-3 font-sans text-[0.75rem] text-muted-foreground md:hidden">
+        {t('combos.swipeHint')}
+      </p>
     </Section>
   )
 }
