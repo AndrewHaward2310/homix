@@ -12,6 +12,13 @@ import { WaveDivider } from '@/components/luxury/wave-divider'
 import { SiteFooter } from '@/components/home/site-footer'
 import { getHeroFeaturedServer, getHeroStatsServer } from '@/lib/server/home'
 
+/**
+ * Trang chủ được prerender lúc build. Đặt `revalidate` để trang TỰ LÀM MỚI định kỳ:
+ * nếu lúc build DB chưa với tới được (số liệu về 0), lần regenerate sau sẽ tự đúng
+ * mà không cần deploy lại. Đồng thời số liệu/căn nổi bật luôn tươi.
+ */
+export const revalidate = 300
+
 // Trang chủ — mặt tiền marketplace, PUBLIC (không yêu cầu đăng nhập).
 export default async function Page() {
   // Lấy ở SERVER để ảnh hero vào HTML đầu (LCP) và khối số liệu không nhảy (CLS).
