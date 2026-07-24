@@ -13,12 +13,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params
   const p = await getPropertyServer(id)
-  if (!p) return { title: 'HOMIX' }
+  if (!p) return { title: 'DOMIX HOME' }
   const title = pickLocale(p.title, 'vi')
   const description = pickLocale(p.description, 'vi').slice(0, 160)
   const images = p.images[0] ? [p.images[0]] : []
   return {
-    title: `${title} · HOMIX`,
+    title: `${title} · DOMIX HOME`,
     description,
     openGraph: { title, description, images, type: 'website' },
     twitter: { card: 'summary_large_image', title, description, images },

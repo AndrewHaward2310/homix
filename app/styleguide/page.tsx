@@ -34,7 +34,7 @@ const TYPE_SPECS = [
     label: 'Body / 17px',
     node: (
       <Body className="max-w-2xl">
-        Mỗi căn hộ tại HOMIX được thiết kế để đón trọn ánh sáng tự nhiên và tầm nhìn
+        Mỗi căn hộ tại DOMIX HOME được thiết kế để đón trọn ánh sáng tự nhiên và tầm nhìn
         panorama ra mặt hồ, nơi khoảng trắng và vật liệu mộc kể câu chuyện về sự sang trọng
         đích thực.
       </Body>
@@ -60,7 +60,7 @@ const PROPERTIES: Property[] = [
   {
     id: 'san-02',
     name: 'The Sancerre',
-    location: 'Đại lộ trung tâm HOMIX',
+    location: 'Đại lộ trung tâm DOMIX HOME',
     price: '6,8 tỷ',
     area: '95 m²',
     bedrooms: 3,
@@ -95,7 +95,7 @@ export default function StyleguidePage() {
       <section className="relative flex min-h-[92vh] items-end overflow-hidden">
         <Image
           src="/images/hero-lakeside.png"
-          alt="Toàn cảnh khu đô thị biển hồ HOMIX lúc hoàng hôn"
+          alt="Toàn cảnh khu đô thị biển hồ DOMIX HOME lúc hoàng hôn"
           fill
           priority
           sizes="100vw"
@@ -105,7 +105,7 @@ export default function StyleguidePage() {
 
         <Container className="relative z-10 pb-20 md:pb-28">
           <div className="max-w-3xl">
-            <Eyebrow className="text-white/80">HOMIX · Design System</Eyebrow>
+            <Eyebrow className="text-white/80">DOMIX HOME · Design System</Eyebrow>
             <Display className="mt-5 text-white">Sống trọn nhịp sống ven hồ</Display>
             <p className="mt-6 max-w-xl text-pretty font-sans text-[1.0625rem] leading-[1.6] text-white/85">
               Bộ nhận diện “Apple Luxury Minimal” cho nền tảng bất động sản cao cấp — nơi ảnh
@@ -332,7 +332,7 @@ export default function StyleguidePage() {
           <div className="flex items-center gap-2">
             <span className="inline-block size-2.5 rounded-full bg-brand" aria-hidden="true" />
             <span className="font-sans text-lg font-semibold tracking-[-0.02em] text-foreground">
-              HOMIX
+              DOMIX HOME
             </span>
           </div>
           <Caption>Design System · “Apple Luxury Minimal” · Bản duyệt look</Caption>

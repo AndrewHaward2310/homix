@@ -49,13 +49,13 @@ const displayEn = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: {
-    default: 'HOMIX — Nền tảng bất động sản cao cấp',
+    default: 'DOMIX HOME — Nền tảng bất động sản cao cấp',
     template: '%s',
   },
   description:
-    'HOMIX — nền tảng bất động sản cao cấp: mua, thuê dài hạn và lưu trú ngắn ngày trong một trải nghiệm tinh tế.',
+    'DOMIX HOME — nền tảng bất động sản cao cấp: mua, thuê dài hạn và lưu trú ngắn ngày trong một trải nghiệm tinh tế.',
   openGraph: {
-    siteName: 'HOMIX',
+    siteName: 'DOMIX HOME',
     type: 'website',
   },
   generator: 'v0.app',

@@ -51,7 +51,7 @@ export default function LoginPage() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/lifestyle-1.png"
-          alt="Không gian sống HOMIX bên hồ lúc hoàng hôn"
+          alt="Không gian sống DOMIX HOME bên hồ lúc hoàng hôn"
           fill
           priority
           sizes="100vw"

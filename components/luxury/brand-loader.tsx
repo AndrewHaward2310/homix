@@ -54,7 +54,7 @@ export function BrandLoaderInline({ label, className }: { label?: string; classN
 }
 
 /**
- * BrandLoader — màn hình chờ toàn khung, mang thương hiệu HOMIX.
+ * BrandLoader — màn hình chờ toàn khung, mang thương hiệu DOMIX HOME.
  * Logo "thở" nhẹ + vòng halo lan toả + thanh tiến trình vô định.
  * Dùng cho app/loading.tsx (Suspense boundary của App Router).
  */
@@ -67,7 +67,7 @@ export function BrandLoader({ className }: { className?: string }) {
       )}
       role="status"
       aria-live="polite"
-      aria-label="Đang tải HOMIX"
+      aria-label="Đang tải DOMIX HOME"
     >
       {/* Logo + halo */}
       <div className="relative flex items-center justify-center">
@@ -75,13 +75,13 @@ export function BrandLoader({ className }: { className?: string }) {
           className="absolute size-16 rounded-2xl bg-brand/25 blur-md animate-brand-halo"
           aria-hidden="true"
         />
-        <LogoMark className="relative size-16 animate-brand-breathe drop-shadow-[0_8px_24px_rgba(11,92,99,0.25)]" />
+        <LogoMark className="relative size-16 animate-brand-breathe drop-shadow-[0_8px_24px_rgba(21,96,212,0.25)]" />
       </div>
 
       {/* Wordmark + thanh tiến trình */}
       <div className="flex flex-col items-center gap-3.5">
         <span className="font-sans text-[1.05rem] font-extrabold tracking-[0.28em] text-foreground">
-          HOMIX
+          DOMIX HOME
         </span>
         <span className="relative h-[3px] w-36 overflow-hidden rounded-full bg-border">
           <span

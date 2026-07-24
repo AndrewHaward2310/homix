@@ -30,7 +30,7 @@ type Provider = {
 }
 
 const PROVIDERS: Provider[] = [
-  { id: 'op', name: 'HOMIX', nightly: 1_450_000, fee: 0, perks: true, supportKey: 'perks.support247', recommended: true },
+  { id: 'op', name: 'DOMIX HOME', nightly: 1_450_000, fee: 0, perks: true, supportKey: 'perks.support247', recommended: true },
   { id: 'airbnb', name: 'Airbnb', nightly: 1_450_000, fee: 203_000, perks: false, supportKey: 'perks.supportRemote' },
   { id: 'agoda', name: 'Agoda', nightly: 1_520_000, fee: 182_000, perks: false, supportKey: 'perks.supportRemote' },
 ]

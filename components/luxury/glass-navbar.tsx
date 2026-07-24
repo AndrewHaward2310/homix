@@ -55,7 +55,7 @@ export function GlassNavbar({ solid = false }: { solid?: boolean }) {
         )}
       >
         <Container className="flex h-[72px] items-center justify-between md:h-[88px]">
-          <Link href="/" aria-label="HOMIX">
+          <Link href="/" aria-label="DOMIX HOME">
             <Logo tone={scrolled ? 'auto' : 'light'} />
           </Link>
 

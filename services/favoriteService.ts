@@ -1,4 +1,4 @@
-// Ocean Park → HOMIX — Favorite service (client → API). Cần đăng nhập.
+// Ocean Park → DOMIX HOME — Favorite service (client → API). Cần đăng nhập.
 import type { Property } from '@/types'
 
 /** Danh sách căn đã lưu + mảng id (cho UI ♥). Chưa đăng nhập → rỗng. */

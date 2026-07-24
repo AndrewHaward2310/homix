@@ -10,12 +10,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params
   const combo = await getTripCombo(id)
-  if (!combo) return { title: 'HOMIX' }
+  if (!combo) return { title: 'DOMIX HOME' }
   const title = pickLocale(combo.title, 'vi')
   const description = pickLocale(combo.subtitle, 'vi').slice(0, 160)
   const images = combo.themeImage ? [combo.themeImage] : []
   return {
-    title: `${title} · Combo HOMIX`,
+    title: `${title} · Combo DOMIX HOME`,
     description,
     openGraph: { title, description, images, type: 'website' },
   }

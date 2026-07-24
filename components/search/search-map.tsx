@@ -111,5 +111,5 @@ export function SearchMap({
     })
   }, [hoveredId])
 
-  return <div ref={containerRef} className="h-full w-full" aria-label="HOMIX search map" />
+  return <div ref={containerRef} className="h-full w-full" aria-label="DOMIX HOME search map" />
 }

@@ -16,7 +16,7 @@ const CHAPTERS = [
 ] as const
 
 /**
- * LifestyleSection — "Một ngày tại HOMIX" theo lối TẠP CHÍ (Concept C):
+ * LifestyleSection — "Một ngày tại DOMIX HOME" theo lối TẠP CHÍ (Concept C):
  * mỗi chương là một panel FULL-BLEED, ảnh tràn tới mép màn hình, chữ cỡ lớn, so le.
  * Ba chương là một chuỗi trong ngày (nhận phòng → ẩm thực → biển hồ) nên đánh số 01–03 có nghĩa.
  */

@@ -1,4 +1,4 @@
-// HOMIX — Admin service (client → API). Chỉ admin gọi được (server chặn 403).
+// DOMIX HOME — Admin service (client → API). Chỉ admin gọi được (server chặn 403).
 import type { AgentFunction, Property, User } from '@/types'
 
 export type AdminOverview = {
