@@ -5,6 +5,7 @@ import { AuthProvider } from '@/components/auth/auth-context'
 import { LanguageProvider } from '@/lib/i18n/provider'
 import { ToastProvider } from '@/components/ui/toast'
 import { ThemeProvider, themeInitScript } from '@/components/theme/theme-provider'
+import { SupportWidget } from '@/components/support/support-widget'
 import './globals.css'
 
 // Self-host font (không tải Google Fonts lúc build → build ổn định offline).
@@ -96,7 +97,10 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <AuthProvider>
-              <ToastProvider>{children}</ToastProvider>
+              <ToastProvider>
+                {children}
+                <SupportWidget />
+              </ToastProvider>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
