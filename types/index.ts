@@ -111,6 +111,8 @@ export type Review = {
   /** 1..5 */
   rating: number
   comment: string
+  /** Ảnh khách tự chụp (public URL). */
+  images: string[]
   createdAt: string
 }
 

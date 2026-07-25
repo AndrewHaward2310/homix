@@ -94,6 +94,7 @@ export function toReview(r: PrismaReview & { customer?: PrismaUser | null }): Re
     avatarUrl: r.customer?.avatarUrl ?? undefined,
     rating: r.rating,
     comment: r.comment,
+    images: r.images ?? [],
     createdAt: r.createdAt.toISOString(),
   }
 }

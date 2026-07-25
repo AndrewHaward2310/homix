@@ -527,5 +527,14 @@
   "pay.card": "Credit / debit card",
   "pay.ewallet": "E-wallet (Momo, ZaloPay…)",
   "pay.transfer": "Bank transfer",
-  "pay.onsite": "Pay on site"
+  "pay.onsite": "Pay on site",
+  "review.write": "Write a review",
+  "review.rating": "Rate",
+  "review.commentPlaceholder": "Share your experience with this home…",
+  "review.addPhoto": "Add photos",
+  "review.removePhoto": "Remove photo",
+  "review.submit": "Submit review",
+  "review.loginToReview": "Sign in with a customer account to write a review.",
+  "review.photoAlt": "Photo by {name}",
+  "review.badFile": "Only JPG/PNG/WebP/AVIF images up to 8MB."
 }

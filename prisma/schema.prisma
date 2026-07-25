@@ -165,8 +165,11 @@ model Review {
   customerId String
   rating     Int
   comment    String
+  /// Ảnh khách tự chụp (public URL trong bucket). Rỗng nếu không đính kèm.
+  images     String[] @default([])
   createdAt  DateTime @default(now())
 
+  @@unique([propertyId, customerId]) // mỗi khách 1 đánh giá / căn (chống trùng ở DB)
   @@index([propertyId])
 }
 

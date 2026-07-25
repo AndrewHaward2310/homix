@@ -198,6 +198,25 @@ export async function getReviews(id: string): Promise<Review[]> {
   return data.reviews
 }
 
+export type SubmitReviewResult =
+  | { ok: true; reviews: Review[]; property: Property }
+  | { ok: false; error: string }
+
+/** Gửi đánh giá (sao + bình luận + ảnh khách chụp). Trả review + property đã cập nhật. */
+export async function submitReview(
+  id: string,
+  input: { rating: number; comment: string; files: File[] },
+): Promise<SubmitReviewResult> {
+  const fd = new FormData()
+  fd.set('rating', String(input.rating))
+  fd.set('comment', input.comment)
+  input.files.forEach((f) => fd.append('images', f))
+  const res = await fetch(`/api/properties/${id}/reviews`, { method: 'POST', body: fd })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) return { ok: false, error: data.error ?? 'Gửi đánh giá thất bại.' }
+  return { ok: true, reviews: data.reviews as Review[], property: data.property as Property }
+}
+
 /** Khoảng ngày đã bị đặt (chặn lịch) của một căn. */
 export async function getAvailability(id: string): Promise<AvailabilityRange[]> {
   const data = await getJson<{ blocked: AvailabilityRange[] }>(
@@ -269,6 +288,7 @@ export const propertyService = {
   getProperty,
   searchProperties,
   getReviews,
+  submitReview,
   getAvailability,
   getSimilar,
   getTowers,

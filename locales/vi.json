@@ -527,5 +527,14 @@
   "pay.card": "Thẻ tín dụng / ghi nợ",
   "pay.ewallet": "Ví điện tử (Momo, ZaloPay…)",
   "pay.transfer": "Chuyển khoản ngân hàng",
-  "pay.onsite": "Thanh toán tại chỗ"
+  "pay.onsite": "Thanh toán tại chỗ",
+  "review.write": "Viết đánh giá",
+  "review.rating": "Chấm sao",
+  "review.commentPlaceholder": "Chia sẻ trải nghiệm của bạn về căn này…",
+  "review.addPhoto": "Thêm ảnh",
+  "review.removePhoto": "Xoá ảnh",
+  "review.submit": "Gửi đánh giá",
+  "review.loginToReview": "Đăng nhập bằng tài khoản khách hàng để viết đánh giá.",
+  "review.photoAlt": "Ảnh của {name}",
+  "review.badFile": "Chỉ nhận ảnh JPG/PNG/WebP/AVIF, tối đa 8MB."
 }

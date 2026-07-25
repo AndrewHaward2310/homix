@@ -47,18 +47,40 @@ export function validateImage(file: File): void {
   }
 }
 
-/** Upload 1 ảnh cho 1 căn → trả public URL. */
-export async function uploadPropertyImage(propertyId: string, file: File): Promise<string> {
+/** Kiểm magic bytes (không tin MIME do client khai) — chặn file giả ảnh. */
+function sniffImage(buf: Buffer): boolean {
+  if (buf.length < 12) return false
+  // JPEG FF D8 FF · PNG 89 50 4E 47 · WEBP "RIFF"...."WEBP" · AVIF ftyp
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return true
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return true
+  if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') return true
+  if (buf.toString('ascii', 4, 8) === 'ftyp') return true // avif/heic
+  return false
+}
+
+/** Upload 1 ảnh vào bucket theo prefix cho trước → trả public URL. */
+async function uploadTo(prefix: string, file: File): Promise<string> {
   validateImage(file)
   const ext = EXT[file.type] ?? 'jpg'
-  const path = `${propertyId}/${crypto.randomUUID()}.${ext}`
+  const path = `${prefix}/${crypto.randomUUID()}.${ext}`
   const buffer = Buffer.from(await file.arrayBuffer())
+  if (!sniffImage(buffer)) throw new StorageError('Tệp không phải ảnh hợp lệ.')
   const { error } = await admin()
     .storage.from(PROPERTY_BUCKET)
     .upload(path, buffer, { contentType: file.type, upsert: false })
   if (error) throw new StorageError(`Upload thất bại: ${error.message}`)
   const { data } = admin().storage.from(PROPERTY_BUCKET).getPublicUrl(path)
   return data.publicUrl
+}
+
+/** Upload 1 ảnh cho 1 căn → trả public URL. */
+export function uploadPropertyImage(propertyId: string, file: File): Promise<string> {
+  return uploadTo(propertyId, file)
+}
+
+/** Upload 1 ảnh ĐÁNH GIÁ (khách tự chụp) → trả public URL. Prefix riêng để dễ rà soát. */
+export function uploadReviewImage(propertyId: string, file: File): Promise<string> {
+  return uploadTo(`reviews/${propertyId}`, file)
 }
 
 /**

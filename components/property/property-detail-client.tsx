@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import {
   Heart,
@@ -42,6 +43,7 @@ import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
 import { Gallery } from '@/components/property/gallery'
 import { BookingCard } from '@/components/property/booking-card'
 import { PropertyCard } from '@/components/property/property-card'
+import { ReviewForm } from '@/components/property/review-form'
 import { cn } from '@/lib/utils'
 
 export function PropertyDetailClient({ id }: { id: string }) {
@@ -233,6 +235,16 @@ export function PropertyDetailClient({ id }: { id: string }) {
                         </span>
                       )}
                     </h2>
+
+                    {/* Viết đánh giá (khách đã đăng nhập) — cập nhật review + điểm/số ngay khi gửi */}
+                    <ReviewForm
+                      propertyId={property.id}
+                      onSubmitted={(rv, p) => {
+                        setReviews(rv)
+                        setProperty(p)
+                      }}
+                    />
+
                     {reviews.length === 0 ? (
                       <p className="mt-3 font-sans text-sm text-muted-foreground">{t('property.noReviews')}</p>
                     ) : (
@@ -253,6 +265,27 @@ export function PropertyDetailClient({ id }: { id: string }) {
                               </div>
                             </div>
                             <p className="mt-2.5 font-sans text-[0.875rem] leading-[1.6] text-muted-foreground">{r.comment}</p>
+                            {r.images.length > 0 && (
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                {r.images.map((src, i) => (
+                                  <a
+                                    key={i}
+                                    href={src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="relative size-16 overflow-hidden rounded-lg ring-1 ring-border"
+                                  >
+                                    <Image
+                                      src={src}
+                                      alt={t('review.photoAlt', { name: r.customerName })}
+                                      fill
+                                      sizes="64px"
+                                      className="object-cover transition hover:scale-105"
+                                    />
+                                  </a>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
