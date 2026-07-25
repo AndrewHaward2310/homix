@@ -511,5 +511,21 @@
   "support.sending": "Sending…",
   "support.sentTitle": "Sent! Thank you",
   "support.sentHint": "Our care specialist will get back to you shortly.",
-  "support.backToFaq": "Frequently asked"
+  "support.backToFaq": "Frequently asked",
+  "checkout.continue": "Continue to payment",
+  "checkout.back": "Back",
+  "checkout.choosePay": "Choose a payment method",
+  "checkout.demoNote": "Demo — no real charge.",
+  "checkout.payNow": "Confirm payment",
+  "checkout.policyStay": "Free cancellation up to 48 hours before check-in. Refunds return to your original method within 3–7 days.",
+  "checkout.policyViewing": "Reschedule or cancel your viewing free of charge any time before the appointment.",
+  "checkout.invoice": "Receipt (demo)",
+  "checkout.property": "Property",
+  "checkout.payMethod": "Payment",
+  "checkout.sentConfirm": "In the live version, an email & SMS confirmation will be sent to you.",
+  "checkout.done": "Done",
+  "pay.card": "Credit / debit card",
+  "pay.ewallet": "E-wallet (Momo, ZaloPay…)",
+  "pay.transfer": "Bank transfer",
+  "pay.onsite": "Pay on site"
 }

@@ -1,8 +1,21 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ChevronLeft, ChevronRight, CalendarDays, CheckCircle2, Loader2 } from 'lucide-react'
+import { getIntlLocale } from '@/lib/i18n/config'
+import {
+  ChevronLeft,
+  ChevronRight,
+  CalendarDays,
+  CheckCircle2,
+  Loader2,
+  CreditCard,
+  Wallet,
+  Landmark,
+  Store,
+  ShieldCheck,
+  FileText,
+} from 'lucide-react'
 import type { AvailabilityRange, Perk, Property } from '@/types'
 import { pickLocale } from '@/types'
 import { useLocale } from '@/lib/i18n/provider'
@@ -15,6 +28,18 @@ import { cn } from '@/lib/utils'
 const MS_DAY = 86_400_000
 const iso = (d: Date) => d.toISOString().slice(0, 10)
 const parse = (s: string) => new Date(s + 'T00:00:00')
+
+// Phương thức thanh toán (DEMO — không trừ tiền thật). Icon + key i18n pay.<id>.
+type PayMethod = 'card' | 'ewallet' | 'transfer' | 'onsite'
+const PAY_METHODS: { id: PayMethod; icon: typeof CreditCard }[] = [
+  { id: 'card', icon: CreditCard },
+  { id: 'ewallet', icon: Wallet },
+  { id: 'transfer', icon: Landmark },
+  { id: 'onsite', icon: Store },
+]
+
+/** Mã đơn ngắn gọn để hiện trên hoá đơn (không lộ id dài của DB). */
+const shortCode = (id: string) => `DMX-${id.slice(-6).toUpperCase()}`
 
 function useBlocked(ranges: AvailabilityRange[]) {
   return useMemo(() => {
@@ -128,8 +153,15 @@ export function BookingCard({
   const [checkIn, setCheckIn] = useState<string | null>(null)
   const [checkOut, setCheckOut] = useState<string | null>(null)
   const [viewingAt, setViewingAt] = useState('')
-  const [state, setState] = useState<'idle' | 'confirm' | 'sending' | 'done' | 'error'>('idle')
+  const [state, setState] = useState<
+    'idle' | 'confirm' | 'payment' | 'sending' | 'done' | 'error'
+  >('idle')
   const [errMsg, setErrMsg] = useState('')
+  const [payMethod, setPayMethod] = useState<PayMethod>('card')
+  const [bookingCode, setBookingCode] = useState('')
+  const [bookedTotal, setBookedTotal] = useState<number | null>(null) // tổng SERVER chốt
+  const submitLock = useRef(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
   // Danh mục trải nghiệm + bậc giảm giá — để hiện bảng kê combo và xem trước tổng.
   const [perkList, setPerkList] = useState<Perk[]>([])
   const [tiers, setTiers] = useState<DiscountTier[]>([])
@@ -228,23 +260,79 @@ export function BookingCard({
     (isStay ? Boolean(checkIn && checkOut) : Boolean(viewingAt)) && !comboPending
 
   const submit = async () => {
+    // Khoá đồng bộ: chặn double-click tạo 2 booking trước khi 'sending' render.
+    if (submitLock.current) return
+    submitLock.current = true
     setState('sending')
-    const res = await bookingService.createBooking({
-      propertyId: property.id,
-      type: property.type,
-      checkIn: isStay ? checkIn! : undefined,
-      checkOut: isStay ? checkOut! : undefined,
-      viewingAt: isStay ? undefined : new Date(viewingAt).toISOString(),
-      // Nguồn sự thật là URL (comboPerks), không phải catalog đã fetch — server tự
-      // tra giá từ DB. Tránh mất combo nếu catalog chưa tải xong.
-      perks: isStay && comboPerks.length ? comboPerks : undefined,
-    })
-    if (res.ok) setState('done')
-    else {
-      setErrMsg(res.error)
-      setState('error')
+    try {
+      const res = await bookingService.createBooking({
+        propertyId: property.id,
+        type: property.type,
+        checkIn: isStay ? checkIn! : undefined,
+        checkOut: isStay ? checkOut! : undefined,
+        viewingAt: isStay ? undefined : new Date(viewingAt).toISOString(),
+        // Nguồn sự thật là URL (comboPerks), không phải catalog đã fetch — server tự
+        // tra giá từ DB. Tránh mất combo nếu catalog chưa tải xong.
+        perks: isStay && comboPerks.length ? comboPerks : undefined,
+      })
+      if (res.ok) {
+        setBookingCode(shortCode(res.booking.id))
+        setBookedTotal(res.booking.totalVnd) // hoá đơn dùng tổng SERVER chốt
+        setState('done')
+      } else {
+        setErrMsg(res.error)
+        setState('error')
+      }
+    } finally {
+      submitLock.current = false
     }
   }
+
+  // Đóng checkout: reset SẠCH state phiên để lần sau không lộ dữ liệu cũ.
+  const closeCheckout = () => {
+    setState('idle')
+    setErrMsg('')
+    setBookingCode('')
+    setBookedTotal(null)
+    setPayMethod('card')
+  }
+
+  // A11y modal: khoá cuộn nền, focus vào dialog, Escape đóng (trừ khi đang gửi),
+  // và trap Tab trong dialog — đồng bộ chuẩn với các modal khác của repo.
+  const modalOpen = state !== 'idle'
+  useEffect(() => {
+    if (!modalOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialogRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && state !== 'sending') {
+        e.preventDefault()
+        closeCheckout()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      )
+      if (!nodes || nodes.length === 0) return
+      const first = nodes[0]
+      const last = nodes[nodes.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalOpen, state])
 
   return (
     <div
@@ -350,36 +438,144 @@ export function BookingCard({
         </p>
       )}
 
-      {/* Modal xác nhận / thanh toán in-app (glass, không rời trang) */}
+      {/* Checkout in-app nhiều bước: xác nhận → (thanh toán, chỉ lưu trú) → hoá đơn */}
       {state !== 'idle' && (
         <div
           className="fixed inset-0 z-[110] flex items-end justify-center bg-black/50 p-4 sm:items-center"
           role="dialog"
           aria-modal="true"
-          onClick={() => state !== 'sending' && setState('idle')}
+          aria-label={isStay ? t('property.reserveNow') : t('property.viewingBook')}
+          onClick={() => state !== 'sending' && closeCheckout()}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-luxury-lg"
+            ref={dialogRef}
+            tabIndex={-1}
+            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-background p-6 shadow-luxury-lg outline-none"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* ---------- HOÁ ĐƠN (done) ---------- */}
             {state === 'done' ? (
-              <div className="flex flex-col items-center gap-3 py-4 text-center">
-                <CheckCircle2 className="size-12 text-brand" />
-                <p className="font-sans text-lg font-bold text-foreground">
-                  {t('property.bookSuccess')}
-                </p>
-                <p className="font-sans text-sm text-muted-foreground">
-                  {t('property.bookSuccessDesc')}
-                </p>
+              <div>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <CheckCircle2 className="size-12 text-emerald-500" />
+                  <p className="font-sans text-lg font-bold text-foreground">
+                    {t('property.bookSuccess')}
+                  </p>
+                  {/* Trung thực: bản demo KHÔNG gửi email/SMS thật */}
+                  <p className="font-sans text-[0.8125rem] text-muted-foreground">
+                    {t('checkout.sentConfirm')}
+                  </p>
+                  <p className="font-sans text-[0.6875rem] text-muted-foreground/80">
+                    {t('checkout.demoNote')}
+                  </p>
+                </div>
+
+                {/* Hoá đơn điện tử */}
+                <div className="mt-4 rounded-2xl border border-border bg-secondary/30 p-4">
+                  <div className="flex items-center justify-between border-b border-dashed border-border pb-3">
+                    <span className="inline-flex items-center gap-1.5 font-sans text-[0.8125rem] font-bold text-foreground">
+                      <FileText className="size-4 text-brand" /> {t('checkout.invoice')}
+                    </span>
+                    <span className="font-mono text-[0.8125rem] font-semibold text-brand">{bookingCode}</span>
+                  </div>
+                  <div className="mt-3 space-y-2 font-sans text-[0.8125rem]">
+                    <Row label={t('checkout.property')}>
+                      <span className="line-clamp-1 max-w-[12rem] text-right">
+                        {pickLocale(property.title, locale)}
+                      </span>
+                    </Row>
+                    {isStay ? (
+                      <>
+                        <Row label={t('property.checkIn')}>{checkIn}</Row>
+                        <Row label={t('property.checkOut')}>{checkOut}</Row>
+                        <Row label={t('checkout.payMethod')}>{t(`pay.${payMethod}`)}</Row>
+                        <div className="flex items-center justify-between border-t border-border pt-2 font-semibold text-foreground">
+                          <span>{t('property.total')}</span>
+                          <span>{formatCurrency(bookedTotal ?? (preview ? preview.packagePriceVnd : subtotal))}</span>
+                        </div>
+                      </>
+                    ) : (
+                      <Row label={t('property.viewingAt')}>
+                        {viewingAt ? new Date(viewingAt).toLocaleString(getIntlLocale(locale)) : ''}
+                      </Row>
+                    )}
+                  </div>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => setState('idle')}
-                  className="mt-2 rounded-full bg-primary px-6 py-2.5 font-sans text-sm font-semibold text-primary-foreground"
+                  onClick={closeCheckout}
+                  className="mt-5 w-full rounded-full bg-primary py-2.5 font-sans text-sm font-semibold text-primary-foreground hover:brightness-110"
                 >
-                  OK
+                  {t('checkout.done')}
+                </button>
+              </div>
+            ) : isStay && (state === 'payment' || state === 'sending' || state === 'error') ? (
+              /* ---------- CHỌN PHƯƠNG THỨC THANH TOÁN (chỉ lưu trú) ---------- */
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setState('confirm')}
+                  className="inline-flex items-center gap-1.5 font-sans text-[0.8125rem] font-medium text-muted-foreground transition hover:text-foreground"
+                >
+                  <ChevronLeft className="size-4" /> {t('checkout.back')}
+                </button>
+                <p className="mt-2 font-sans text-lg font-bold text-foreground">{t('checkout.choosePay')}</p>
+                <p className="font-sans text-[0.75rem] text-muted-foreground">{t('checkout.demoNote')}</p>
+
+                <div className="mt-4 space-y-2">
+                  {PAY_METHODS.map(({ id, icon: Icon }) => {
+                    const on = payMethod === id
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => setPayMethod(id)}
+                        className={cn(
+                          'flex w-full items-center gap-3 rounded-xl border p-3 text-left transition',
+                          on ? 'border-brand bg-brand/5 ring-2 ring-brand/20' : 'border-border hover:border-brand/40',
+                        )}
+                      >
+                        <Icon className={cn('size-5 shrink-0', on ? 'text-brand' : 'text-muted-foreground')} />
+                        <span className="flex-1 font-sans text-[0.9rem] font-semibold text-foreground">
+                          {t(`pay.${id}`)}
+                        </span>
+                        <span
+                          className={cn(
+                            'grid size-5 place-items-center rounded-full border-2',
+                            on ? 'border-brand bg-brand text-brand-foreground' : 'border-border',
+                          )}
+                        >
+                          {on && <CheckCircle2 className="size-4" />}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="mt-4 flex items-center justify-between rounded-xl bg-secondary/50 p-3 font-sans">
+                  <span className="text-[0.8125rem] text-muted-foreground">{t('property.total')}</span>
+                  <span className="text-[1.05rem] font-bold text-foreground">
+                    {formatCurrency(preview ? preview.packagePriceVnd : subtotal)}
+                  </span>
+                </div>
+
+                {state === 'error' && (
+                  <p className="mt-3 font-sans text-sm text-red-600">{errMsg || t('property.bookError')}</p>
+                )}
+                <button
+                  type="button"
+                  disabled={state === 'sending'}
+                  onClick={submit}
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-primary py-2.5 font-sans text-sm font-semibold text-primary-foreground hover:brightness-110 disabled:opacity-50"
+                >
+                  {state === 'sending' && <Loader2 className="size-4 animate-spin" />}
+                  {t('checkout.payNow')}
                 </button>
               </div>
             ) : (
+              /* ---------- XÁC NHẬN + CHÍNH SÁCH HUỶ ---------- */
               <>
                 <p className="font-sans text-lg font-bold text-foreground">
                   {isStay ? t('property.reserveNow') : t('property.viewingBook')}
@@ -393,30 +589,39 @@ export function BookingCard({
                     </>
                   ) : (
                     <Row label={t('property.viewingAt')}>
-                      {viewingAt ? new Date(viewingAt).toLocaleString('vi-VN') : ''}
+                      {viewingAt ? new Date(viewingAt).toLocaleString(getIntlLocale(locale)) : ''}
                     </Row>
                   )}
                 </div>
+
+                {/* Chính sách huỷ theo loại hình */}
+                <div className="mt-3 flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-3">
+                  <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                  <p className="font-sans text-[0.8125rem] text-foreground">
+                    {isStay ? t('checkout.policyStay') : t('checkout.policyViewing')}
+                  </p>
+                </div>
+
                 {state === 'error' && (
                   <p className="mt-3 font-sans text-sm text-red-600">{errMsg || t('property.bookError')}</p>
                 )}
                 <div className="mt-5 flex gap-2">
                   <button
                     type="button"
-                    disabled={state === 'sending'}
-                    onClick={() => setState('idle')}
+                    disabled={(state as string) === 'sending'}
+                    onClick={closeCheckout}
                     className="flex-1 rounded-full border border-border py-2.5 font-sans text-sm font-medium text-foreground hover:bg-secondary disabled:opacity-50"
                   >
                     {t('locator.close')}
                   </button>
                   <button
                     type="button"
-                    disabled={state === 'sending'}
-                    onClick={submit}
+                    disabled={(state as string) === 'sending'}
+                    onClick={() => (isStay ? setState('payment') : submit())}
                     className="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-2.5 font-sans text-sm font-semibold text-primary-foreground hover:brightness-110 disabled:opacity-50"
                   >
-                    {state === 'sending' && <Loader2 className="size-4 animate-spin" />}
-                    {t('property.bookNow')}
+                    {(state as string) === 'sending' && <Loader2 className="size-4 animate-spin" />}
+                    {isStay ? t('checkout.continue') : t('property.bookNow')}
                   </button>
                 </div>
               </>

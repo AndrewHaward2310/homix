@@ -511,5 +511,21 @@
   "support.sending": "Đang gửi…",
   "support.sentTitle": "Đã gửi! Cảm ơn bạn",
   "support.sentHint": "Chuyên viên chăm sóc sẽ liên hệ với bạn trong thời gian sớm nhất.",
-  "support.backToFaq": "Câu hỏi thường gặp"
+  "support.backToFaq": "Câu hỏi thường gặp",
+  "checkout.continue": "Tiếp tục thanh toán",
+  "checkout.back": "Quay lại",
+  "checkout.choosePay": "Chọn phương thức thanh toán",
+  "checkout.demoNote": "Bản demo — không trừ tiền thật.",
+  "checkout.payNow": "Xác nhận thanh toán",
+  "checkout.policyStay": "Miễn phí huỷ trước 48 giờ nhận phòng. Hoàn tiền về đúng phương thức đã thanh toán trong 3–7 ngày.",
+  "checkout.policyViewing": "Đổi hoặc huỷ lịch xem miễn phí bất cứ lúc nào trước giờ hẹn.",
+  "checkout.invoice": "Biên nhận (demo)",
+  "checkout.property": "Căn",
+  "checkout.payMethod": "Thanh toán",
+  "checkout.sentConfirm": "Trong bản chính thức, email & SMS xác nhận sẽ được gửi cho bạn.",
+  "checkout.done": "Hoàn tất",
+  "pay.card": "Thẻ tín dụng / ghi nợ",
+  "pay.ewallet": "Ví điện tử (Momo, ZaloPay…)",
+  "pay.transfer": "Chuyển khoản ngân hàng",
+  "pay.onsite": "Thanh toán tại chỗ"
 }
