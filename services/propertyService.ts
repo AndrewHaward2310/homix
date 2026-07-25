@@ -147,8 +147,11 @@ export type SearchFilters = {
   minPrice?: number
   maxPrice?: number
   beds?: number
+  baths?: number
+  minArea?: number
+  maxArea?: number
   amenities?: string[]
-  sort?: 'relevant' | 'price_asc' | 'price_desc' | 'newest'
+  sort?: 'relevant' | 'price_asc' | 'price_desc' | 'newest' | 'top_rated'
   page?: number
   pageSize?: number
   exclude?: string
@@ -169,6 +172,9 @@ function filtersToParams(f: SearchFilters): string {
   if (f.minPrice != null) p.set('minPrice', String(f.minPrice))
   if (f.maxPrice != null) p.set('maxPrice', String(f.maxPrice))
   if (f.beds != null) p.set('beds', String(f.beds))
+  if (f.baths != null) p.set('baths', String(f.baths))
+  if (f.minArea != null) p.set('minArea', String(f.minArea))
+  if (f.maxArea != null) p.set('maxArea', String(f.maxArea))
   if (f.amenities?.length) p.set('amenities', f.amenities.join(','))
   if (f.sort) p.set('sort', f.sort)
   if (f.exclude) p.set('exclude', f.exclude)

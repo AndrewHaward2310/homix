@@ -478,5 +478,18 @@
   "agent.schedule.kind.checkout": "Check-out",
   "agent.schedule.allDay": "All day",
   "agent.schedule.unknownProperty": "Property no longer available",
-  "combos.swipeHint": "Swipe for more combos"
+  "combos.swipeHint": "Swipe for more combos",
+  "search.filters": "Filters",
+  "search.advanced": "Advanced filters",
+  "search.area": "Area",
+  "search.baths": "Bathrooms",
+  "search.amenities": "Amenities",
+  "search.min": "Min",
+  "search.max": "Max",
+  "search.any": "Any",
+  "search.apply": "Apply",
+  "search.reset": "Reset",
+  "search.unitVnd": "VND",
+  "search.sort_top_rated": "Top rated",
+  "search.bathsShort": "bath"
 }

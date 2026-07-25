@@ -13,6 +13,7 @@ import { Container } from '@/components/luxury/container'
 import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
 import { PropertyGridSkeleton } from '@/components/ui/skeleton'
 import { PropertyCard } from '@/components/property/property-card'
+import { AdvancedFilters, type AdvancedValues } from '@/components/search/advanced-filters'
 import { cn } from '@/lib/utils'
 
 const SearchMap = dynamic(() => import('@/components/search/search-map').then((m) => m.SearchMap), {
@@ -26,8 +27,19 @@ const TYPE_TABS: { value: PropertyType | 'all'; key: string }[] = [
   { value: 'stay_short', key: 'search.tabStayShort' },
   { value: 'sale', key: 'search.tabBuy' },
 ]
-const SORTS = ['relevant', 'price_asc', 'price_desc', 'newest'] as const
+const SORTS = ['relevant', 'top_rated', 'price_asc', 'price_desc', 'newest'] as const
 const PAGE_SIZE = 9
+
+/** Đọc số từ URL: bỏ rỗng/NaN/âm → undefined (không để NaN lọt xuống API gây 400). */
+const numParam = (v: string | null): number | undefined => {
+  if (v == null || v.trim() === '') return undefined
+  const n = Number(v)
+  return Number.isFinite(n) && n >= 0 ? n : undefined
+}
+
+/** Trả (nhỏ, lớn) — hoán đổi nếu bị nhập ngược; giữ undefined nếu chỉ có một đầu. */
+const orderPair = (a?: number, b?: number): [number | undefined, number | undefined] =>
+  a != null && b != null && a > b ? [b, a] : [a, b]
 
 function SearchInner() {
   const { t, locale } = useLocale()
@@ -44,9 +56,13 @@ function SearchInner() {
       // không có tác dụng.
       towerId: sp.get('towerId') ?? undefined,
       q: sp.get('q') ?? undefined,
-      minPrice: sp.get('minPrice') ? Number(sp.get('minPrice')) : undefined,
-      maxPrice: sp.get('maxPrice') ? Number(sp.get('maxPrice')) : undefined,
-      beds: sp.get('beds') ? Number(sp.get('beds')) : undefined,
+      minPrice: numParam(sp.get('minPrice')),
+      maxPrice: numParam(sp.get('maxPrice')),
+      minArea: numParam(sp.get('minArea')),
+      maxArea: numParam(sp.get('maxArea')),
+      beds: numParam(sp.get('beds')),
+      baths: numParam(sp.get('baths')),
+      amenities: sp.get('amenities') ? sp.get('amenities')!.split(',').filter(Boolean) : undefined,
       sort: (sp.get('sort') as SearchFilters['sort']) ?? 'relevant',
       page: sp.get('page') ? Number(sp.get('page')) : 1,
       pageSize: PAGE_SIZE,
@@ -61,6 +77,7 @@ function SearchInner() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [view, setView] = useState<'list' | 'map'>('list')
   const [qInput, setQInput] = useState(filters.q ?? '')
+  const [advOpen, setAdvOpen] = useState(false)
 
   useEffect(() => {
     getMasterplanTowers().then((tw: Awaited<ReturnType<typeof getMasterplanTowers>>) => {
@@ -105,13 +122,61 @@ function SearchInner() {
 
   const activeChips: { label: string; clear: () => void }[] = []
   if (filters.q) activeChips.push({ label: `"${filters.q}"`, clear: () => setParam({ q: undefined }) })
-  if (filters.beds) activeChips.push({ label: `≥ ${filters.beds} PN`, clear: () => setParam({ beds: undefined }) })
+  if (filters.beds)
+    activeChips.push({ label: `≥ ${filters.beds} ${t('locator.bedroomsShort')}`, clear: () => setParam({ beds: undefined }) })
+  if (filters.baths)
+    activeChips.push({ label: `≥ ${filters.baths} ${t('search.bathsShort')}`, clear: () => setParam({ baths: undefined }) })
   if (filters.minPrice || filters.maxPrice)
     activeChips.push({ label: t('search.priceRange'), clear: () => setParam({ minPrice: undefined, maxPrice: undefined }) })
+  if (filters.minArea || filters.maxArea)
+    activeChips.push({ label: t('search.area'), clear: () => setParam({ minArea: undefined, maxArea: undefined }) })
+  filters.amenities?.forEach((a) =>
+    activeChips.push({
+      label: t(`amenity.${a}`),
+      clear: () =>
+        setParam({ amenities: filters.amenities!.filter((x) => x !== a).join(',') || undefined }),
+    }),
+  )
+
+  // Số bộ lọc nâng cao đang bật (để hiện badge trên nút).
+  const advCount =
+    (filters.minPrice || filters.maxPrice ? 1 : 0) +
+    (filters.minArea || filters.maxArea ? 1 : 0) +
+    (filters.baths ? 1 : 0) +
+    (filters.amenities?.length ?? 0)
+
+  const applyAdvanced = (v: AdvancedValues) => {
+    // Hoán đổi nếu người dùng nhập min > max (thay vì trả kết quả rỗng khó hiểu).
+    const [minPrice, maxPrice] = orderPair(v.minPrice, v.maxPrice)
+    const [minArea, maxArea] = orderPair(v.minArea, v.maxArea)
+    setParam({
+      minPrice: minPrice != null ? String(minPrice) : undefined,
+      maxPrice: maxPrice != null ? String(maxPrice) : undefined,
+      minArea: minArea != null ? String(minArea) : undefined,
+      maxArea: maxArea != null ? String(maxArea) : undefined,
+      baths: v.baths != null ? String(v.baths) : undefined,
+      amenities: v.amenities.length ? v.amenities.join(',') : undefined,
+    })
+    setAdvOpen(false)
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <GlassNavbar solid />
+
+      <AdvancedFilters
+        open={advOpen}
+        onClose={() => setAdvOpen(false)}
+        onApply={applyAdvanced}
+        initial={{
+          minPrice: filters.minPrice,
+          maxPrice: filters.maxPrice,
+          minArea: filters.minArea,
+          maxArea: filters.maxArea,
+          baths: filters.baths,
+          amenities: filters.amenities ?? [],
+        }}
+      />
 
       {/* Filter bar sticky */}
       <div className="sticky top-[72px] z-30 border-b border-border bg-background/95 backdrop-blur-xl">
@@ -155,10 +220,25 @@ function SearchInner() {
             <option value="">{t('search.anyBeds')}</option>
             {[1, 2, 3, 4].map((n) => (
               <option key={n} value={n}>
-                ≥ {n} PN
+                ≥ {n} {t('locator.bedroomsShort')}
               </option>
             ))}
           </select>
+
+          {/* Bộ lọc nâng cao */}
+          <button
+            type="button"
+            onClick={() => setAdvOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 font-sans text-sm font-medium text-foreground transition hover:bg-secondary"
+          >
+            <SlidersHorizontal className="size-4" />
+            {t('search.filters')}
+            {advCount > 0 && (
+              <span className="ml-0.5 grid size-5 place-items-center rounded-full bg-primary font-sans text-[0.6875rem] font-bold text-primary-foreground tabular-nums">
+                {advCount}
+              </span>
+            )}
+          </button>
 
           {/* Toggle List/Map (mobile) */}
           <button

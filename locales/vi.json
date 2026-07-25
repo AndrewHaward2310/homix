@@ -478,5 +478,18 @@
   "agent.schedule.kind.checkout": "Trả phòng",
   "agent.schedule.allDay": "Cả ngày",
   "agent.schedule.unknownProperty": "Căn không còn khả dụng",
-  "combos.swipeHint": "Vuốt ngang để xem thêm combo"
+  "combos.swipeHint": "Vuốt ngang để xem thêm combo",
+  "search.filters": "Bộ lọc",
+  "search.advanced": "Bộ lọc nâng cao",
+  "search.area": "Diện tích",
+  "search.baths": "Số phòng tắm",
+  "search.amenities": "Tiện ích",
+  "search.min": "Từ",
+  "search.max": "Đến",
+  "search.any": "Bất kỳ",
+  "search.apply": "Áp dụng",
+  "search.reset": "Đặt lại",
+  "search.unitVnd": "VNĐ",
+  "search.sort_top_rated": "Đánh giá cao nhất",
+  "search.bathsShort": "WC"
 }
