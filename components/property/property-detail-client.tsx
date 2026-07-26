@@ -47,6 +47,7 @@ import { Gallery } from '@/components/property/gallery'
 import { BookingCard } from '@/components/property/booking-card'
 import { PropertyCard } from '@/components/property/property-card'
 import { ReviewForm } from '@/components/property/review-form'
+import { ReviewsSection } from '@/components/property/reviews-section'
 import { cn } from '@/lib/utils'
 
 export function PropertyDetailClient({ id }: { id: string }) {
@@ -268,51 +269,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
                       }}
                     />
 
-                    {reviews.length === 0 ? (
-                      <p className="mt-3 font-sans text-sm text-muted-foreground">{t('property.noReviews')}</p>
-                    ) : (
-                      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                        {reviews.map((r) => (
-                          <div key={r.id} className="rounded-2xl border border-border bg-card p-4">
-                            <div className="flex items-center gap-2">
-                              <span className="flex size-8 items-center justify-center rounded-full bg-secondary font-sans text-xs font-semibold text-foreground">
-                                {r.customerName.charAt(0)}
-                              </span>
-                              <div className="min-w-0">
-                                <p className="truncate font-sans text-sm font-semibold text-foreground">{r.customerName}</p>
-                                <div className="flex gap-0.5">
-                                  {Array.from({ length: 5 }, (_, i) => (
-                                    <Star key={i} className={cn('size-3', i < r.rating ? 'fill-amber-400 text-amber-400' : 'text-border')} />
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                            <p className="mt-2.5 font-sans text-[0.875rem] leading-[1.6] text-muted-foreground">{r.comment}</p>
-                            {r.images.length > 0 && (
-                              <div className="mt-3 flex flex-wrap gap-2">
-                                {r.images.map((src, i) => (
-                                  <a
-                                    key={i}
-                                    href={src}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="relative size-16 overflow-hidden rounded-lg ring-1 ring-border"
-                                  >
-                                    <Image
-                                      src={src}
-                                      alt={t('review.photoAlt', { name: r.customerName })}
-                                      fill
-                                      sizes="64px"
-                                      className="object-cover transition hover:scale-105"
-                                    />
-                                  </a>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <ReviewsSection reviews={reviews} />
                   </section>
                 </div>
 

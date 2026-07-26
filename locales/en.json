@@ -541,5 +541,8 @@
   "property.recentBookings": "{count} recent bookings",
   "auth.showPassword": "Show password",
   "auth.hidePassword": "Hide password",
-  "search.clearAll": "Clear all filters"
+  "search.clearAll": "Clear all filters",
+  "review.filterAll": "All",
+  "review.withPhotos": "With photos",
+  "review.noMatch": "No reviews match this filter."
 }
