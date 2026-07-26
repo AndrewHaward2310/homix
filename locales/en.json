@@ -538,5 +538,7 @@
   "review.photoAlt": "Photo by {name}",
   "review.badFile": "Only JPG/PNG/WebP/AVIF images up to 8MB.",
   "property.views": "{count} views",
-  "property.recentBookings": "{count} recent bookings"
+  "property.recentBookings": "{count} recent bookings",
+  "auth.showPassword": "Show password",
+  "auth.hidePassword": "Hide password"
 }

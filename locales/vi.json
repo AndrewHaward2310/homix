@@ -141,7 +141,7 @@
   "auth.email": "Email",
   "auth.emailPlaceholder": "ban@oceanpark.vn",
   "auth.password": "Mật khẩu",
-  "auth.passwordPlaceholder": "���•••••",
+  "auth.passwordPlaceholder": "••••••",
   "auth.login": "Đăng nhập",
   "auth.loggingIn": "Đang đăng nhập…",
   "auth.forgotPassword": "Quên mật khẩu?",
@@ -538,5 +538,7 @@
   "review.photoAlt": "Ảnh của {name}",
   "review.badFile": "Chỉ nhận ảnh JPG/PNG/WebP/AVIF, tối đa 8MB.",
   "property.views": "{count} lượt xem",
-  "property.recentBookings": "{count} lượt đặt gần đây"
+  "property.recentBookings": "{count} lượt đặt gần đây",
+  "auth.showPassword": "Hiện mật khẩu",
+  "auth.hidePassword": "Ẩn mật khẩu"
 }

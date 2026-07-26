@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { Eye, EyeOff } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/auth-context'
 import { LanguageSwitcher } from '@/components/luxury/language-switcher'
@@ -24,6 +25,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -98,16 +100,27 @@ export default function LoginPage() {
             <label htmlFor="password" className="font-sans text-sm font-medium text-white/90">
               {t('auth.password')}
             </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={t('auth.passwordPlaceholder')}
-              className="h-12 rounded-2xl border border-white/25 bg-white/10 px-4 font-sans text-[0.95rem] text-white placeholder:text-white/40 outline-none transition-all duration-300 focus:border-white/60 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t('auth.passwordPlaceholder')}
+                className="h-12 w-full rounded-2xl border border-white/25 bg-white/10 pl-4 pr-12 font-sans text-[0.95rem] text-white placeholder:text-white/40 outline-none transition-all duration-300 focus:border-white/60 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={t(showPassword ? 'auth.hidePassword' : 'auth.showPassword')}
+                aria-pressed={showPassword}
+                className="absolute right-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl text-white/60 transition-colors duration-200 hover:bg-white/10 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-white/40"
+              >
+                {showPassword ? <EyeOff className="size-[18px]" /> : <Eye className="size-[18px]" />}
+              </button>
+            </div>
           </div>
 
           {error && (
