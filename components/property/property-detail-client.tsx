@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import {
   Heart,
@@ -17,6 +18,7 @@ import {
   CalendarCheck,
   Eye,
   Flame,
+  ChevronRight,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { AvailabilityRange, Property, Review, Tower } from '@/types'
@@ -104,6 +106,15 @@ export function PropertyDetailClient({ id }: { id: string }) {
         {property && (
           <main className="pb-28 md:pb-16">
             <Container className="pt-6">
+              {/* Breadcrumb — điều hướng + SEO */}
+              <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-1.5 font-sans text-[0.8125rem] text-muted-foreground">
+                <Link href="/" className="transition-colors hover:text-foreground">{t('nav.home')}</Link>
+                <ChevronRight className="size-3.5 shrink-0 opacity-60" aria-hidden="true" />
+                <Link href="/search" className="transition-colors hover:text-foreground">{t('nav.explore')}</Link>
+                <ChevronRight className="size-3.5 shrink-0 opacity-60" aria-hidden="true" />
+                <span className="truncate font-medium text-foreground" aria-current="page">{towerName ?? property.code}</span>
+              </nav>
+
               {/* Header nhỏ: tên + hành động */}
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">

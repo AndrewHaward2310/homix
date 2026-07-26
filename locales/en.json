@@ -548,5 +548,7 @@
   "card.prevPhoto": "Previous photo",
   "card.nextPhoto": "Next photo",
   "card.gotoPhoto": "Go to photo {n}",
-  "property.viewingHint": "Pick a time from now onward."
+  "property.viewingHint": "Pick a time from now onward.",
+  "nav.home": "Home",
+  "nav.explore": "Search"
 }

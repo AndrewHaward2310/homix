@@ -548,5 +548,7 @@
   "card.prevPhoto": "Ảnh trước",
   "card.nextPhoto": "Ảnh sau",
   "card.gotoPhoto": "Tới ảnh {n}",
-  "property.viewingHint": "Chọn thời điểm từ hiện tại trở đi."
+  "property.viewingHint": "Chọn thời điểm từ hiện tại trở đi.",
+  "nav.home": "Trang chủ",
+  "nav.explore": "Tìm kiếm"
 }
