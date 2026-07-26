@@ -14,6 +14,7 @@ import { StateWrapper, type ViewState } from '@/components/ui/state-wrapper'
 import { PropertyGridSkeleton } from '@/components/ui/skeleton'
 import { PropertyCard } from '@/components/property/property-card'
 import { AdvancedFilters, type AdvancedValues } from '@/components/search/advanced-filters'
+import { SavedSearches } from '@/components/search/saved-searches'
 import { cn } from '@/lib/utils'
 
 const SearchMap = dynamic(() => import('@/components/search/search-map').then((m) => m.SearchMap), {
@@ -150,6 +151,11 @@ function SearchInner() {
     }),
   )
 
+  // Nhãn dễ đọc cho bộ tìm kiếm đang xem (để lưu lại).
+  const savedLabel = activeChips.length
+    ? activeChips.map((c) => c.label).join(' · ')
+    : t('search.allListings')
+
   // Số bộ lọc nâng cao đang bật (để hiện badge trên nút).
   const advCount =
     (filters.minPrice || filters.maxPrice ? 1 : 0) +
@@ -282,6 +288,13 @@ function SearchInner() {
               </span>
             )}
           </button>
+
+          {/* Lưu / áp lại bộ tìm kiếm */}
+          <SavedSearches
+            currentQuery={sp.toString()}
+            currentLabel={savedLabel}
+            onApply={(q) => router.push(`/search${q ? `?${q}` : ''}`, { scroll: false })}
+          />
 
           {/* Toggle List/Map (mobile) */}
           <button
