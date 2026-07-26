@@ -42,6 +42,16 @@ export function Reveal<T extends ElementType = 'div'>({
     const node = ref.current
     if (!node) return
 
+    // An toàn: nếu phần tử ĐÃ nằm trong khung nhìn ngay khi mount (nội dung trên
+    // màn đầu), hiện luôn — không phụ thuộc callback IntersectionObserver có thể
+    // trễ, tránh mọi khả năng nội dung above-the-fold kẹt vô hình.
+    const rect = node.getBoundingClientRect()
+    const vh = window.innerHeight || document.documentElement.clientHeight
+    if (rect.top < vh && rect.bottom > 0) {
+      setVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

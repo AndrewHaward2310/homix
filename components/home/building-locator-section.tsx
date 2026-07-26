@@ -57,7 +57,7 @@ export function BuildingLocatorSection() {
           <MasterplanLocator />
         ) : (
           <div
-            className="grid h-[70vh] min-h-[420px] w-full place-items-center bg-secondary md:h-[88vh]"
+            className="relative grid h-[70vh] min-h-[420px] w-full place-items-center bg-secondary md:h-[88vh]"
             aria-hidden="true"
           >
             <BrandLoaderInline />
