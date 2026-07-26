@@ -23,22 +23,22 @@ Minimalism*, palette real-estate (teal/blue). Chạy lại bất cứ lúc nào:
 | M1 | MED | Nhãn **"Đã xác minh" bị cắt** ("Đã xác mi…") trên thẻ hẹp (lưới 3 cột) — vi phạm `truncation-strategy`. | `property-card.tsx`: badge row `right-14 flex-wrap` + `whitespace-nowrap` → nhãn xuống dòng, không đè nút tim. |
 | M2 | MED | **Giá không dùng chữ số tabular** → dễ nhảy layout & lệch cột (`number-tabular`). | Thêm `tabular-nums` cho giá ở thẻ + thanh CTA chi tiết. |
 
-## ☐ Khuyến nghị tiếp theo (chưa làm — cần bạn quyết)
+## ✅ Đã kiểm chứng lại (đính chính)
 
-### 1. Định vị sản phẩm: single-development vs marketplace (ưu tiên cao)
-Navbar hiện là khung **một dự án** ("Tổng quan / Căn hộ / Tiện ích / Vị trí") và trang chủ mở đầu
-bằng **bản đồ 3D masterplan full-bleed**, trong khi `/search` lại là **marketplace nhiều tin**.
-Skill khuyến nghị pattern Marketplace: *hero = thanh tìm kiếm*, rồi Categories → Featured listings →
-Trust → CTA. → **Quyết định hướng đi**: nếu là sàn nhiều tin, đưa search + tin nổi bật lên đầu home,
-để bản đồ thành mục "khám phá khu vực" phía dưới; nếu là 1 đại dự án thì giữ map hero nhưng đổi
-navbar cho nhất quán.
+### 1. Định vị marketplace — KHÔNG cần đổi (đã đúng)
+Đính chính: kết luận ban đầu "home mở đầu bằng bản đồ" là **sai do công cụ chụp** — `_shot.mjs`
+mặc định cuộn tới bản đồ (`scrollTo='map'`). Kiểm tra lại DOM: hero `#tong-quan` nằm ở top=0 với
+pitch + **thanh tìm kiếm (tabs Thuê/Lưu trú/Mua bán + Tìm kiếm)** + số liệu + ảnh căn nổi bật + trust
+strip — **đúng y pattern Marketplace** skill khuyến nghị. Bản đồ là section #5 (dưới màn đầu). Không đổi.
 
-### 2. Hiệu năng hero (mobile LCP/TTI)
-Home mở đầu bằng `maplibre-gl` (JS nặng) **trên màn đầu**. Dù đã `dynamic import`, nó vẫn above-the-fold.
-Skill `bundle-splitting` / `lazy-load-below-fold`: cân nhắc ảnh bản đồ tĩnh nhẹ làm placeholder, chỉ
-nạp map tương tác khi người dùng chạm/scroll.
+### 2. Hiệu năng bản đồ — ĐÃ SỬA
+`MasterplanLocator` trước đây import tĩnh `maplibre-gl` → nằm trong bundle đầu và khởi tạo WebGL ngay
+lúc tải dù ở dưới màn đầu (11 request tile external mỗi lần tải). Đã đổi sang **dynamic import + gate
+IntersectionObserver** (`building-locator-section.tsx`): chỉ nạp chunk + dựng map khi cuộn tới gần
+(rootMargin 400px), placeholder cùng chiều cao (không CLS). Kiểm chứng: tile external lúc tải đầu **11 → 0**,
+map vẫn render đúng khi cuộn tới.
 
-### 3. Chi tiết nhỏ
+### 3. Chi tiết nhỏ (chưa làm)
 - `min-h-screen` → cân nhắc `min-h-dvh` ở trang mobile-first (login, 403…) để tránh giật do thanh trình duyệt mobile (`viewport-units`).
 - Kiểm tra **độ tương phản** `muted-foreground` (giá phụ, thông số) đạt 4.5:1 ở **cả** light & dark (`color-accessible-pairs`) — nên đo bằng công cụ.
 - Đảm bảo đoạn mô tả dài có `max-w` (đo dòng 60–75 ký tự — `line-length`).
