@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Heart } from 'lucide-react'
 import type { Property } from '@/types'
 import { favoriteService } from '@/services/favoriteService'
 import { getMasterplanTowers } from '@/services/propertyService'
@@ -45,6 +46,15 @@ export default function FavoritesPage() {
         onRetry={load}
         emptyTitle={t('account.favEmpty')}
         emptyHint={t('account.favEmptyHint')}
+        emptyIcon={<Heart className="size-7" aria-hidden="true" />}
+        emptyAction={
+          <Link
+            href="/search"
+            className="inline-flex rounded-full bg-primary px-5 py-2.5 font-sans text-sm font-semibold text-primary-foreground transition hover:brightness-110 active:scale-95"
+          >
+            {t('account.explore')}
+          </Link>
+        }
       >
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
@@ -59,12 +69,15 @@ export default function FavoritesPage() {
         </div>
       </StateWrapper>
 
-      <Link
-        href="/search"
-        className="mt-8 inline-flex rounded-full bg-primary px-5 py-2.5 font-sans text-sm font-semibold text-primary-foreground"
-      >
-        {t('account.explore')}
-      </Link>
+      {/* CTA khám phá thêm — chỉ hiện khi ĐÃ có mục yêu thích (rỗng thì CTA nằm trong empty state) */}
+      {state === 'success' && (
+        <Link
+          href="/search"
+          className="mt-8 inline-flex rounded-full bg-primary px-5 py-2.5 font-sans text-sm font-semibold text-primary-foreground transition hover:brightness-110 active:scale-95"
+        >
+          {t('account.explore')}
+        </Link>
+      )}
     </div>
   )
 }

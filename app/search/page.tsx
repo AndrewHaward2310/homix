@@ -116,6 +116,9 @@ function SearchInner() {
     [router, sp],
   )
 
+  // Xoá TẤT CẢ bộ lọc/từ khoá → về danh sách gốc (dùng ở empty state để mở rộng tìm kiếm).
+  const clearAll = useCallback(() => router.replace('/search', { scroll: false }), [router])
+
   const page = filters.page ?? 1
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const activeType = (sp.get('type') as PropertyType | 'all') ?? 'all'
@@ -295,6 +298,18 @@ function SearchInner() {
               state={state}
               emptyTitle={t('search.emptyTitle')}
               emptyHint={t('search.emptyHint')}
+              emptyIcon={<Search className="size-7" aria-hidden="true" />}
+              emptyAction={
+                activeChips.length > 0 || activeType !== 'all' ? (
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 font-sans text-sm font-semibold text-primary-foreground transition hover:brightness-110 active:scale-95"
+                  >
+                    <X className="size-4" /> {t('search.clearAll')}
+                  </button>
+                ) : undefined
+              }
               errorTitle={t('search.errorTitle')}
               skeleton={
                 <PropertyGridSkeleton

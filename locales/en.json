@@ -540,5 +540,6 @@
   "property.views": "{count} views",
   "property.recentBookings": "{count} recent bookings",
   "auth.showPassword": "Show password",
-  "auth.hidePassword": "Hide password"
+  "auth.hidePassword": "Hide password",
+  "search.clearAll": "Clear all filters"
 }

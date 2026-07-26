@@ -13,6 +13,10 @@ type StateWrapperProps = {
   skeleton?: ReactNode
   emptyTitle?: string
   emptyHint?: string
+  /** Icon tuỳ biến cho trạng thái rỗng (mặc định Inbox). */
+  emptyIcon?: ReactNode
+  /** CTA dưới phần rỗng — dẫn người dùng đi tiếp (vd link "Khám phá căn hộ"). */
+  emptyAction?: ReactNode
   errorTitle?: string
   onRetry?: () => void
   retryLabel?: string
@@ -28,6 +32,8 @@ export function StateWrapper({
   skeleton,
   emptyTitle = 'Chưa có dữ liệu',
   emptyHint,
+  emptyIcon,
+  emptyAction,
   errorTitle = 'Đã có lỗi xảy ra',
   onRetry,
   retryLabel = 'Thử lại',
@@ -62,12 +68,15 @@ export function StateWrapper({
 
   if (state === 'empty') {
     return (
-      <div className={cn('flex flex-col items-center gap-2 py-16 text-center', className)}>
-        <Inbox className="size-8 text-muted-foreground" aria-hidden="true" />
-        <p className="font-sans text-base font-semibold text-foreground">{emptyTitle}</p>
+      <div className={cn('flex flex-col items-center py-16 text-center', className)}>
+        <div className="grid size-16 place-items-center rounded-full bg-secondary text-muted-foreground">
+          {emptyIcon ?? <Inbox className="size-7" aria-hidden="true" />}
+        </div>
+        <p className="mt-4 font-sans text-base font-semibold text-foreground">{emptyTitle}</p>
         {emptyHint && (
-          <p className="max-w-sm font-sans text-sm text-muted-foreground">{emptyHint}</p>
+          <p className="mt-1.5 max-w-sm font-sans text-sm text-muted-foreground">{emptyHint}</p>
         )}
+        {emptyAction && <div className="mt-5">{emptyAction}</div>}
       </div>
     )
   }

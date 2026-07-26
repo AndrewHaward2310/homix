@@ -540,5 +540,6 @@
   "property.views": "{count} lượt xem",
   "property.recentBookings": "{count} lượt đặt gần đây",
   "auth.showPassword": "Hiện mật khẩu",
-  "auth.hidePassword": "Ẩn mật khẩu"
+  "auth.hidePassword": "Ẩn mật khẩu",
+  "search.clearAll": "Xoá tất cả bộ lọc"
 }
