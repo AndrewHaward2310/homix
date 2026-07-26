@@ -264,7 +264,7 @@ function SearchInner() {
                 type="button"
                 onClick={() => setParam({ type: tab.value === 'all' ? undefined : tab.value })}
                 className={cn(
-                  'rounded-full px-4 py-1.5 font-sans text-[0.8125rem] font-medium transition-colors',
+                  'rounded-full px-4 py-1.5 font-sans text-[0.8125rem] font-medium transition active:scale-95',
                   on ? 'bg-primary text-primary-foreground' : 'border border-border text-foreground hover:bg-secondary',
                 )}
               >
@@ -277,12 +277,22 @@ function SearchInner() {
               key={i}
               type="button"
               onClick={c.clear}
-              className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 font-sans text-[0.8125rem] text-foreground"
+              className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1.5 font-sans text-[0.8125rem] text-foreground transition hover:bg-secondary/70 active:scale-95"
             >
               {c.label}
               <X className="size-3.5" />
             </button>
           ))}
+          {/* Nhiều bộ lọc → nút xoá nhanh tất cả (đỡ phải bấm từng chip) */}
+          {activeChips.length >= 2 && (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-sans text-[0.8125rem] font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline active:scale-95"
+            >
+              {t('search.clearAll')}
+            </button>
+          )}
         </Container>
       </div>
 
