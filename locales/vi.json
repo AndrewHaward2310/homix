@@ -547,5 +547,6 @@
   "review.noMatch": "Không có đánh giá khớp bộ lọc.",
   "card.prevPhoto": "Ảnh trước",
   "card.nextPhoto": "Ảnh sau",
-  "card.gotoPhoto": "Tới ảnh {n}"
+  "card.gotoPhoto": "Tới ảnh {n}",
+  "property.viewingHint": "Chọn thời điểm từ hiện tại trở đi."
 }

@@ -41,6 +41,13 @@ const PAY_METHODS: { id: PayMethod; icon: typeof CreditCard }[] = [
 /** Mã đơn ngắn gọn để hiện trên hoá đơn (không lộ id dài của DB). */
 const shortCode = (id: string) => `DMX-${id.slice(-6).toUpperCase()}`
 
+/** Chuỗi datetime-local (giờ ĐỊA PHƯƠNG) cho thuộc tính min — chặn chọn quá khứ. */
+function minViewingAt() {
+  const d = new Date()
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`
+}
+
 function useBlocked(ranges: AvailabilityRange[]) {
   return useMemo(() => {
     const set = new Set<string>()
@@ -399,9 +406,11 @@ export function BookingCard({
           <input
             type="datetime-local"
             value={viewingAt}
+            min={minViewingAt()}
             onChange={(e) => setViewingAt(e.target.value)}
             className="mt-1.5 w-full rounded-xl border border-border bg-background px-3 py-2.5 font-sans text-sm text-foreground outline-none focus:ring-2 focus:ring-brand/30"
           />
+          <p className="mt-1.5 font-sans text-[0.75rem] text-muted-foreground">{t('property.viewingHint')}</p>
         </div>
       )}
 
