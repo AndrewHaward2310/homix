@@ -113,7 +113,7 @@ export function AdvancedFilters({
 
   return (
     <div
-      className="fixed inset-0 z-[120] flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 z-[120] flex items-end justify-center bg-black/50 p-0 animate-[overlay-in_0.2s_ease-out] sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
@@ -123,8 +123,11 @@ export function AdvancedFilters({
         aria-label={t('search.advanced')}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-border bg-card p-5 shadow-luxury-lg outline-none sm:rounded-3xl sm:p-6"
+        className="sheet-enter max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-border bg-card p-5 shadow-luxury-lg outline-none sm:rounded-3xl sm:p-6"
       >
+        {/* Tay kéo bottom-sheet (chỉ mobile) */}
+        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-border sm:hidden" aria-hidden="true" />
+
         <div className="flex items-center justify-between">
           <h2 className="font-display text-[1.2rem] font-bold text-foreground">{t('search.advanced')}</h2>
           <button
