@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
-import { Star, ImageIcon } from 'lucide-react'
+import { Star, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Review } from '@/types'
 import { useT } from '@/lib/i18n/provider'
 import { cn } from '@/lib/utils'
@@ -16,6 +16,8 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
   const t = useT()
   const [star, setStar] = useState<number | null>(null)
   const [photosOnly, setPhotosOnly] = useState(false)
+  // Lightbox ảnh review: bộ ảnh của 1 review + vị trí đang xem.
+  const [view, setView] = useState<{ imgs: string[]; i: number; name: string } | null>(null)
 
   const stats = useMemo(() => {
     const total = reviews.length
@@ -28,6 +30,23 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
   const shown = reviews.filter(
     (r) => (star == null || r.rating === star) && (!photosOnly || r.images.length > 0),
   )
+
+  // Điều hướng lightbox bằng bàn phím: ←/→ chuyển ảnh, Esc đóng. Khoá cuộn nền.
+  useEffect(() => {
+    if (!view) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setView(null)
+      else if (e.key === 'ArrowRight') setView((v) => (v ? { ...v, i: (v.i + 1) % v.imgs.length } : v))
+      else if (e.key === 'ArrowLeft') setView((v) => (v ? { ...v, i: (v.i - 1 + v.imgs.length) % v.imgs.length } : v))
+    }
+    document.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [view])
 
   if (reviews.length === 0) {
     return <p className="mt-3 font-sans text-sm text-muted-foreground">{t('property.noReviews')}</p>
@@ -113,20 +132,74 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
               {r.images.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-2">
                   {r.images.map((src, i) => (
-                    <a
+                    <button
                       key={i}
-                      href={src}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative size-16 overflow-hidden rounded-lg ring-1 ring-border transition hover:ring-brand"
+                      type="button"
+                      onClick={() => setView({ imgs: r.images, i, name: r.customerName })}
+                      aria-label={t('review.photoAlt', { name: r.customerName })}
+                      className="relative size-16 overflow-hidden rounded-lg ring-1 ring-border transition hover:ring-brand focus-visible:ring-2 focus-visible:ring-brand active:scale-95"
                     >
                       <Image src={src} alt={t('review.photoAlt', { name: r.customerName })} fill sizes="64px" className="object-cover transition hover:scale-105" />
-                    </a>
+                    </button>
                   ))}
                 </div>
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Lightbox ảnh review */}
+      {view && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('review.photoAlt', { name: view.name })}
+          onClick={() => setView(null)}
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+        >
+          <button
+            type="button"
+            aria-label={t('locator.close')}
+            onClick={() => setView(null)}
+            className="absolute right-4 top-4 grid size-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+          >
+            <X className="size-5" />
+          </button>
+
+          {view.imgs.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label={t('card.prevPhoto')}
+                onClick={(e) => { e.stopPropagation(); setView((v) => (v ? { ...v, i: (v.i - 1 + v.imgs.length) % v.imgs.length } : v)) }}
+                className="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 md:left-6"
+              >
+                <ChevronLeft className="size-6" />
+              </button>
+              <button
+                type="button"
+                aria-label={t('card.nextPhoto')}
+                onClick={(e) => { e.stopPropagation(); setView((v) => (v ? { ...v, i: (v.i + 1) % v.imgs.length } : v)) }}
+                className="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 md:right-6"
+              >
+                <ChevronRight className="size-6" />
+              </button>
+            </>
+          )}
+
+          <div className="relative max-h-[85vh] w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={view.imgs[view.i]}
+              alt={t('review.photoAlt', { name: view.name })}
+              className="mx-auto max-h-[85vh] w-auto rounded-xl object-contain"
+            />
+            {view.imgs.length > 1 && (
+              <div className="mt-3 text-center font-sans text-sm text-white/70">
+                {view.i + 1} / {view.imgs.length}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
