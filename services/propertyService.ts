@@ -217,6 +217,15 @@ export async function submitReview(
   return { ok: true, reviews: data.reviews as Review[], property: data.property as Property }
 }
 
+/** Ghi nhận 1 lượt xem (fire-and-forget, throttle phía server). Lỗi thì im lặng. */
+export async function recordView(id: string): Promise<void> {
+  try {
+    await fetch(`/api/properties/${id}/view`, { method: 'POST', keepalive: true })
+  } catch {
+    /* không chặn UI nếu ghi lượt xem thất bại */
+  }
+}
+
 /** Khoảng ngày đã bị đặt (chặn lịch) của một căn. */
 export async function getAvailability(id: string): Promise<AvailabilityRange[]> {
   const data = await getJson<{ blocked: AvailabilityRange[] }>(
@@ -289,6 +298,7 @@ export const propertyService = {
   searchProperties,
   getReviews,
   submitReview,
+  recordView,
   getAvailability,
   getSimilar,
   getTowers,

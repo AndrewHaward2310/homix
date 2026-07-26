@@ -127,6 +127,7 @@ model Property {
   verified    Boolean        @default(false)
   ratingAvg   Float?
   reviewCount Int            @default(0)
+  viewCount   Int            @default(0)
 
   tower       Tower          @relation(fields: [towerId], references: [id])
   towerId     String
@@ -193,6 +194,8 @@ model Booking {
 
   @@index([customerId])
   @@index([propertyId])
+  // Badge "đặt gần đây": lọc theo propertyId + createdAt (+ status) mỗi lần mở chi tiết.
+  @@index([propertyId, createdAt])
 }
 
 model Lead {

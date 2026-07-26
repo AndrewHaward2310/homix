@@ -22,3 +22,6 @@ node_modules
 .next/
 .DS_Store
 *.tsbuildinfo
+
+# UI/UX Pro Max skill bundle (installed locally; commit if you want to share with the team)
+.claude/skills/

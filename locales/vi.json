@@ -536,5 +536,7 @@
   "review.submit": "Gửi đánh giá",
   "review.loginToReview": "Đăng nhập bằng tài khoản khách hàng để viết đánh giá.",
   "review.photoAlt": "Ảnh của {name}",
-  "review.badFile": "Chỉ nhận ảnh JPG/PNG/WebP/AVIF, tối đa 8MB."
+  "review.badFile": "Chỉ nhận ảnh JPG/PNG/WebP/AVIF, tối đa 8MB.",
+  "property.views": "{count} lượt xem",
+  "property.recentBookings": "{count} lượt đặt gần đây"
 }

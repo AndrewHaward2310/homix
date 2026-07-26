@@ -536,5 +536,7 @@
   "review.submit": "Submit review",
   "review.loginToReview": "Sign in with a customer account to write a review.",
   "review.photoAlt": "Photo by {name}",
-  "review.badFile": "Only JPG/PNG/WebP/AVIF images up to 8MB."
+  "review.badFile": "Only JPG/PNG/WebP/AVIF images up to 8MB.",
+  "property.views": "{count} views",
+  "property.recentBookings": "{count} recent bookings"
 }

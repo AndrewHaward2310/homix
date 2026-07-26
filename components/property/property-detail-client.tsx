@@ -15,6 +15,8 @@ import {
   Clock,
   ShieldCheck,
   CalendarCheck,
+  Eye,
+  Flame,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { AvailabilityRange, Property, Review, Tower } from '@/types'
@@ -25,6 +27,7 @@ import {
   getAvailability,
   getSimilar,
   getTowers,
+  recordView,
 } from '@/services/propertyService'
 import { useLocale } from '@/lib/i18n/provider'
 import { useFavorites } from '@/hooks/use-favorites'
@@ -85,6 +88,11 @@ export function PropertyDetailClient({ id }: { id: string }) {
 
   useRecordView(property?.id)
 
+  // Ghi nhận lượt xem phía server (throttle theo IP) — 1 lần / lần mở trang.
+  useEffect(() => {
+    recordView(id)
+  }, [id])
+
   const fav = property ? isFavorite(property.id) : false
   const towerName = property ? towers[property.towerId] : undefined
 
@@ -117,6 +125,21 @@ export function PropertyDetailClient({ id }: { id: string }) {
                   <p className="mt-1 inline-flex items-center gap-1.5 font-sans text-[0.9375rem] text-muted-foreground">
                     <MapPin className="size-4" /> {towerName ?? property.code}
                   </p>
+                  {/* Tín hiệu quan tâm — dữ liệu THẬT: lượt xem tích luỹ + đặt gần đây */}
+                  {((property.viewCount ?? 0) > 0 || (property.recentBookings ?? 0) > 0) && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      {(property.viewCount ?? 0) > 0 && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 font-sans text-[0.75rem] font-medium text-muted-foreground">
+                          <Eye className="size-3.5" /> {t('property.views', { count: property.viewCount ?? 0 })}
+                        </span>
+                      )}
+                      {(property.recentBookings ?? 0) > 0 && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-orange-500/10 px-2.5 py-1 font-sans text-[0.75rem] font-semibold text-orange-600 dark:text-orange-400">
+                          <Flame className="size-3.5" /> {t('property.recentBookings', { count: property.recentBookings ?? 0 })}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <button

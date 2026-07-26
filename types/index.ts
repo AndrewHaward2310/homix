@@ -90,6 +90,10 @@ export type Property = {
   /** Điểm đánh giá trung bình (denormalize từ Review, do server tính). */
   ratingAvg?: number
   reviewCount?: number
+  /** Tổng lượt xem trang chi tiết (throttle theo IP) — tín hiệu quan tâm thật. */
+  viewCount?: number
+  /** Số lượt đặt trong 30 ngày gần đây (server tính, chỉ có ở API chi tiết). */
+  recentBookings?: number
 }
 
 // ---------------------------------------------------------------------------

@@ -72,6 +72,7 @@ export function toProperty(p: PrismaProperty): Property {
     verified: p.verified,
     ratingAvg: p.ratingAvg ?? undefined,
     reviewCount: p.reviewCount,
+    viewCount: p.viewCount,
   }
 }
 
