@@ -36,7 +36,7 @@ export function ComboBuilderClient() {
   return (
     <div className="min-h-screen bg-background">
       <GlassNavbar solid />
-      <main className="pt-[72px] md:pt-[88px]">
+      <main id="main-content" className="pt-[72px] md:pt-[88px]">
         <Container className="py-10 md:py-14">
           <Eyebrow>{t('builder.eyebrow')}</Eyebrow>
           <H1 className="mt-3 font-display">{t('builder.title')}</H1>

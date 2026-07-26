@@ -65,7 +65,7 @@ export function ComboDetailClient({ id }: { id: string }) {
   return (
     <div className="min-h-screen bg-background">
       <GlassNavbar solid />
-      <main className="pt-[72px] md:pt-[88px]">
+      <main id="main-content" className="pt-[72px] md:pt-[88px]">
         <StateWrapper state={state} className="py-24">
           {combo && (
             <>

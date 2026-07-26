@@ -41,6 +41,13 @@ export function GlassNavbar({ solid = false }: { solid?: boolean }) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
+      {/* Skip-link a11y: phần tử focus ĐẦU TIÊN, ẩn tới khi tab vào, nhảy tới nội dung chính. */}
+      <a
+        href="#main-content"
+        className="sr-only rounded-full bg-primary px-4 py-2 font-sans text-sm font-semibold text-primary-foreground focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60]"
+      >
+        {t('a11y.skipToContent')}
+      </a>
       {!scrolled && (
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent"

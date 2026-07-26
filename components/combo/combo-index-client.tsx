@@ -37,7 +37,7 @@ export function ComboIndexClient() {
   return (
     <div className="min-h-screen bg-background">
       <GlassNavbar solid />
-      <main className="pt-[72px] md:pt-[88px]">
+      <main id="main-content" className="pt-[72px] md:pt-[88px]">
         <Container className="py-12 md:py-16">
           <Reveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div className="max-w-2xl">

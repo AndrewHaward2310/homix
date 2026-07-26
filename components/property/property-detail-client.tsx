@@ -104,7 +104,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
       <GlassNavbar solid />
       <StateWrapper state={state} className="pt-[72px]" errorTitle="Không tải được căn hộ">
         {property && (
-          <main className="pb-28 md:pb-16">
+          <main id="main-content" className="pb-28 md:pb-16">
             <Container className="pt-6">
               {/* Breadcrumb — điều hướng + SEO */}
               <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-1.5 font-sans text-[0.8125rem] text-muted-foreground">

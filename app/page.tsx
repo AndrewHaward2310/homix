@@ -27,7 +27,7 @@ export default async function Page() {
   return (
     <div className="min-h-screen bg-background">
       <GlassNavbar solid />
-      <main>
+      <main id="main-content">
         <HeroSection featured={featured} stats={stats} />
         {/* Dải cam kết dịch vụ (số liệu đã nằm ở hero). */}
         <TrustStrip />
