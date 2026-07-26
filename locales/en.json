@@ -544,5 +544,8 @@
   "search.clearAll": "Clear all filters",
   "review.filterAll": "All",
   "review.withPhotos": "With photos",
-  "review.noMatch": "No reviews match this filter."
+  "review.noMatch": "No reviews match this filter.",
+  "card.prevPhoto": "Previous photo",
+  "card.nextPhoto": "Next photo",
+  "card.gotoPhoto": "Go to photo {n}"
 }

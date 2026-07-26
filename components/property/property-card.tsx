@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Bed, Maximize, Heart, BadgeCheck, Star } from 'lucide-react'
+import { Bed, Maximize, Heart, BadgeCheck, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Property } from '@/types'
 import { pickLocale } from '@/types'
 import { useLocale } from '@/lib/i18n/provider'
@@ -37,6 +38,24 @@ export function PropertyCard({
   const suffixKey = priceSuffixKey(property.type)
   const suffix = suffixKey ? t(suffixKey) : ''
 
+  // Carousel ảnh ngay trên thẻ — lướt ảnh không cần vào chi tiết.
+  const images = property.images.length ? property.images : ['/placeholder.svg']
+  const [idx, setIdx] = useState(0)
+  const [loaded, setLoaded] = useState(false)
+  const go = (e: React.MouseEvent, dir: 1 | -1) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setLoaded(false)
+    setIdx((i) => (i + dir + images.length) % images.length)
+  }
+  const jump = (e: React.MouseEvent, i: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (i === idx) return
+    setLoaded(false)
+    setIdx(i)
+  }
+
   return (
     <Link
       href={`/property/${property.id}`}
@@ -49,14 +68,55 @@ export function PropertyCard({
       )}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-secondary shadow-luxury-sm transition-shadow duration-300 group-hover:shadow-luxury-lg">
+        {/* Nền shimmer trong lúc ảnh tải (blur-up nhẹ, chống "giật") */}
+        <div className={cn('absolute inset-0 animate-pulse bg-secondary transition-opacity duration-300', loaded && 'opacity-0')} aria-hidden="true" />
         <Image
-          src={property.images[0] || '/placeholder.svg'}
+          key={idx}
+          src={images[idx]}
           alt={`${title}${towerName ? ` — ${towerName}` : ''}`}
           fill
           priority={priority}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 380px"
+          onLoad={() => setLoaded(true)}
           className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
         />
+
+        {/* Điều hướng nhiều ảnh — mũi tên (hiện khi hover) + chấm */}
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label={t('card.prevPhoto')}
+              onClick={(e) => go(e, -1)}
+              className="absolute left-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition hover:bg-black/65 focus-visible:opacity-100 active:scale-90 group-hover:opacity-100"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label={t('card.nextPhoto')}
+              onClick={(e) => go(e, 1)}
+              className="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white opacity-0 backdrop-blur-sm transition hover:bg-black/65 focus-visible:opacity-100 active:scale-90 group-hover:opacity-100"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+            <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={t('card.gotoPhoto', { n: i + 1 })}
+                  aria-current={i === idx}
+                  onClick={(e) => jump(e, i)}
+                  className={cn(
+                    'size-1.5 rounded-full transition-all',
+                    i === idx ? 'w-4 bg-white' : 'bg-white/55 hover:bg-white/80',
+                  )}
+                />
+              ))}
+            </div>
+          </>
+        )}
         {/* Badge loại + verified — chừa chỗ nút yêu thích (right-3) + cho xuống dòng
             để nhãn "Đã xác minh" không bị cắt trên thẻ hẹp (lưới 3 cột). */}
         <div className="absolute left-3 right-14 top-3 flex flex-wrap items-center gap-1.5">

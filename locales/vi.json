@@ -544,5 +544,8 @@
   "search.clearAll": "Xoá tất cả bộ lọc",
   "review.filterAll": "Tất cả",
   "review.withPhotos": "Có ảnh",
-  "review.noMatch": "Không có đánh giá khớp bộ lọc."
+  "review.noMatch": "Không có đánh giá khớp bộ lọc.",
+  "card.prevPhoto": "Ảnh trước",
+  "card.nextPhoto": "Ảnh sau",
+  "card.gotoPhoto": "Tới ảnh {n}"
 }
