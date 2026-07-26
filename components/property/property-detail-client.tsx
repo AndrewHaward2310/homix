@@ -122,6 +122,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
 
   const fav = property ? isFavorite(property.id) : false
   const towerName = property ? towers[property.towerId] : undefined
+  const [favBurst, setFavBurst] = useState(false)
 
   return (
     <div className="min-h-screen bg-background">
@@ -190,10 +191,16 @@ export function PropertyDetailClient({ id }: { id: string }) {
                     type="button"
                     aria-label={fav ? t('property.unsave') : t('property.save')}
                     aria-pressed={fav}
-                    onClick={() => toggle(property.id)}
+                    onClick={() => {
+                      if (!fav) setFavBurst(true)
+                      toggle(property.id)
+                    }}
                     className="flex size-10 items-center justify-center rounded-full border border-border text-foreground transition hover:bg-secondary"
                   >
-                    <Heart className={cn('size-4', fav && 'fill-red-500 text-red-500')} />
+                    <Heart
+                      onAnimationEnd={() => setFavBurst(false)}
+                      className={cn('size-4', favBurst && 'animate-heart-pop', fav && 'fill-red-500 text-red-500')}
+                    />
                   </button>
                 </div>
               </div>

@@ -55,6 +55,7 @@ export function PropertyCard({
     setLoaded(false)
     setIdx(i)
   }
+  const [burst, setBurst] = useState(false)
 
   return (
     <Link
@@ -139,12 +140,14 @@ export function PropertyCard({
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
+              if (!favorite) setBurst(true)
               onToggleFavorite(property.id)
             }}
             className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full border border-glass-border bg-glass text-foreground backdrop-blur-xl transition-all hover:scale-105 active:scale-95"
           >
             <Heart
-              className={cn('size-4 transition-colors', favorite && 'fill-red-500 text-red-500')}
+              onAnimationEnd={() => setBurst(false)}
+              className={cn('size-4 transition-colors', burst && 'animate-heart-pop', favorite && 'fill-red-500 text-red-500')}
               aria-hidden="true"
             />
           </button>
