@@ -130,7 +130,9 @@ export function GlassNavbar({ solid = false }: { solid?: boolean }) {
               </a>
             ))}
             <div className="my-2 h-px bg-border" />
-            <div className="flex items-center justify-between px-1">
+            {/* Hàng tiện ích + CTA — xếp DỌC để không tràn viền trên máy hẹp (390px);
+                hai nút chia đều bề ngang. */}
+            <div className="flex flex-col gap-3 px-1">
               <div className="flex items-center gap-1">
                 <LanguageSwitcher tone="default" />
                 <ThemeToggle />
@@ -139,14 +141,14 @@ export function GlassNavbar({ solid = false }: { solid?: boolean }) {
                 <Link
                   href={loginHref}
                   onClick={() => setMenuOpen(false)}
-                  className={cn(luxuryButtonVariants({ variant: 'ghost', size: 'sm' }))}
+                  className={cn(luxuryButtonVariants({ variant: 'ghost', size: 'sm' }), 'flex-1 justify-center')}
                 >
                   {loginLabel}
                 </Link>
                 <Link
                   href="/search"
                   onClick={() => setMenuOpen(false)}
-                  className={cn(luxuryButtonVariants({ variant: 'primary', size: 'sm' }))}
+                  className={cn(luxuryButtonVariants({ variant: 'primary', size: 'sm' }), 'flex-1 justify-center')}
                 >
                   {t('nav.bookTour')}
                 </Link>
