@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X } from 'lucide-react'
+import { Search, SlidersHorizontal, Map as MapIcon, List as ListIcon, X, MapPin } from 'lucide-react'
 import type { Property, PropertyType, Tower } from '@/types'
 import { getMasterplanTowers, searchProperties, type SearchFilters } from '@/services/propertyService'
 import { useLocale } from '@/lib/i18n/provider'
@@ -78,6 +78,7 @@ function SearchInner() {
   const [view, setView] = useState<'list' | 'map'>('list')
   const [qInput, setQInput] = useState(filters.q ?? '')
   const [advOpen, setAdvOpen] = useState(false)
+  const [sugOpen, setSugOpen] = useState(false)
 
   useEffect(() => {
     getMasterplanTowers().then((tw: Awaited<ReturnType<typeof getMasterplanTowers>>) => {
@@ -118,6 +119,14 @@ function SearchInner() {
 
   // Xoá TẤT CẢ bộ lọc/từ khoá → về danh sách gốc (dùng ở empty state để mở rộng tìm kiếm).
   const clearAll = useCallback(() => router.replace('/search', { scroll: false }), [router])
+
+  // Gợi ý tên tòa tháp/phân khu khớp từ khoá đang gõ (autocomplete).
+  const suggestions = useMemo(() => {
+    const q = qInput.trim().toLowerCase()
+    if (!q) return [] as string[]
+    const names = Array.from(new Set(Object.values(towerNames)))
+    return names.filter((n) => n.toLowerCase().includes(q) && n.toLowerCase() !== q).slice(0, 6)
+  }, [qInput, towerNames])
 
   const page = filters.page ?? 1
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
@@ -188,17 +197,48 @@ function SearchInner() {
           <form
             onSubmit={(e) => {
               e.preventDefault()
+              setSugOpen(false)
               setParam({ q: qInput || undefined })
             }}
-            className="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-background px-4 py-2"
+            className="relative flex min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-background px-4 py-2"
           >
             <Search className="size-4 shrink-0 text-muted-foreground" />
             <input
               value={qInput}
-              onChange={(e) => setQInput(e.target.value)}
+              onChange={(e) => {
+                setQInput(e.target.value)
+                setSugOpen(true)
+              }}
+              onFocus={() => setSugOpen(true)}
+              onKeyDown={(e) => e.key === 'Escape' && setSugOpen(false)}
               placeholder={t('search.searchPlaceholder')}
+              role="combobox"
+              aria-expanded={sugOpen && suggestions.length > 0}
+              aria-autocomplete="list"
               className="w-full bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
+            {sugOpen && suggestions.length > 0 && (
+              <ul className="absolute inset-x-0 top-[calc(100%+6px)] z-40 overflow-hidden rounded-2xl border border-border bg-background py-1 shadow-luxury-lg">
+                {suggestions.map((name) => (
+                  <li key={name}>
+                    <button
+                      type="button"
+                      // mousedown trước blur → chọn được trước khi input mất focus
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        setQInput(name)
+                        setSugOpen(false)
+                        setParam({ q: name })
+                      }}
+                      className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left font-sans text-sm text-foreground transition-colors hover:bg-secondary"
+                    >
+                      <MapPin className="size-4 shrink-0 text-muted-foreground" />
+                      <span className="truncate">{name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </form>
 
           {/* Sort */}
