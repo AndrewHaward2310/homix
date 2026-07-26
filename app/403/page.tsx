@@ -12,7 +12,7 @@ export default function ForbiddenPage() {
   const portal = user ? ROLE_HOME[user.role] : '/login'
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-6 text-center">
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-background px-6 text-center">
       <span className="flex size-14 items-center justify-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
         <ShieldAlert className="size-7" aria-hidden="true" />
       </span>

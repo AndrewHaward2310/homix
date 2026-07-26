@@ -46,7 +46,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4 md:justify-end md:p-10 lg:p-16">
+    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background p-4 md:justify-end md:p-10 lg:p-16">
       {/* Ảnh lifestyle tràn viền + overlay tối nhẹ */}
       <div className="absolute inset-0 z-0">
         <Image

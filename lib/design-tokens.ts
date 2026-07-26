@@ -12,7 +12,7 @@ export const colors = {
 
   // Chữ
   foreground: '#1D1D1F', // chữ chính
-  mutedForeground: '#86868B', // chữ phụ
+  mutedForeground: '#6F6F74', // chữ phụ (đậm nhẹ để đạt WCAG AA ~5:1 trên nền trắng)
 
   // Viền
   border: '#E8E8ED', // viền cực nhạt

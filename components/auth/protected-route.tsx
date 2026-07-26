@@ -34,7 +34,7 @@ export function ProtectedRoute({ allow, children }: ProtectedRouteProps) {
   // Trạng thái chờ khôi phục phiên / đang điều hướng — màn hình tối giản đúng style.
   if (loading || !user || !allow.includes(user.role)) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-dvh items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <span
             className="size-6 animate-spin rounded-full border-2 border-border border-t-brand"
