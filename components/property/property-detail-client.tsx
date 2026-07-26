@@ -358,7 +358,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
             {/* CTA sticky đáy (mobile) */}
             <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-xl lg:hidden">
               <div>
-                <div className="font-sans text-lg font-bold text-foreground">{formatCurrency(property.priceVnd)}</div>
+                <div className="font-sans text-lg font-bold tabular-nums text-foreground">{formatCurrency(property.priceVnd)}</div>
                 <div className="font-sans text-[0.75rem] text-muted-foreground">
                   {property.type === 'rent_long' ? t('common.perMonth') : property.type === 'stay_short' ? t('common.perNight') : ''}
                 </div>

@@ -96,6 +96,10 @@ export function SupportWidget() {
   // Không hiện ở khu nhân viên / trang đăng nhập.
   if (HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'))) return null
 
+  // Trang chi tiết BĐS có thanh CTA "đặt lịch" dính đáy ở mobile → nâng FAB/panel lên
+  // trên thanh đó (chỉ mobile; từ lg trở lên thanh CTA ẩn nên trả về vị trí thường).
+  const lifted = pathname.startsWith('/property/')
+
   return (
     <>
       {/* Nút nổi — z thấp hơn lightbox/modal (z-100+) để không đè trải nghiệm xem ảnh */}
@@ -107,7 +111,8 @@ export function SupportWidget() {
         aria-expanded={open}
         aria-controls={panelId}
         className={cn(
-          'fixed bottom-5 right-5 z-[80] grid size-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-luxury-lg transition hover:brightness-110 active:scale-95',
+          'fixed right-5 z-[80] grid size-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-luxury-lg transition hover:brightness-110 active:scale-95',
+          lifted ? 'bottom-24 lg:bottom-5' : 'bottom-5',
           open && 'rotate-90',
         )}
         style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
@@ -125,7 +130,10 @@ export function SupportWidget() {
           id={panelId}
           role="dialog"
           aria-label={t('support.title')}
-          className="fixed bottom-24 right-5 z-[80] flex max-h-[calc(100dvh-8rem)] w-[min(92vw,23rem)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-luxury-lg"
+          className={cn(
+            'fixed right-5 z-[80] flex max-h-[calc(100dvh-8rem)] w-[min(92vw,23rem)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-luxury-lg',
+            lifted ? 'bottom-40 lg:bottom-24' : 'bottom-24',
+          )}
         >
           {/* Header */}
           <div className="flex items-center gap-3 bg-primary p-4 text-primary-foreground">

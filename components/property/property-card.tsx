@@ -57,13 +57,14 @@ export function PropertyCard({
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 380px"
           className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
         />
-        {/* Badge loại + verified */}
-        <div className="absolute left-3 top-3 flex items-center gap-1.5">
-          <span className="rounded-full border border-glass-border bg-glass px-2.5 py-1 font-sans text-[0.6875rem] font-medium text-foreground backdrop-blur-xl">
+        {/* Badge loại + verified — chừa chỗ nút yêu thích (right-3) + cho xuống dòng
+            để nhãn "Đã xác minh" không bị cắt trên thẻ hẹp (lưới 3 cột). */}
+        <div className="absolute left-3 right-14 top-3 flex flex-wrap items-center gap-1.5">
+          <span className="whitespace-nowrap rounded-full border border-glass-border bg-glass px-2.5 py-1 font-sans text-[0.6875rem] font-medium text-foreground backdrop-blur-xl">
             {t(`ptype.${property.type}`)}
           </span>
           {property.verified && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-brand/90 px-2 py-1 font-sans text-[0.625rem] font-semibold text-brand-foreground backdrop-blur-xl">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-brand/90 px-2 py-1 font-sans text-[0.625rem] font-semibold text-brand-foreground backdrop-blur-xl">
               <BadgeCheck className="size-3" aria-hidden="true" />
               {t('property.verified')}
             </span>
@@ -111,7 +112,7 @@ export function PropertyCard({
           )}
         </div>
 
-        <div className="mt-2.5 font-sans text-[1.125rem] font-bold text-brand">
+        <div className="mt-2.5 font-sans text-[1.125rem] font-bold tabular-nums text-brand">
           {compact}
           <span className="text-[0.9375rem] font-normal text-muted-foreground">{suffix}</span>
         </div>
