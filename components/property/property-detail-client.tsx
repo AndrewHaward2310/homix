@@ -62,6 +62,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
   const [blocked, setBlocked] = useState<AvailabilityRange[]>([])
   const [similar, setSimilar] = useState<Property[]>([])
   const [towers, setTowers] = useState<Record<string, string>>({})
+  const [activeSection, setActiveSection] = useState('overview')
 
   useEffect(() => {
     let active = true
@@ -95,6 +96,29 @@ export function PropertyDetailClient({ id }: { id: string }) {
   useEffect(() => {
     recordView(id)
   }, [id])
+
+  // Scroll-spy: tự sáng mục trong thanh điều hướng theo phần đang xem.
+  useEffect(() => {
+    if (state !== 'success') return
+    const ids = ['overview', 'amenities', 'location', 'reviews']
+    const els = ids.map((s) => document.getElementById(s)).filter(Boolean) as HTMLElement[]
+    if (!els.length) return
+    // Active = mục CUỐI CÙNG có mép trên đã vượt qua đường ~120px dưới nav.
+    // Tính lại toàn bộ mỗi lần observer bắn để chọn dứt khoát (không lệ thuộc thứ tự entry).
+    const LINE = 120
+    const compute = () => {
+      let cur = ids[0]
+      for (const s of ids) {
+        const el = document.getElementById(s)
+        if (el && el.getBoundingClientRect().top - LINE <= 1) cur = s
+      }
+      setActiveSection(cur)
+    }
+    const obs = new IntersectionObserver(compute, { rootMargin: `-${LINE}px 0px -80% 0px`, threshold: 0 })
+    els.forEach((el) => obs.observe(el))
+    compute()
+    return () => obs.disconnect()
+  }, [state])
 
   const fav = property ? isFavorite(property.id) : false
   const towerName = property ? towers[property.towerId] : undefined
@@ -189,15 +213,24 @@ export function PropertyDetailClient({ id }: { id: string }) {
                       ['amenities', 'pnav.amenities'],
                       ['location', 'pnav.location'],
                       ['reviews', 'pnav.reviews'],
-                    ].map(([id, key]) => (
-                      <a
-                        key={id}
-                        href={`#${id}`}
-                        className="whitespace-nowrap border-b-2 border-transparent px-3 py-3 font-sans text-[0.875rem] font-medium text-muted-foreground transition-colors hover:border-brand hover:text-foreground"
-                      >
-                        {t(key)}
-                      </a>
-                    ))}
+                    ].map(([sid, key]) => {
+                      const on = activeSection === sid
+                      return (
+                        <a
+                          key={sid}
+                          href={`#${sid}`}
+                          aria-current={on ? 'true' : undefined}
+                          className={cn(
+                            'whitespace-nowrap border-b-2 px-3 py-3 font-sans text-[0.875rem] font-medium transition-colors',
+                            on
+                              ? 'border-brand text-foreground'
+                              : 'border-transparent text-muted-foreground hover:border-brand/40 hover:text-foreground',
+                          )}
+                        >
+                          {t(key)}
+                        </a>
+                      )
+                    })}
                   </nav>
 
                   {/* Thông số */}
