@@ -23,7 +23,7 @@ pnpm db:generate  # regenerate Prisma Client after editing schema
 ```
 
 - `next.config.mjs` sets `typescript.ignoreBuildErrors: true` and `images.unoptimized: true` — a green `pnpm build` does **not** mean the types are clean. Type-check explicitly with `pnpm exec tsc --noEmit` when correctness matters.
-- No test runner is configured.
+- **Vitest** for unit tests of pure logic (no DB/network): `pnpm test` (run once) / `pnpm test:watch`. Config in `vitest.config.mts`, tests in `tests/*.test.ts` (mappers BigInt→number, SEO JSON-LD/XSS, price/locale). No DB-backed or e2e tests yet.
 - Path alias: `@/*` maps to the repo root (e.g. `@/components/...`, `@/lib/...`).
 
 ## Architecture
