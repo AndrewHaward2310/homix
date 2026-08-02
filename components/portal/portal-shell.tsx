@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { LucideIcon } from 'lucide-react'
-import { LogOut, ChevronDown } from 'lucide-react'
+import { LogOut, ChevronDown, MoreHorizontal, X } from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-context'
 import { useT } from '@/lib/i18n/provider'
 import { LanguageSwitcher } from '@/components/luxury/language-switcher'
@@ -28,8 +28,15 @@ export function PortalShell({
   const { user, logout } = useAuth()
   const t = useT()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
+
+  // Bottom-nav mobile: 5 chỗ. Nếu nhiều mục hơn → 4 tab đầu + tab "Thêm" mở sheet
+  // chứa TOÀN BỘ mục (nếu không sẽ có mục không tới được trên mobile).
+  const MAX_TABS = 5
+  const hasMore = nav.length > MAX_TABS
+  const tabs = hasMore ? nav.slice(0, MAX_TABS - 1) : nav
 
   return (
     <div className="min-h-screen bg-secondary/30">
@@ -46,6 +53,7 @@ export function PortalShell({
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? 'page' : undefined}
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-3 py-2.5 font-sans text-[0.9rem] font-medium transition-colors',
                   active
@@ -127,13 +135,14 @@ export function PortalShell({
 
       {/* Bottom-nav mobile */}
       <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
-        {nav.slice(0, 4).map((item) => {
+        {tabs.map((item) => {
           const Icon = item.icon
           const active = isActive(item.href)
           return (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? 'page' : undefined}
               className={cn(
                 'flex flex-1 flex-col items-center gap-1 py-2.5 font-sans text-[0.625rem] font-medium',
                 active ? 'text-brand' : 'text-muted-foreground',
@@ -144,7 +153,74 @@ export function PortalShell({
             </Link>
           )
         })}
+        {hasMore && (
+          <button
+            type="button"
+            onClick={() => setMoreOpen(true)}
+            aria-expanded={moreOpen}
+            className={cn(
+              'flex flex-1 flex-col items-center gap-1 py-2.5 font-sans text-[0.625rem] font-medium',
+              // sáng nếu trang đang xem nằm trong nhóm "Thêm"
+              nav.slice(MAX_TABS - 1).some((i) => isActive(i.href)) ? 'text-brand' : 'text-muted-foreground',
+            )}
+          >
+            <MoreHorizontal className="size-5" aria-hidden="true" />
+            <span className="truncate px-1">{t('portal.more')}</span>
+          </button>
+        )}
       </nav>
+
+      {/* Sheet "Thêm" — toàn bộ mục điều hướng cho mobile */}
+      {moreOpen && (
+        <div
+          className="fixed inset-0 z-[70] flex items-end bg-black/50 animate-[overlay-in_0.2s_ease-out] md:hidden"
+          onClick={() => setMoreOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('portal.allSections')}
+            onClick={(e) => e.stopPropagation()}
+            className="sheet-enter max-h-[80vh] w-full overflow-y-auto rounded-t-3xl border-t border-border bg-background p-4 pb-8"
+          >
+            <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-border" aria-hidden="true" />
+            <div className="mb-3 flex items-center justify-between">
+              <p className="font-sans text-base font-bold text-foreground">{t('portal.allSections')}</p>
+              <button
+                type="button"
+                aria-label={t('locator.close')}
+                onClick={() => setMoreOpen(false)}
+                className="grid size-8 place-items-center rounded-lg text-muted-foreground hover:bg-secondary"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {nav.map((item) => {
+                const Icon = item.icon
+                const active = isActive(item.href)
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMoreOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={cn(
+                      'flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center font-sans text-[0.75rem] font-medium transition-colors',
+                      active
+                        ? 'border-brand/40 bg-brand/10 text-brand'
+                        : 'border-border text-foreground hover:bg-secondary',
+                    )}
+                  >
+                    <Icon className="size-5" aria-hidden="true" />
+                    <span className="line-clamp-2 leading-tight">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

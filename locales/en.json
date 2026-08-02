@@ -557,5 +557,7 @@
   "search.savedThis": "This search is saved",
   "search.noSaved": "No saved searches yet.",
   "search.allListings": "All listings",
-  "common.delete": "Delete"
+  "common.delete": "Delete",
+  "portal.more": "More",
+  "portal.allSections": "All sections"
 }

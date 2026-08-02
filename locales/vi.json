@@ -557,5 +557,7 @@
   "search.savedThis": "Đã lưu tìm kiếm này",
   "search.noSaved": "Chưa có tìm kiếm nào được lưu.",
   "search.allListings": "Tất cả tin đăng",
-  "common.delete": "Xoá"
+  "common.delete": "Xoá",
+  "portal.more": "Thêm",
+  "portal.allSections": "Tất cả mục"
 }
