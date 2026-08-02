@@ -22,10 +22,11 @@ export type LocalizedText = {
   en: string
   ko?: string
   zh?: string
+  hi?: string
 }
 
 /** Mã ngôn ngữ được hỗ trợ ở tầng dữ liệu động. */
-export type LocaleCode = 'vi' | 'en' | 'ko' | 'zh'
+export type LocaleCode = 'vi' | 'en' | 'ko' | 'zh' | 'hi'
 
 // ---------------------------------------------------------------------------
 // Người dùng
@@ -226,6 +227,7 @@ const INTL_LOCALE: Record<LocaleCode, string> = {
   en: 'en-US',
   ko: 'ko-KR',
   zh: 'zh-CN',
+  hi: 'hi-IN',
 }
 
 /**
@@ -242,5 +244,7 @@ export function formatMoney(amountVnd: number, locale: LocaleCode = 'vi'): strin
 
 /** Lấy nội dung động theo ngôn ngữ, fallback vi -> en. */
 export function pickLocale(text: LocalizedText, locale: LocaleCode = 'vi'): string {
-  return text[locale] ?? text.vi ?? text.en
+  // Nội dung động chỉ có vi/en; với locale khác (zh/hi/ko) fallback về EN (quốc tế)
+  // rồi mới tới vi — dễ đọc hơn cho người dùng nước ngoài.
+  return text[locale] ?? text.en ?? text.vi
 }

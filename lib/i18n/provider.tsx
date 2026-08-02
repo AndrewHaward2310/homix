@@ -10,6 +10,7 @@ import {
 } from 'react'
 import type { LocaleCode } from '@/types'
 import viMessages from '@/locales/vi.json'
+import enMessages from '@/locales/en.json'
 import {
   DEFAULT_LOCALE,
   getIntlLocale,
@@ -45,7 +46,11 @@ const I18nContext = createContext<I18nContextValue | null>(null)
 // Cache các gói ngôn ngữ đã nạp để không import lại.
 const MESSAGE_CACHE: Partial<Record<LocaleCode, Messages>> = {
   vi: viMessages as Messages,
+  en: enMessages as Messages,
 }
+
+/** Gói tiếng Anh bundle sẵn làm fallback cho locale dịch chưa đủ. */
+const EN_FALLBACK = enMessages as Messages
 
 async function loadMessages(locale: LocaleCode): Promise<Messages> {
   if (MESSAGE_CACHE[locale]) return MESSAGE_CACHE[locale] as Messages
@@ -113,7 +118,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = useCallback(
     (key: string, params?: TParams) => {
-      const value = messages[key]
+      // Chuỗi chưa dịch ở locale hiện tại → rơi về TIẾNG ANH (rồi mới tới key thô).
+      // Nhờ vậy thêm ngôn ngữ dịch DẦN vẫn hiển thị mượt, không lộ key như "nav.rent".
+      const value = messages[key] ?? (EN_FALLBACK[key] as string | undefined)
       if (value == null) {
         if (process.env.NODE_ENV !== 'production') {
           console.log(`[v0] i18n: thiếu key "${key}" cho locale "${locale}"`)

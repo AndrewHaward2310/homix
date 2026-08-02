@@ -29,8 +29,9 @@ export type LocaleMeta = {
 export const LOCALES: LocaleMeta[] = [
   { code: 'vi', short: 'VI', label: 'Tiếng Việt', intl: 'vi-VN' },
   { code: 'en', short: 'EN', label: 'English', intl: 'en-US' },
+  { code: 'zh', short: 'ZH', label: '中文', intl: 'zh-CN' },
+  { code: 'hi', short: 'HI', label: 'हिन्दी', intl: 'hi-IN' },
   // { code: 'ko', short: 'KO', label: '한국어', intl: 'ko-KR' },
-  // { code: 'zh', short: 'ZH', label: '中文', intl: 'zh-CN' },
 ]
 
 export const SUPPORTED_LOCALES: LocaleCode[] = LOCALES.map((l) => l.code)
